@@ -27,7 +27,7 @@ class Visual():
   def __init__(self, imem):
 
     ## STEP1: Initialize the size.
-    self.fig, self.ax = plt.subplots(figsize=(8, 8))
+    self.fig, self.ax = plt.subplots(figsize=(8, 8), dpi=400)
     self.ax.set_xlim(0, 100)
     self.ax.set_ylim(0, 100)
 
@@ -53,7 +53,6 @@ class Visual():
         fill=False, edgecolor='black', linewidth=self.LINE_WIDTH_BOLD))
 
     self.anim = animation.FuncAnimation(self.fig, self.tick, frames=5, interval=1000, repeat=False)
-    plt.close(self.fig)
 
 
   def fetch(self):
@@ -94,12 +93,9 @@ class Visual():
     plt.show()
 
 
-  def to_html5_video(self):
-    return self.anim.to_html5_video()
-
-
-  def to_jshtml(self):
-    return self.anim.to_jshtml()
+  def save(self, name):
+    plt.close(self.fig)
+    self.anim.save(name)
 
 
 if __name__ == "__main__":
@@ -108,5 +104,4 @@ if __name__ == "__main__":
   ]
 
   visual = Visual(imem)
-  # visual.show()
-  visual.show_jupyter()
+  visual.show()
