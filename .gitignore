@@ -1,4 +1,6 @@
 
+.DS_Store
+
 /Pipfile.lock
-/video.mp4
+/video.svg
 /.ipynb_checkpoints/
