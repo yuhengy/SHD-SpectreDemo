@@ -49,12 +49,19 @@ class Rob():
         
         if   exe_cmd["opcode"]=="ALU":
           aluReq(exe_cmd["port"], exe_cmd["latency"], exe_cmd["result"], i)
+          entry["status"] = self.Status.DISPATCHED
+        
         elif exe_cmd["opcode"]=="LOAD":
           l1Req(entry["src_data"], i)
+          entry["status"] = self.Status.DISPATCHED
+        
+        elif exe_cmd["opcode"]=="NOP":
+          l1Req(entry["src_data"], i)
+          entry["status"] = self.Status.FINISHED
+        
         else:
           assert false, "Unsupported opcode."
         
-        entry["status"] = self.Status.DISPATCHED
 
 
 

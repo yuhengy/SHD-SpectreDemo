@@ -29,6 +29,19 @@ def decode(inst):
       "wb_addr"  : inst["dest"],
     }
 
+  elif inst["opcode"]=="NOP":
+    return {
+      "src_used" : False,
+      "src_addr" : None,
+      
+      "exe_cmd": {
+        "opcode": "NOP",
+      },
+      
+      "wb_enable": False,
+      "wb_addr"  : None,
+    }
+
   else:
     assert false, "Unsupported opcode."
 

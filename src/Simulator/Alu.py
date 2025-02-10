@@ -9,6 +9,7 @@ class Alu():
 
 
   def sendReq(self, port, latency, result, roblink):
+    assert port < self.NUM_PORTS, f"ALU only has {self.NUM_PORTS} ports."
     self.portFifo[port].append({
       "latency": latency,
       "result" : result,

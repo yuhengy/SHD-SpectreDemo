@@ -1,30 +1,36 @@
 
 import os, sys
-sys.path.append(os.getcwd())
 
-from src.PhysicalRegfile import PhysicalRegfile
-from src.Rob             import Rob
-from src.Alu             import Alu
-from src.MemSystem       import MemSystem
-from src.decode          import decode
+sys.path.append(os.getcwd())
+from src.Simulator.PhysicalRegfile import PhysicalRegfile
+from src.Simulator.Rob             import Rob
+from src.Simulator.Alu             import Alu
+from src.Simulator.MemSystem       import MemSystem
+from src.Simulator.decode          import decode
 
 
 class Processor():
 
-  def __init__(self, imem, l1ValidArray, printTrace=False):
-    self.cycle     = 0
-    self.pc        = 0
-    self.imem      = imem
-    self.regfile   = PhysicalRegfile(printTrace)
-    self.rob       = Rob(printTrace)
-    self.alu       = Alu(printTrace)
-    self.memSystem = MemSystem(l1ValidArray, printTrace)
+  def __init__(self, imem, l1ValidArray, totalCycle, printTrace=False):
+    self.pc         = 0
+    self.imem       = imem
+    self.regfile    = PhysicalRegfile(printTrace)
+    self.rob        = Rob(printTrace)
+    self.alu        = Alu(printTrace)
+    self.memSystem  = MemSystem(l1ValidArray, printTrace)
+    
+    self.cycle      = 0
+    self.totalCycle = totalCycle
 
     self.printTrace = printTrace
 
 
   def fetch(self):
-    decodedDict = decode(self.imem[self.pc])
+    if self.pc < len(self.imem):
+      inst = self.imem[self.pc]
+    else:
+      inst = {"opcode": "NOP", "name": "nop"}
+    decodedDict = decode(inst)
     
     src_stall, src_data, src_roblink = self.regfile.read(
       decodedDict["src_used"], decodedDict["src_addr"],
@@ -71,8 +77,8 @@ class Processor():
       print()
 
 
-  def simulate(self, cycle):
-    for i in range(cycle):
+  def simulate(self):
+    for i in range(self.totalCycle):
       self.tick()
 
 
@@ -88,10 +94,11 @@ if __name__ == "__main__":
       {"dest": 0, "opcode": "ALU", "src": 0, "latency": 4, "port": 0, "name": "inst0"},
       {"dest": 0, "opcode": "ALU", "src": 0, "latency": 4, "port": 0, "name": "inst0"},
       {"dest": 0, "opcode": "ALU", "src": 0, "latency": 4, "port": 0, "name": "inst0"},
-      {"dest": 0, "opcode": "ALU", "src": 0, "latency": 4, "port": 0, "name": "inst0"},
+      {"opcode": "NOP", "name": "nop"},
     ],
     l1ValidArray=[False, False, False, False],
-    printTrace=True
+    totalCycle=8,
+    printTrace=True,
   )
-  processor.simulate(8)
+  processor.simulate()
 
