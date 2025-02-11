@@ -10,7 +10,7 @@ class MemSystem(SimuMemSystem):
 
   ANIM_PRE  = 0.2
   ANIM_POST = 0.2
-  
+
   def __init__(self, l1ValidArray, d, bufferSize, grid, fontsize, line_width,
                speed=1):
     super().__init__(l1ValidArray)
@@ -21,6 +21,12 @@ class MemSystem(SimuMemSystem):
     self.fontsize   = fontsize
     self.line_width = line_width
     self.speed      = speed
+
+    self.hit_grids      = []
+    self.mshrFifo_grids = []
+
+    self.valid_text = []
+    self.valid_grid = []
 
 
     ## STEP1: Divide into L1 and main memory.
@@ -56,8 +62,6 @@ class MemSystem(SimuMemSystem):
     textValid_grid.drawText(d, "Valid", fontsize)
     for i, grid in enumerate(addr_grid):
       grid.drawText(d, f"0x{i}", fontsize)
-
-    self.valid_text = []
     for i, grid in enumerate(valid_grid):
       self.valid_text.append(
         grid.drawText(d, "1" if l1ValidArray[i] else "0", fontsize))
@@ -81,7 +85,6 @@ class MemSystem(SimuMemSystem):
     mshrBox_grid = mshrBox_grid.getSubGrid(1, 0)
 
     ## STEP2.3: Draw MSHR buffer.
-    self.mshrFifo_grids = []
     buffer_grid.divideY([0.2] + [1 for _ in range(bufferSize)])
     for i in range(bufferSize, 0, -1):
       self.mshrFifo_grids.append(buffer_grid.getSubGrid(0, i))
@@ -120,100 +123,27 @@ class MemSystem(SimuMemSystem):
     ## STEP3: Draw main memory.
     mem_grid.drawRectangle(d, line_width)
     mem_grid.drawText(d, "Main Memory", fontsize)
-
-
-  def sendReq(self, addr, roblink, circle, text):
-    if self.l1ValidArray[addr]:
-      self.hitList.append({"addr": addr, "roblink": roblink})
-      grid = self.hit_grids[addr]
-      self.hitList[-1]["draw"] = (circle, text)
-
-    else:
-      existingMiss, entryID = self.findInMshrFifo(addr)
-      if existingMiss==None:
-        self.mshrFifo.append({
-          "addr": addr,
-          "latency": self.MISS_LATENCY,
-          "roblinkList": [roblink],
-        })
-        grid = self.mshrFifo_grids[len(self.mshrFifo)-1]
-        self.mshrFifo[-1]["draw"] = [(circle, text)]
-
-      else:
-        existingMiss["roblinkList"].append(roblink)
-        grid = self.mshrFifo_grids[entryID]
-        existingMiss["draw"].append((circle, text))
-
-
-    circle.add_key_frame((
-      self.cycle-self.ANIM_POST)/self.speed,
-      cx=grid.centerX(), cy=grid.centerY()
-    )
-    text.add_key_frame(
-      (self.cycle-self.ANIM_POST)/self.speed,
-      x=grid.centerX(), y=grid.centerY()
-    )
   
 
   def respond_hit(self, entry, robResp):
-    circle, text = entry["draw"]
-    grid = self.hit_grids[entry["addr"]]
-    circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, cx=grid.centerX(), cy=grid.centerY())
-    text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, x=grid.centerX(), y=grid.centerY())
+    entry["animBox"].disappear(self.cycle)
     
     super().respond_hit(entry, robResp)
   
 
   def respond_miss(self, head, robResp):
-
-    ## STEP1: If there are extra draw (due to squash), remove them.
-    for _ in range(len(head["draw"]) - len(head["roblinkList"])):
-      circle, text = head["draw"][0]
-      
-      if self.justSquash:
-        circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-        text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-      else:
-        circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="orange")
-        text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="orange")
-      circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
-      text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
-
-      head["draw"].pop(0)
+    ## STEP1: Current entry disappear.
+    for animBox in head["animBoxList"]:
+      animBox.disappear(self.cycle)
 
 
-    ## STEP2: Returned entry is here at the begining of the cycle.
-    grid = self.mshrFifo_grids[0]
-    for circle, text in head["draw"]:
-      circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, cx=grid.centerX(), cy=grid.centerY())
-      text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, x=grid.centerX(), y=grid.centerY())
+    ## STEP2: Other entries move forward.
+    for i, entry in enumerate(self.mshrFifo):
+      for animBox in entry["animBoxList"]:
+        animBox.moveTo(self.cycle, self.mshrFifo_grids[i])
 
 
-    ## STEP3: Other entries move forward.
-    if len(self.mshrFifo) > 0:
-      for i, entry in enumerate(self.mshrFifo):
-        grid_old = self.mshrFifo_grids[i+1]
-        grid     = self.mshrFifo_grids[i]
-        
-        for circle, text in entry["draw"]:
-          circle.add_key_frame(
-            (self.cycle-1+self.ANIM_PRE)/self.speed,
-            cx=grid_old.centerX(), cy=grid_old.centerY()
-          )
-          circle.add_key_frame(
-            (self.cycle-self.ANIM_POST)/self.speed,
-            cx=grid.centerX(), cy=grid.centerY()
-          )
-          text.add_key_frame(
-            (self.cycle-1+self.ANIM_PRE)/self.speed,
-            x=grid_old.centerX(), y=grid_old.centerY()
-          )
-          text.add_key_frame(
-            (self.cycle-self.ANIM_POST)/self.speed,
-            x=grid.centerX(), y=grid.centerY()
-          )
-
-    ## STEP4: Update the valid arrary.
+    ## STEP3: Update the valid arrary.
     text = self.valid_text[head["addr"]]
     text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
     text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
@@ -231,33 +161,45 @@ class MemSystem(SimuMemSystem):
     super().respond_miss(head, robResp)
 
 
+
+
+  ## PUBLIC:
+  def sendReq(self, addr, roblink, animBox):
+    if self.l1ValidArray[addr]:
+      self.hitList.append({"addr": addr, "roblink": roblink})
+      animBox.moveTo(self.cycle, self.hit_grids[addr])
+      self.hitList[-1]["animBox"] = animBox
+
+    else:
+      existingMiss, entryID = self.findInMshrFifo(addr)
+      if existingMiss==None:
+        self.mshrFifo.append({
+          "addr": addr,
+          "latency": self.MISS_LATENCY,
+          "roblinkList": [roblink],
+        })
+        animBox.moveTo(self.cycle, self.mshrFifo_grids[len(self.mshrFifo)-1])
+        self.mshrFifo[-1]["animBoxList"] = [animBox]
+
+      else:
+        existingMiss["roblinkList"].append(roblink)
+        animBox.moveTo(self.cycle, self.mshrFifo_grids[entryID])
+        existingMiss["animBoxList"].append(animBox)
+
+
   def squash(self):
     for entry in self.hitList:
-      circle, text = entry["draw"]
-      
-      circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-      circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
-      text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-      text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
+      entry["animBox"].disappear(self.cycle)
     
-    if len(self.mshrFifo) > 1:
-      for entry in self.mshrFifo[1:]:
-        for circle, text in entry["draw"]:
-          circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-          circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
-          text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-          text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
+    for entry in self.mshrFifo[1:]:
+      for animBox in entry["animBoxList"]:
+        animBox.disappear(self.cycle)
       
+    if len(self.mshrFifo) > 0:
       head = self.mshrFifo[0]
       if head["latency"] > 0:
-        for circle, text in head["draw"]:
-          circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-          circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="orange")
-          text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-          text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="orange")
-
-    ## TODO: remove this
-    self.justSquash = True
+        for animBox in head["animBoxList"]:
+          animBox.changeColor(self.cycle, "orange")
 
     super().squash()
     

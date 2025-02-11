@@ -26,11 +26,10 @@ class Processor():
 
 
   def fetch(self):
-    if self.pc < len(self.imem):
-      inst = self.imem[self.pc]
-    else:
-      inst = {"opcode": "NOP", "name": "nop"}
-    decodedDict = decode(inst)
+    if self.pc >= len(self.imem):
+      return
+
+    decodedDict = decode(self.imem[self.pc])
     
     src_stall, src_data, src_roblink = self.regfile.read(
       decodedDict["src_used"], decodedDict["src_addr"])

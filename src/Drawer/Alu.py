@@ -7,10 +7,6 @@ from src.Simulator.Alu import Alu as SimuAlu
 
 
 class Alu(SimuAlu):
-
-  ANIM_PRE  = 0.2
-  ANIM_POST = 0.2
-  
   def __init__(self, d, bufferSize, grid, fontsize, line_width, speed=1):
     super().__init__()
 
@@ -20,6 +16,8 @@ class Alu(SimuAlu):
     self.fontsize   = fontsize
     self.line_width = line_width
     self.speed      = speed
+
+    self.ports_grids = []
 
 
     ## STEP1: Divide into 4 components.
@@ -38,7 +36,6 @@ class Alu(SimuAlu):
 
 
     ## STEP2: Draw 4 buffers and textPort.
-    self.ports_grids = []
 
     ## STEP2.1: Divide into 4 ports.
     parts = [0.125] + [1, 0.25] * self.NUM_PORTS
@@ -87,76 +84,40 @@ class Alu(SimuAlu):
       "ALU", fontsize,
       textAlu_grid.centerX(), textAlu_grid.centerY(), center=True
     ))
+    
+
+  def respond_internal(self, portID, head, roblink, result, robResp):
+    ## STEP1: Current entry disappear.
+    head["animBox"].disappear(self.cycle)
 
 
-  def sendReq(self, port, latency, result, roblink, circle, text):
+    ## STEP2: Other entries move forward.
+    for i, entry in enumerate(self.portFifo[portID]):
+      entry["animBox"].moveTo(self.cycle, self.ports_grids[portID][i])
+
+
+    super().respond_internal(portID, head, roblink, result, robResp)
+
+
+
+
+  ## PUBLIC:
+  def sendReq(self, port, latency, result, roblink, animBox):
     super().sendReq(port, latency, result, roblink)
     
     loc = len(self.portFifo[port])
     assert loc <= self.bufferSize, \
            "Buffer for port is full in the visulization, please increase " + \
            "bufferSize argument."
-    grid = self.ports_grids[port][loc-1]
-    
-    circle.add_key_frame((
-      self.cycle-self.ANIM_POST)/self.speed,
-      cx=grid.centerX(), cy=grid.centerY()
-    )
-    text.add_key_frame(
-      (self.cycle-self.ANIM_POST)/self.speed,
-      x=grid.centerX(), y=grid.centerY()
-    )
 
-    self.portFifo[port][-1]["draw"] = (circle, text)
-    
-
-  def respond_internal(self, portID, head, roblink, result, robResp):
-    ## STEP1: Returned entry is here at the begining of the cycle.
-    circle, text = head["draw"]
-    grid = self.ports_grids[portID][0]
-    circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, cx=grid.centerX(), cy=grid.centerY())
-    text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, x=grid.centerX(), y=grid.centerY())
-
-
-    ## STEP2: Other entries move forward.
-    fifo = self.portFifo[portID]
-
-    if len(fifo) > 0:
-      for i, entry in enumerate(fifo):
-        circle, text = entry["draw"]
-        grid_old = self.ports_grids[portID][i+1]
-        grid     = self.ports_grids[portID][i]
-
-        circle.add_key_frame(
-          (self.cycle-1+self.ANIM_PRE)/self.speed,
-          cx=grid_old.centerX(), cy=grid_old.centerY()
-        )
-        circle.add_key_frame(
-          (self.cycle-self.ANIM_POST)/self.speed,
-          cx=grid.centerX(), cy=grid.centerY()
-        )
-        text.add_key_frame(
-          (self.cycle-1+self.ANIM_PRE)/self.speed,
-          x=grid_old.centerX(), y=grid_old.centerY()
-        )
-        text.add_key_frame(
-          (self.cycle-self.ANIM_POST)/self.speed,
-          x=grid.centerX(), y=grid.centerY()
-        )
-    
-    super().respond_internal(portID, head, roblink, result, robResp)
+    animBox.moveTo(self.cycle, self.ports_grids[port][loc-1])
+    self.portFifo[port][-1]["animBox"] = animBox
 
 
   def squash(self):
     for fifo in self.portFifo:
       for entry in fifo:
-        circle, text = entry["draw"]
-        
-        circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-        circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
-        text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-        text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
-
+        entry["animBox"].disappear()
 
     super().squash()
 

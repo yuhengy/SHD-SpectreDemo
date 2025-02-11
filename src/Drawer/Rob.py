@@ -4,13 +4,10 @@ import drawsvg as draw
 
 sys.path.append(os.getcwd())
 from src.Simulator.Rob import Rob as SimuRob
+from src.Drawer.AnimationBox import AnimationBox
 
 
 class Rob(SimuRob):
-
-  ANIM_PRE  = 0.2
-  ANIM_POST = 0.2
-  
   def __init__(self, d, numInst, grid, fontsize, line_width, speed=1):
     super().__init__()
 
@@ -20,6 +17,8 @@ class Rob(SimuRob):
     self.fontsize   = fontsize
     self.line_width = line_width
     self.speed      = speed
+
+    self.entry_grids = []
 
 
     ## STEP1: Divide into 4 components.
@@ -33,7 +32,6 @@ class Rob(SimuRob):
 
     ## STEP2: Draw entries.
     entries_grid.divideX([0.5] + [1 for _ in range(numInst+1)])
-    self.entry_grids = []
     for i in range(numInst+1, 0, -1):
       self.entry_grids.append(entries_grid.getSubGrid(i, 0))
     dots_grid = entries_grid.getSubGrid(0, 0)
@@ -73,177 +71,57 @@ class Rob(SimuRob):
     ))
 
 
-  def push(
-    self, src_stall, src_data, src_roblink, pc, exe_cmd, wb_enable, wb_addr):
-    super().push(
-      src_stall, src_data, src_roblink, pc, exe_cmd, wb_enable, wb_addr)
-
-    if self.tail >= len(self.entry_grids):
-      return
-
-    entry      = self.entries    [self.tail-1]
-    entry_grid = self.entry_grids[self.tail-1]
-    
-    circle = draw.Circle(
-      entry_grid.centerX(), entry_grid.centerY(), 0.75*self.fontsize,
-      fill="none", stroke_width=self.line_width)
-    circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="none")
-    circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="black")
-    self.d.append(circle)
-
-    text = draw.Text(
-      exe_cmd["name"], self.fontsize * 2 / max(2, len(exe_cmd["name"])),
-      entry_grid.centerX(), entry_grid.centerY(), center=True)
-    text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="none")
-    text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="black")
-    self.d.append(text)
-
-    entry["draw"] = (circle, text)
-    
-    circle = draw.Circle(
-      entry_grid.centerX(), entry_grid.centerY(), 0.75*self.fontsize,
-      fill="none", stroke_width=self.line_width)
-    circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="none")
-    circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="black")
-    self.d.append(circle)
-
-    text = draw.Text(
-      exe_cmd["name"], self.fontsize * 2 / max(2, len(exe_cmd["name"])),
-      entry_grid.centerX(), entry_grid.centerY(), center=True)
-    text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="none")
-    text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="black")
-    self.d.append(text)
-
-    entry["draw_dispatched"] = (circle, text)
-
-
-  def dispatch_draw(self, i):
-    entry      = self.entries    [i]
-    entry_grid = self.entry_grids[i]
-    exe_cmd    = entry["exe_cmd"]
-    if "draw" not in entry:
-      return
-
-
-    circle, text = entry["draw"]
-    circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-    circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="red")
-    text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-    text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="red")
-
-
-    circle, text = entry["draw_dispatched"]
-    circle.add_key_frame(
-      (self.cycle-1+self.ANIM_PRE)/self.speed,
-      cx=entry_grid.centerX(), cy=entry_grid.centerY()
-    )
-    text.add_key_frame(
-      (self.cycle-1+self.ANIM_PRE)/self.speed,
-      x=entry_grid.centerX(), y=entry_grid.centerY()
-    )
-
-    return circle, text
-
-
   def dispatch_alu(self, port, latency, result, i, aluReq):
-    circle, text = self.dispatch_draw(i)
-    aluReq(port, latency, result, i, circle, text)
+    animBox = self.entries[i]["animBox"]
+    animBox_forDispatch = animBox.fork(self.cycle)
+    animBox.changeColor(self.cycle, "red")
+    aluReq(port, latency, result, i, animBox_forDispatch)
 
 
   def dispatch_l1(self, addr, i, l1Req):
-    circle, text = self.dispatch_draw(i)
-    l1Req(addr, i, circle, text)
+    animBox = self.entries[i]["animBox"]
+    animBox_forDispatch = animBox.fork(self.cycle)
+    animBox.changeColor(self.cycle, "red")
+    l1Req(addr, i, animBox_forDispatch)
 
 
   def dispatch_br(self, i):
     super().dispatch_br(i)
     
-    entry      = self.entries[i]
-    entry_grid = self.entry_grids[i]
-
+    entry = self.entries[i]
     if entry["squash"]:
-      circle, text = entry["draw"]
-      circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-      circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="orange")
-      text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-      text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="orange")
-
-      circle, text = entry["draw_dispatched"]
-      circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-      circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="orange")
-      text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-      text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="orange")
-
-        
-
-  def collectResultAndForward(self, roblink, result):
-    entry      = self.entries    [roblink]
-    entry_grid = self.entry_grids[roblink]
-
-
-    circle, text = entry["draw"]
-    circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="red")
-    circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="black")
-    text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="red")
-    text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="black")
-
-
-    circle, text = entry["draw_dispatched"]
-    circle.add_key_frame(
-      (self.cycle-self.ANIM_POST)/self.speed,
-      cx=entry_grid.centerX(), cy=entry_grid.centerY()
-    )
-    text.add_key_frame(
-      (self.cycle-self.ANIM_POST)/self.speed,
-      x=entry_grid.centerX(), y=entry_grid.centerY()
-    )
-    
-
-    super().collectResultAndForward(roblink, result)
+      entry["animBox"].changeColor(self.cycle, "orange")
 
 
   def commit_wb(self, regfileWrite):
-    entry      = self.entries    [self.head]
-    entry_grid = self.entry_grids[self.head]
-
-
-    circle, text = entry["draw"]
-    circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-    circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
-    text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-    text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
-
-
-    circle, text = entry["draw_dispatched"]
-    circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-    circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
-    text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-    text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
-
-
+    self.entries[self.head]["animBox"].disappear(self.cycle)
     super().commit_wb(regfileWrite)
 
 
   def commit_squash(self, setPc):
-
-    ## TODO: fix for entries do not have "draw"
-    for i in range(self.head, self.tail):
-      entry  = self.entries[i]
-      
-      if "draw" in entry:
-        circle, text = entry["draw"]
-        circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-        circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
-        text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-        text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
-
-        if entry["status"]!=self.Status.DISPATCHED:
-          circle, text = entry["draw_dispatched"]
-          circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
-          circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
-          text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-          text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
-
-
+    for entry in self.entries[self.head: self.tail]:
+      entry["animBox"].disappear(self.cycle)
     super().commit_squash(setPc)
+
+
+
+
+
+  ## PUBLIC:
+  def push(
+    self, src_stall, src_data, src_roblink, pc, exe_cmd, wb_enable, wb_addr):
+    super().push(
+      src_stall, src_data, src_roblink, pc, exe_cmd, wb_enable, wb_addr)
+
+    animBox = AnimationBox(
+      self.d, exe_cmd["name"], 0.75*self.fontsize, self.line_width, self.speed,
+      self.entry_grids[self.tail-1])
+    animBox.appear(self.cycle)
+    self.entries[self.tail-1]["animBox"] = animBox
+
+
+  def collectResultAndForward(self, roblink, result):
+    self.entries[roblink]["animBox"].changeColor(self.cycle, "black")
+    
+    super().collectResultAndForward(roblink, result)
 

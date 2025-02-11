@@ -90,9 +90,6 @@ class MemSystem():
 
       assert head["latency"] > 0, "MSHR Latency drops below 0"
       head["latency"] = head["latency"] - 1
-    
-    ## TODO: remove this
-    self.justSquash = False
 
     self.cycle += 1
 
