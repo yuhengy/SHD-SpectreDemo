@@ -15,7 +15,7 @@ from src.Drawer.MemSystem import MemSystem
 class Processor(SimuProcessor):
 
   def __init__(self, imem, l1ValidArray, totalCycle, printTrace=False, \
-                     scale=1, xyRatio=16/9, speed=1):
+                     scale=1, xyRatio=16/9, speed=1, bufferSize=3):
     super().__init__(imem, l1ValidArray, totalCycle, printTrace)
 
 
@@ -121,10 +121,13 @@ class Processor(SimuProcessor):
 
 
     ## STEP5: Draw submodules, i.e., ROB, ALU, and memory system.
-    self.rob       = Rob(self.d, len(imem), rob_grid, fontsize, line_width, speed)
-    self.alu       = Alu(self.d, 3, alu_grid, fontsize, line_width, speed)
-    self.memSystem = MemSystem(l1ValidArray, self.d, 3, memSystem_grid,
-                               fontsize, line_width, speed)
+    self.rob       = Rob(
+      self.d, len(imem), rob_grid, fontsize, line_width, speed)
+    self.alu       = Alu(
+      self.d, bufferSize, alu_grid, fontsize, line_width, speed)
+    self.memSystem = MemSystem(
+      l1ValidArray, self.d, bufferSize, memSystem_grid, fontsize, line_width,
+      speed)
 
 
   def getDraw(self):
@@ -153,6 +156,7 @@ if __name__ == "__main__":
     # scale=1,
     # xyRatio=16/9,
     # speed=1,
+    # bufferSize=3,
   )
   processor.simulate()
   processor.getDraw().display_inline()

@@ -5,6 +5,8 @@ class Alu():
   def __init__(self, printTrace=False):
     self.portFifo = [[] for _ in range(self.NUM_PORTS)]
     
+    self.cycle = 0
+
     self.printTrace = printTrace
 
 
@@ -20,6 +22,10 @@ class Alu():
       print(f"[ALU] Get request {self.portFifo[port][-1]} at Port {port}.")
 
 
+  def respond_internal(self, portID, head, roblink, result, robResp):
+    robResp(roblink, result)
+
+
   def respond(self, robResp):
     for i in range(self.NUM_PORTS):
       fifo = self.portFifo[i]
@@ -29,7 +35,7 @@ class Alu():
         
         if head["latency"]==0:
           fifo.pop(0)
-          robResp(head["roblink"], head["result"])
+          self.respond_internal(i, head, head["roblink"], head["result"], robResp)
 
 
   def tick(self):
@@ -41,4 +47,6 @@ class Alu():
 
         assert head["latency"] > 0, "ALU Latency drops below 0"
         head["latency"] = head["latency"] - 1
+
+    self.cycle += 1
 

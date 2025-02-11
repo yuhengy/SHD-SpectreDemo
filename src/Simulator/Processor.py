@@ -78,7 +78,7 @@ class Processor():
 
 
   def simulate(self):
-    for i in range(self.totalCycle):
+    for i in range(self.totalCycle+1):
       self.tick()
 
 

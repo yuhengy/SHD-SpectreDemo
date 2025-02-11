@@ -7,6 +7,9 @@ from src.Simulator.Alu import Alu as SimuAlu
 
 
 class Alu(SimuAlu):
+
+  ANIM_PRE  = 0.2
+  ANIM_POST = 0.2
   
   def __init__(self, d, bufferSize, grid, fontsize, line_width, speed=1):
     super().__init__()
@@ -35,31 +38,40 @@ class Alu(SimuAlu):
 
 
     ## STEP2: Draw 4 buffers and textPort.
-    parts = [0.125]
-    for i in range(self.NUM_PORTS):
-      parts += [1, 0.25]
+    self.ports_grids = []
+
+    ## STEP2.1: Divide into 4 ports.
+    parts = [0.125] + [1, 0.25] * self.NUM_PORTS
     parts[-1] = 0.125
     buffer_grid.divideX(parts)
-    buffers_grid = []
-    for i in range(1, 2*self.NUM_PORTS, 2):
-      buffers_grid.append(buffer_grid.getSubGrid(i, 0))
+    for portID in range(self.NUM_PORTS):
+      grid = buffer_grid.getSubGrid(1+2*portID, 0)
 
-    entry_height = buffer_grid.height / (bufferSize + 0.2)
-
-    for portID, grid in enumerate(buffers_grid):
+      ## STEP2.2: Divide into 3 entries.
+      grid.divideY([0.2] + [1 for _ in range(bufferSize)])
+      port_grids = []
+      for i in range(bufferSize, 0, -1):
+        port_grids.append(grid.getSubGrid(0, i))
+      portTail_grid = grid.getSubGrid(0, 0)
+      self.ports_grids.append(port_grids)
+      
+      ## STEP2.3: Draw the buffer tail.
       self.d.append(draw.Line(
-        grid.x, grid.y, grid.x, grid.y+entry_height*1.2,
+        portTail_grid.x, portTail_grid.y,
+        portTail_grid.x, portTail_grid.y+portTail_grid.height*6,
         stroke="black", stroke_width=self.line_width
       ))
       self.d.append(draw.Line(
-        grid.x2(), grid.y, grid.x2(), grid.y+entry_height*1.2,
+        portTail_grid.x2(), portTail_grid.y,
+        portTail_grid.x2(), portTail_grid.y+portTail_grid.height*6,
         stroke="black", stroke_width=self.line_width
       ))
-      for i in range(bufferSize-1):
-        self.d.append(draw.Rectangle(
-          grid.x, grid.y+entry_height*(i+1.2), grid.width, entry_height,
-          fill="none", stroke="black", stroke_width=self.line_width
-        ))
+
+      ## STEP2.4: Draw the buffer body.
+      for g in port_grids[:-1]:
+        g.drawRectangle(d, line_width)
+      
+      ## STEP2.5: Draw the text.
       self.d.append(draw.Text(
         f"Port {portID}", fontsize,
         grid.centerX(), grid.y2()+0.75*fontsize, center=True
@@ -75,4 +87,73 @@ class Alu(SimuAlu):
       "ALU", fontsize,
       textAlu_grid.centerX(), textAlu_grid.centerY(), center=True
     ))
+
+
+  def sendReq(self, port, latency, result, roblink, circle, text):
+    super().sendReq(port, latency, result, roblink)
+    
+    loc = len(self.portFifo[port])
+    assert loc <= self.bufferSize, \
+           "Buffer for port is full in the visulization, please increase " + \
+           "bufferSize argument."
+    grid = self.ports_grids[port][loc-1]
+    
+    circle.add_key_frame((
+      self.cycle-self.ANIM_POST)/self.speed,
+      cx=grid.centerX(), cy=grid.centerY()
+    )
+    text.add_key_frame(
+      (self.cycle-self.ANIM_POST)/self.speed,
+      x=grid.centerX(), y=grid.centerY()
+    )
+
+    self.portFifo[port][-1]["draw"] = (circle, text)
+    
+
+  def respond_internal(self, portID, head, roblink, result, robResp):
+    ## STEP1: Returned entry is here at the begining of the cycle.
+    circle, text = head["draw"]
+    grid = self.ports_grids[portID][0]
+    circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, cx=grid.centerX(), cy=grid.centerY())
+    text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, x=grid.centerX(), y=grid.centerY())
+
+
+    ## STEP2: Other entries move forward.
+    fifo = self.portFifo[portID]
+
+    if len(fifo) > 0:
+      for i, entry in enumerate(fifo):
+        circle, text = entry["draw"]
+        grid_old = fifo[i+1]
+        grid     = fifo[i]
+
+        circle.add_key_frame(
+          (self.cycle-1+self.ANIM_PRE)/self.speed,
+          cx=grid_old.centerX(), cy=grid_old.centerY()
+        )
+        circle.add_key_frame(
+          (self.cycle-self.ANIM_POST)/self.speed,
+          cx=grid.centerX(), cy=grid.centerY()
+        )
+        text.add_key_frame(
+          (self.cycle-1+self.ANIM_PRE)/self.speed,
+          x=grid_old.centerX(), y=grid_old.centerY()
+        )
+        text.add_key_frame(
+          (self.cycle-self.ANIM_POST)/self.speed,
+          x=grid.centerX(), y=grid.centerY()
+        )
+    
+    super().respond_internal(portID, head, roblink, result, robResp)
+
+
+
+
+
+
+
+
+
+
+    
 

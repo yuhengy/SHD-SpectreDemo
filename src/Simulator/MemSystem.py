@@ -7,8 +7,20 @@ class MemSystem():
     self.l1ValidArray = l1ValidArray
     self.hitList = []
     self.mshrFifo = []
+    
+    self.cycle = 0
 
     self.printTrace = printTrace
+
+
+  def findInMshrFifo(self, addr):
+    existingMiss = None
+    entryID      = None
+    for i, entry in enumerate(self.mshrFifo):
+      if entry["addr"]==addr:
+        existingMiss = entry
+        entryID      = i
+    return existingMiss, entryID
 
 
   def sendReq(self, addr, roblink):
@@ -19,12 +31,9 @@ class MemSystem():
         print(f"[Memory System] Get request and hit: {self.hitList[-1]}.")
 
     else:
-      existingMiss = list(filter(
-        lambda entry: entry["addr"]==addr,
-        self.mshrFifo
-      ))
+      existingMiss, entryID = self.findInMshrFifo(addr)
 
-      if   len(existingMiss)==0:
+      if existingMiss==None:
         self.mshrFifo.append({
           "addr": addr,
           "latency": self.MISS_LATENCY,
@@ -35,20 +44,26 @@ class MemSystem():
           print(f"[Memory System] Get request and miss.",
                 f"New MSHR request: {self.mshrFifo[-1]}.")
       
-      elif len(existingMiss)==1:
-        existingMiss[0]["roblinkList"].append(roblink)
+      else:
+        existingMiss["roblinkList"].append(roblink)
 
         if self.printTrace:
           print(f"[Memory System] Get request and miss.",
-                f"Append to existing MSHR request: {existingMiss[0]}.")
-      
-      else:
-        assert False, "Duplicated entries in the mshrFifo."
+                f"Append to existing MSHR request: {existingMiss}.")
+  
+
+  def respond_hit(self, entry, robResp):
+    robResp(entry["roblink"], self.READ_ONLY_ARRAY[entry["addr"]])
+  
+
+  def respond_miss(self, head, robResp):
+    for roblink in head["roblinkList"]:
+      robResp(roblink, self.READ_ONLY_ARRAY[head["addr"]])
 
 
   def respond(self, robResp):
     for entry in self.hitList:
-      robResp(entry["roblink"], self.READ_ONLY_ARRAY[entry["addr"]])
+      self.respond_hit(entry, robResp)
     self.hitList = []
 
 
@@ -57,8 +72,8 @@ class MemSystem():
       
       if head["latency"]==0:
         self.mshrFifo.pop(0)
-        for roblink in head["roblinkList"]:
-          robResp(roblink, self.READ_ONLY_ARRAY[head["addr"]])
+        self.respond_miss(head, robResp)
+        self.l1ValidArray[head["addr"]] = True
 
 
   def tick(self):
@@ -67,4 +82,6 @@ class MemSystem():
 
       assert head["latency"] > 0, "MSHR Latency drops below 0"
       head["latency"] = head["latency"] - 1
+
+    self.cycle += 1
 

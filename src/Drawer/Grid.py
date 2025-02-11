@@ -63,17 +63,21 @@ class Grid():
 
 
   def drawRectangle(self, d, line_width):
-    d.append(draw.Rectangle(
+    rectangle = draw.Rectangle(
       self.x, self.y, self.width, self.height,
       fill="none", stroke="black", stroke_width=line_width
-    ))
+    )
+    d.append(rectangle)
+    return rectangle
 
 
   def drawText(self, d, text, fontsize):
-    d.append(draw.Text(
+    text = draw.Text(
       text, fontsize,
       self.centerX(), self.centerY(), center=True
-    ))
+    )
+    d.append(text)
+    return text
 
 
   def getSubGrid(self, x, y):
@@ -87,8 +91,8 @@ class Grid():
 
   def getMergedGrid(self, other):
     if   self.x==other.x:
-      assert (self.y+self.height)==other.y or (other.y+other.height)==self.y
-      assert self.width==other.width
+      # assert (self.y+self.height)==other.y or (other.y+other.height)==self.y
+      # assert self.width==other.width
       return Grid(
         min(self.x, other.x),
         min(self.y, other.y),
@@ -96,8 +100,8 @@ class Grid():
         self.height+other.height
       )
     elif self.y==other.y:
-      assert (self.x+self.width )==other.x or (other.x+other.width )==self.x
-      assert self.height==other.height
+      # assert (self.x+self.width )==other.x or (other.x+other.width )==self.x
+      # assert self.height==other.height
       return Grid(
         min(self.x, other.x),
         min(self.y, other.y),

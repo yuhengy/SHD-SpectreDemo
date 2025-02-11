@@ -10,6 +10,7 @@ def decode(inst):
         "port"   : inst["port"]   if "port"   in inst else 0,
         "latency": inst["latency"],
         "result" : inst["result"] if "result" in inst else 0,
+        "name"   : inst["name"],
       },
      
       "wb_enable": True,
@@ -23,6 +24,7 @@ def decode(inst):
       
       "exe_cmd": {
         "opcode": "LOAD",
+        "name"   : inst["name"],
       },
       
       "wb_enable": True,
@@ -36,6 +38,7 @@ def decode(inst):
       
       "exe_cmd": {
         "opcode": "NOP",
+        "name"   : inst["name"],
       },
       
       "wb_enable": False,

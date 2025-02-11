@@ -16,11 +16,13 @@ class Rob():
     self.head = 0
     self.tail = 0
 
+    self.cycle = 0
+
     self.printTrace = printTrace
 
 
   def push(self, src_stall, src_data, src_roblink,
-                 exe_info,
+                 exe_cmd,
                  wb_enable, wb_addr):
     self.entries.append({
       "status"      : self.Status.STALLED if src_stall else self.Status.READY,
@@ -28,7 +30,7 @@ class Rob():
       "src_data"    : src_data,
       "src_roblink" : src_roblink,
 
-      "exe_cmd"     : exe_info,
+      "exe_cmd"     : exe_cmd,
       
       "wb_enable"   : wb_enable,
       "wb_addr"     : wb_addr,
@@ -40,6 +42,14 @@ class Rob():
       print(f"[ROB] Push entry {self.entries[-1]}.")
 
 
+  def dispatch_alu(self, port, latency, result, i, aluReq):
+    aluReq(port, latency, result, i)
+
+
+  def dispatch_l1(self, src_data, i, l1Req):
+    l1Req(src_data, i)
+
+
   def dispatch(self, aluReq, l1Req):
     for i in range(self.head, self.tail):
       entry = self.entries[i]
@@ -48,22 +58,20 @@ class Rob():
         exe_cmd = entry["exe_cmd"]
         
         if   exe_cmd["opcode"]=="ALU":
-          aluReq(exe_cmd["port"], exe_cmd["latency"], exe_cmd["result"], i)
+          self.dispatch_alu(
+            exe_cmd["port"], exe_cmd["latency"], exe_cmd["result"], i, aluReq)
           entry["status"] = self.Status.DISPATCHED
         
         elif exe_cmd["opcode"]=="LOAD":
-          l1Req(entry["src_data"], i)
+          self.dispatch_l1(entry["src_data"], i, l1Req)
           entry["status"] = self.Status.DISPATCHED
         
         elif exe_cmd["opcode"]=="NOP":
-          l1Req(entry["src_data"], i)
           entry["status"] = self.Status.FINISHED
         
         else:
           assert false, "Unsupported opcode."
         
-
-
 
   def collectResultAndForward(self, roblink, result):
     assert self.head <= roblink and roblink < self.tail, \
@@ -88,6 +96,13 @@ class Rob():
           print(f"[ROB] Forward result {result} to entry {i}.")
 
 
+  def commit_internal(self, regfileWrite):
+    entry = self.entries[self.head]
+    if entry["wb_enable"]:
+      regfileWrite(entry["wb_addr"], entry["wb_data"])
+    self.head += 1
+
+
   def commit(self, regfileWrite):
     if self.tail==self.head:
       return
@@ -95,14 +110,12 @@ class Rob():
     entry = self.entries[self.head]
     
     if entry["status"]== self.Status.FINISHED:
-      if entry["wb_enable"]:
-        regfileWrite(entry["wb_addr"], entry["wb_data"])
-      self.head += 1
+      self.commit_internal(regfileWrite)
 
       if self.printTrace:
         print(f"[ROB] Commit entry {entry}.")
 
 
   def tick(self):
-    pass
+    self.cycle += 1
 
