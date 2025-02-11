@@ -39,6 +39,10 @@ class PhysicalRegfile():
         self.architectualRegfile[addr] = data
 
 
+  def squash(self):
+    self.avaliable = [True for _ in range(self.NUM_REG)]
+
+
   def tick(self):
     pass
 

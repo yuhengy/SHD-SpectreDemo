@@ -1,6 +1,6 @@
 
 class MemSystem():
-  MISS_LATENCY = 4
+  MISS_LATENCY = 3
   READ_ONLY_ARRAY = [0, 0, 0, 0]
 
   def __init__(self, l1ValidArray, printTrace=False):
@@ -76,12 +76,23 @@ class MemSystem():
         self.l1ValidArray[head["addr"]] = True
 
 
+  def squash(self):
+    self.hitList = []
+    if len(self.mshrFifo) > 0:
+      head = self.mshrFifo[0]
+      head["roblinkList"] = []
+      self.mshrFifo = [head]
+
+
   def tick(self):
     if len(self.mshrFifo) > 0:
       head = self.mshrFifo[0]
 
       assert head["latency"] > 0, "MSHR Latency drops below 0"
       head["latency"] = head["latency"] - 1
+    
+    ## TODO: remove this
+    self.justSquash = False
 
     self.cycle += 1
 

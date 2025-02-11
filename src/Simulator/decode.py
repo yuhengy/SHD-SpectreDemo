@@ -18,17 +18,38 @@ def decode(inst):
     }
 
   elif inst["opcode"]=="LOAD":
+    useReg = "src" in inst
+    useImm = "srcImm" in inst
+    assert useReg ^ useImm, "LOAD use one of src or srcImm."
+    return {
+      "src_used" : useReg,
+      "src_addr" : inst["src"] if useReg else None,
+      
+      "exe_cmd": {
+        "opcode": "LOAD",
+        "useImm": useImm,
+        "srcImm": inst["srcImm"] if useImm else None,
+        "name"  : inst["name"],
+      },
+      
+      "wb_enable": True,
+      "wb_addr"  : inst["dest"],
+    }
+
+  elif inst["opcode"]=="BREZ":
     return {
       "src_used" : True,
       "src_addr" : inst["src"],
       
       "exe_cmd": {
-        "opcode": "LOAD",
-        "name"   : inst["name"],
+        "opcode"         : "BREZ",
+        "predicted_taken": False,
+        "offset"         : inst["offset"],
+        "name"           : inst["name"],
       },
       
-      "wb_enable": True,
-      "wb_addr"  : inst["dest"],
+      "wb_enable": False,
+      "wb_addr"  : None,
     }
 
   elif inst["opcode"]=="NOP":
@@ -38,7 +59,7 @@ def decode(inst):
       
       "exe_cmd": {
         "opcode": "NOP",
-        "name"   : inst["name"],
+        "name"  : inst["name"],
       },
       
       "wb_enable": False,

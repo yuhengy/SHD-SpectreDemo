@@ -21,7 +21,7 @@ class Rob():
     self.printTrace = printTrace
 
 
-  def push(self, src_stall, src_data, src_roblink,
+  def push(self, src_stall, src_data, src_roblink, pc,
                  exe_cmd,
                  wb_enable, wb_addr):
     self.entries.append({
@@ -35,6 +35,10 @@ class Rob():
       "wb_enable"   : wb_enable,
       "wb_addr"     : wb_addr,
       "wb_data"     : 0,
+
+      "pc"          : pc,
+      "squash"      : False,
+      "squash_pc"   : None,
     })
     self.tail += 1
 
@@ -46,8 +50,16 @@ class Rob():
     aluReq(port, latency, result, i)
 
 
-  def dispatch_l1(self, src_data, i, l1Req):
-    l1Req(src_data, i)
+  def dispatch_l1(self, addr, i, l1Req):
+    l1Req(addr, i)
+
+
+  def dispatch_br(self, i):
+    entry = self.entries[i]
+    exe_cmd = entry["exe_cmd"]
+
+    entry["squash"] = (entry["src_data"]==0) != exe_cmd["predicted_taken"]
+    entry["squash_pc"] = entry["pc"] + exe_cmd["offset"]
 
 
   def dispatch(self, aluReq, l1Req):
@@ -63,8 +75,13 @@ class Rob():
           entry["status"] = self.Status.DISPATCHED
         
         elif exe_cmd["opcode"]=="LOAD":
-          self.dispatch_l1(entry["src_data"], i, l1Req)
+          addr = exe_cmd["srcImm"] if exe_cmd["useImm"] else entry["src_data"]
+          self.dispatch_l1(addr, i, l1Req)
           entry["status"] = self.Status.DISPATCHED
+        
+        elif exe_cmd["opcode"]=="BREZ":
+          self.dispatch_br(i)
+          entry["status"] = self.Status.FINISHED
         
         elif exe_cmd["opcode"]=="NOP":
           entry["status"] = self.Status.FINISHED
@@ -96,21 +113,37 @@ class Rob():
           print(f"[ROB] Forward result {result} to entry {i}.")
 
 
-  def commit_internal(self, regfileWrite):
+  def commit_wb(self, regfileWrite):
     entry = self.entries[self.head]
-    if entry["wb_enable"]:
-      regfileWrite(entry["wb_addr"], entry["wb_data"], self.head)
-    self.head += 1
+    regfileWrite(entry["wb_addr"], entry["wb_data"], self.head)
 
 
-  def commit(self, regfileWrite):
+  def commit_squash(self, squash):
+
+    ## STEP1: Clear ROB.
+    self.entries = self.entries[:(self.head+1)]
+    self.tail    = self.head + 1
+
+    ## STEP2: Clear renaming table, ALU and L1. Reset PC.
+    squash(self.entries[self.head]["squash_pc"])
+
+
+  def commit(self, regfileWrite, squash):
     if self.tail==self.head:
       return
 
     entry = self.entries[self.head]
     
     if entry["status"]== self.Status.FINISHED:
-      self.commit_internal(regfileWrite)
+      entry = self.entries[self.head]
+      
+      if entry["wb_enable"]:
+        self.commit_wb(regfileWrite)
+      
+      if entry["squash"]:
+        self.commit_squash(squash)
+      
+      self.head += 1
 
       if self.printTrace:
         print(f"[ROB] Commit entry {entry}.")

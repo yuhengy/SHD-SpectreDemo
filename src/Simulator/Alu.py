@@ -38,6 +38,10 @@ class Alu():
           self.respond_internal(i, head, head["roblink"], head["result"], robResp)
 
 
+  def squash(self):
+    self.portFifo = [[] for _ in range(self.NUM_PORTS)]
+
+
   def tick(self):
     for i in range(self.NUM_PORTS):
       fifo = self.portFifo[i]

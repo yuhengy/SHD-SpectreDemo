@@ -165,14 +165,31 @@ class MemSystem(SimuMemSystem):
   
 
   def respond_miss(self, head, robResp):
-    ## STEP1: Returned entry is here at the begining of the cycle.
+
+    ## STEP1: If there are extra draw (due to squash), remove them.
+    for _ in range(len(head["draw"]) - len(head["roblinkList"])):
+      circle, text = head["draw"][0]
+      
+      if self.justSquash:
+        circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
+        text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
+      else:
+        circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="orange")
+        text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="orange")
+      circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
+      text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
+
+      head["draw"].pop(0)
+
+
+    ## STEP2: Returned entry is here at the begining of the cycle.
     grid = self.mshrFifo_grids[0]
     for circle, text in head["draw"]:
       circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, cx=grid.centerX(), cy=grid.centerY())
       text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, x=grid.centerX(), y=grid.centerY())
 
 
-    ## STEP2: Other entries move forward.
+    ## STEP3: Other entries move forward.
     if len(self.mshrFifo) > 0:
       for i, entry in enumerate(self.mshrFifo):
         grid_old = self.mshrFifo_grids[i+1]
@@ -196,7 +213,7 @@ class MemSystem(SimuMemSystem):
             x=grid.centerX(), y=grid.centerY()
           )
 
-    ## STEP3: Update the valid arrary.
+    ## STEP4: Update the valid arrary.
     text = self.valid_text[head["addr"]]
     text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
     text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
@@ -212,4 +229,35 @@ class MemSystem(SimuMemSystem):
 
     
     super().respond_miss(head, robResp)
+
+
+  def squash(self):
+    for entry in self.hitList:
+      circle, text = entry["draw"]
+      
+      circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
+      circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
+      text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
+      text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
+    
+    if len(self.mshrFifo) > 1:
+      for entry in self.mshrFifo[1:]:
+        for circle, text in entry["draw"]:
+          circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
+          circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
+          text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
+          text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
+      
+      head = self.mshrFifo[0]
+      if head["latency"] > 0:
+        for circle, text in head["draw"]:
+          circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
+          circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="orange")
+          text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
+          text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="orange")
+
+    ## TODO: remove this
+    self.justSquash = True
+
+    super().squash()
     

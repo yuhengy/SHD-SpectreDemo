@@ -74,8 +74,9 @@ class Rob(SimuRob):
 
 
   def push(
-    self, src_stall, src_data, src_roblink, exe_cmd, wb_enable, wb_addr):
-    super().push(src_stall, src_data, src_roblink, exe_cmd, wb_enable, wb_addr)
+    self, src_stall, src_data, src_roblink, pc, exe_cmd, wb_enable, wb_addr):
+    super().push(
+      src_stall, src_data, src_roblink, pc, exe_cmd, wb_enable, wb_addr)
 
     if self.tail >= len(self.entry_grids):
       return
@@ -149,9 +150,30 @@ class Rob(SimuRob):
     aluReq(port, latency, result, i, circle, text)
 
 
-  def dispatch_l1(self, src_data, i, l1Req):
+  def dispatch_l1(self, addr, i, l1Req):
     circle, text = self.dispatch_draw(i)
-    l1Req(src_data, i, circle, text)
+    l1Req(addr, i, circle, text)
+
+
+  def dispatch_br(self, i):
+    super().dispatch_br(i)
+    
+    entry      = self.entries[i]
+    entry_grid = self.entry_grids[i]
+
+    if entry["squash"]:
+      circle, text = entry["draw"]
+      circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
+      circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="orange")
+      text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
+      text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="orange")
+
+      circle, text = entry["draw_dispatched"]
+      circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
+      circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="orange")
+      text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
+      text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="orange")
+
         
 
   def collectResultAndForward(self, roblink, result):
@@ -180,7 +202,7 @@ class Rob(SimuRob):
     super().collectResultAndForward(roblink, result)
 
 
-  def commit_internal(self, regfileWrite):
+  def commit_wb(self, regfileWrite):
     entry      = self.entries    [self.head]
     entry_grid = self.entry_grids[self.head]
 
@@ -199,5 +221,29 @@ class Rob(SimuRob):
     text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
 
 
-    super().commit_internal(regfileWrite)
+    super().commit_wb(regfileWrite)
+
+
+  def commit_squash(self, setPc):
+
+    ## TODO: fix for entries do not have "draw"
+    for i in range(self.head, self.tail):
+      entry  = self.entries[i]
+      
+      if "draw" in entry:
+        circle, text = entry["draw"]
+        circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
+        circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
+        text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
+        text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
+
+        if entry["status"]!=self.Status.DISPATCHED:
+          circle, text = entry["draw_dispatched"]
+          circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
+          circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
+          text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
+          text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
+
+
+    super().commit_squash(setPc)
 

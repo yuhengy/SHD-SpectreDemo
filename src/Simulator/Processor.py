@@ -38,7 +38,7 @@ class Processor():
       self.regfile.updateRenaming(decodedDict["wb_addr"], self.rob.tail)
     
     self.rob.push(
-      src_stall, src_data, src_roblink,
+      src_stall, src_data, src_roblink, self.pc,
       decodedDict["exe_cmd"],
       decodedDict["wb_enable"], decodedDict["wb_addr"])
 
@@ -55,7 +55,13 @@ class Processor():
 
 
   def commit(self):
-    self.rob.commit(self.regfile.write)
+    def squash(newPc):
+      self.regfile  .squash()
+      self.alu      .squash()
+      self.memSystem.squash()
+      self.pc = newPc
+
+    self.rob.commit(self.regfile.write, squash)
 
 
   def tick(self):

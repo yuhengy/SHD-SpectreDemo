@@ -146,3 +146,17 @@ class Alu(SimuAlu):
     
     super().respond_internal(portID, head, roblink, result, robResp)
 
+
+  def squash(self):
+    for fifo in self.portFifo:
+      for entry in fifo:
+        circle, text = entry["draw"]
+        
+        circle.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, stroke="black")
+        circle.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, stroke="none")
+        text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
+        text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
+
+
+    super().squash()
+
