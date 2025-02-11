@@ -99,7 +99,7 @@ class Rob():
   def commit_internal(self, regfileWrite):
     entry = self.entries[self.head]
     if entry["wb_enable"]:
-      regfileWrite(entry["wb_addr"], entry["wb_data"])
+      regfileWrite(entry["wb_addr"], entry["wb_data"], self.head)
     self.head += 1
 
 

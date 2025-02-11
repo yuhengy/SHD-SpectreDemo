@@ -14,9 +14,9 @@ from src.Drawer.MemSystem import MemSystem
 
 class Processor(SimuProcessor):
 
-  def __init__(self, imem, l1ValidArray, totalCycle, printTrace=False, \
+  def __init__(self, imem, l1ValidArray, totalCycle, r7=1, printTrace=False, \
                      scale=1, xyRatio=16/9, speed=1, bufferSize=3):
-    super().__init__(imem, l1ValidArray, totalCycle, printTrace)
+    super().__init__(imem, l1ValidArray, totalCycle, r7, printTrace)
 
 
     ## STEP1: Scaling factors
@@ -139,24 +139,25 @@ class Processor(SimuProcessor):
 
 
 
+
 if __name__ == "__main__":
   processor = Processor(
-    imem=[
-      {"dest": 0, "opcode": "ALU", "src": 0, "latency": 1, "port": 0, "name": "inst0"},
-      {"dest": 0, "opcode": "ALU", "src": 0, "latency": 1, "port": 0, "name": "inst0"},
-      {"dest": 0, "opcode": "ALU", "src": 0, "latency": 2, "port": 0, "name": "inst0"},
-      {"dest": 0, "opcode": "ALU", "src": 0, "latency": 2, "port": 0, "name": "inst0"},
-      {"dest": 0, "opcode": "ALU", "src": 0, "latency": 4, "port": 0, "name": "inst0"},
-      {"dest": 0, "opcode": "ALU", "src": 0, "latency": 4, "port": 0, "name": "inst0"},
-      {"dest": 0, "opcode": "ALU", "src": 0, "latency": 4, "port": 0, "name": "inst0"},
-      {"dest": 0, "opcode": "ALU", "src": 0, "latency": 4, "port": 0, "name": "inst0"},
-    ],
-    l1ValidArray=[False, False, False, False],
-    totalCycle=8,
-    # scale=1,
-    # xyRatio=16/9,
-    # speed=1,
-    # bufferSize=3,
+  imem=[
+    {"dest": 1, "opcode": "LOAD", "src": 0, "latency": 1, "port": 0, "name": "1"},
+    {"dest": 0, "opcode": "LOAD", "src": 1, "latency": 1, "port": 0, "name": "TX"},
+    {"dest": 0, "opcode": "LOAD", "src": 1, "latency": 2, "port": 0, "name": "2"},
+    {"dest": 1, "opcode": "LOAD", "src": 7, "latency": 2, "port": 0, "name": "RX"},
+    {"dest": 0, "opcode": "LOAD", "src": 0, "latency": 1, "port": 0, "name": "xxxxxxx"},
+    {"dest": 0, "opcode": "LOAD", "src": 0, "latency": 1, "port": 0, "name": "inst6"},
+    {"opcode": "NOP", "name": "nop"},
+  ],
+  l1ValidArray=[False, False, False, False],
+  totalCycle=10,
+  # r7=1,
+  # scale=1,
+  # xyRatio=16/9,
+  # speed=1,
+  # bufferSize=3,
   )
   processor.simulate()
   processor.getDraw().display_inline()

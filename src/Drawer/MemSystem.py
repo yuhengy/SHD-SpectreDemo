@@ -136,7 +136,7 @@ class MemSystem(SimuMemSystem):
           "latency": self.MISS_LATENCY,
           "roblinkList": [roblink],
         })
-        grid = self.mshrFifo_grids[0]
+        grid = self.mshrFifo_grids[len(self.mshrFifo)-1]
         self.mshrFifo[-1]["draw"] = [(circle, text)]
 
       else:
@@ -175,8 +175,8 @@ class MemSystem(SimuMemSystem):
     ## STEP2: Other entries move forward.
     if len(self.mshrFifo) > 0:
       for i, entry in enumerate(self.mshrFifo):
-        grid_old = self.mshrFifo[i+1]
-        grid     = self.mshrFifo[i]
+        grid_old = self.mshrFifo_grids[i+1]
+        grid     = self.mshrFifo_grids[i]
         
         for circle, text in entry["draw"]:
           circle.add_key_frame(
@@ -213,5 +213,3 @@ class MemSystem(SimuMemSystem):
     
     super().respond_miss(head, robResp)
     
-
-

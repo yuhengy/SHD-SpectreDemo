@@ -11,10 +11,10 @@ from src.Simulator.decode          import decode
 
 class Processor():
 
-  def __init__(self, imem, l1ValidArray, totalCycle, printTrace=False):
+  def __init__(self, imem, l1ValidArray, totalCycle, r7=1, printTrace=False):
     self.pc         = 0
     self.imem       = imem
-    self.regfile    = PhysicalRegfile(printTrace)
+    self.regfile    = PhysicalRegfile(r7, printTrace)
     self.rob        = Rob(printTrace)
     self.alu        = Alu(printTrace)
     self.memSystem  = MemSystem(l1ValidArray, printTrace)
@@ -33,9 +33,9 @@ class Processor():
     decodedDict = decode(inst)
     
     src_stall, src_data, src_roblink = self.regfile.read(
-      decodedDict["src_used"], decodedDict["src_addr"],
-      decodedDict["wb_enable"], decodedDict["wb_addr"]
-    )
+      decodedDict["src_used"], decodedDict["src_addr"])
+    if decodedDict["wb_enable"]:
+      self.regfile.updateRenaming(decodedDict["wb_addr"], self.rob.tail)
     
     self.rob.push(
       src_stall, src_data, src_roblink,

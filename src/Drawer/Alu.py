@@ -124,8 +124,8 @@ class Alu(SimuAlu):
     if len(fifo) > 0:
       for i, entry in enumerate(fifo):
         circle, text = entry["draw"]
-        grid_old = fifo[i+1]
-        grid     = fifo[i]
+        grid_old = self.ports_grids[portID][i+1]
+        grid     = self.ports_grids[portID][i]
 
         circle.add_key_frame(
           (self.cycle-1+self.ANIM_PRE)/self.speed,
@@ -145,15 +145,4 @@ class Alu(SimuAlu):
         )
     
     super().respond_internal(portID, head, roblink, result, robResp)
-
-
-
-
-
-
-
-
-
-
-    
 
