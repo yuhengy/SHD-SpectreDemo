@@ -4,7 +4,7 @@ import drawsvg as draw
 
 sys.path.append(os.getcwd())
 from src.Simulator.Rob import Rob as SimuRob
-from src.Drawer.AnimationBox import AnimationBox
+from src.Drawer.AnimationInst import AnimationInst
 
 
 class Rob(SimuRob):
@@ -72,17 +72,17 @@ class Rob(SimuRob):
 
 
   def dispatch_alu(self, port, latency, result, i, aluReq):
-    animBox = self.entries[i]["animBox"]
-    animBox_forDispatch = animBox.fork(self.cycle)
-    animBox.changeColor(self.cycle, "red")
-    aluReq(port, latency, result, i, animBox_forDispatch)
+    animInst = self.entries[i]["animInst"]
+    animInst_forDispatch = animInst.fork(self.cycle)
+    animInst.changeColor(self.cycle, "red")
+    aluReq(port, latency, result, i, animInst_forDispatch)
 
 
   def dispatch_l1(self, addr, i, l1Req):
-    animBox = self.entries[i]["animBox"]
-    animBox_forDispatch = animBox.fork(self.cycle)
-    animBox.changeColor(self.cycle, "red")
-    l1Req(addr, i, animBox_forDispatch)
+    animInst = self.entries[i]["animInst"]
+    animInst_forDispatch = animInst.fork(self.cycle)
+    animInst.changeColor(self.cycle, "red")
+    l1Req(addr, i, animInst_forDispatch)
 
 
   def dispatch_br(self, i):
@@ -90,17 +90,17 @@ class Rob(SimuRob):
     
     entry = self.entries[i]
     if entry["squash"]:
-      entry["animBox"].changeColor(self.cycle, "orange")
+      entry["animInst"].changeColor(self.cycle, "orange")
 
 
   def commit_wb(self, regfileWrite):
-    self.entries[self.head]["animBox"].disappear(self.cycle)
+    self.entries[self.head]["animInst"].disappear(self.cycle)
     super().commit_wb(regfileWrite)
 
 
   def commit_squash(self, setPc):
     for entry in self.entries[self.head: self.tail]:
-      entry["animBox"].disappear(self.cycle)
+      entry["animInst"].disappear(self.cycle)
     super().commit_squash(setPc)
 
 
@@ -113,15 +113,15 @@ class Rob(SimuRob):
     super().push(
       src_stall, src_data, src_roblink, pc, exe_cmd, wb_enable, wb_addr)
 
-    animBox = AnimationBox(
+    animInst = AnimationInst(
       self.d, exe_cmd["name"], 0.75*self.fontsize, self.line_width, self.speed,
       self.entry_grids[self.tail-1])
-    animBox.appear(self.cycle)
-    self.entries[self.tail-1]["animBox"] = animBox
+    animInst.appear(self.cycle)
+    self.entries[self.tail-1]["animInst"] = animInst
 
 
   def collectResultAndForward(self, roblink, result):
-    self.entries[roblink]["animBox"].changeColor(self.cycle, "black")
+    self.entries[roblink]["animInst"].changeColor(self.cycle, "black")
     
     super().collectResultAndForward(roblink, result)
 

@@ -7,6 +7,7 @@ from src.Simulator.Rob             import Rob
 from src.Simulator.Alu             import Alu
 from src.Simulator.MemSystem       import MemSystem
 from src.Simulator.decode          import decode
+from src.Simulator.parseProgram    import imemToStrList
 
 
 class Processor():
@@ -80,6 +81,15 @@ class Processor():
     
     if self.printTrace:
       print()
+
+
+
+
+
+  ## PUBLIC:
+  def printImem(self):
+    for inst in imemToStrList(self.imem):
+      print(inst)
 
 
   def simulate(self):

@@ -2,7 +2,7 @@
 import drawsvg as draw
 
 
-class AnimationBox():
+class AnimationInst():
 
   PRE_TIME  = 0.2
   POST_TIME = 0.2
@@ -51,7 +51,7 @@ class AnimationBox():
 
   ## PUBLIC:
   def fork(self, cycle):
-    other = AnimationBox(
+    other = AnimationInst(
       self.d, self.text, self.r, self.line_width, self.speed, self.grid)
     other.changeColor_internal(
       cycle, self.color, self.startTime(cycle)-0.02, self.startTime(cycle)-0.01)

@@ -126,21 +126,21 @@ class MemSystem(SimuMemSystem):
   
 
   def respond_hit(self, entry, robResp):
-    entry["animBox"].disappear(self.cycle)
+    entry["animInst"].disappear(self.cycle)
     
     super().respond_hit(entry, robResp)
   
 
   def respond_miss(self, head, robResp):
     ## STEP1: Current entry disappear.
-    for animBox in head["animBoxList"]:
-      animBox.disappear(self.cycle)
+    for animInst in head["animInstList"]:
+      animInst.disappear(self.cycle)
 
 
     ## STEP2: Other entries move forward.
     for i, entry in enumerate(self.mshrFifo):
-      for animBox in entry["animBoxList"]:
-        animBox.moveTo(self.cycle, self.mshrFifo_grids[i])
+      for animInst in entry["animInstList"]:
+        animInst.moveTo(self.cycle, self.mshrFifo_grids[i])
 
 
     ## STEP3: Update the valid arrary.
@@ -164,11 +164,12 @@ class MemSystem(SimuMemSystem):
 
 
   ## PUBLIC:
-  def sendReq(self, addr, roblink, animBox):
+  def sendReq(self, addr, roblink, animInst):
     if self.l1ValidArray[addr]:
       self.hitList.append({"addr": addr, "roblink": roblink})
-      animBox.moveTo(self.cycle, self.hit_grids[addr])
-      self.hitList[-1]["animBox"] = animBox
+      animInst.moveTo(self.cycle, self.hit_grids[addr])
+      animInst.changeColor(self.cycle, "red")
+      self.hitList[-1]["animInst"] = animInst
 
     else:
       existingMiss, entryID = self.findInMshrFifo(addr)
@@ -178,28 +179,30 @@ class MemSystem(SimuMemSystem):
           "latency": self.MISS_LATENCY,
           "roblinkList": [roblink],
         })
-        animBox.moveTo(self.cycle, self.mshrFifo_grids[len(self.mshrFifo)-1])
-        self.mshrFifo[-1]["animBoxList"] = [animBox]
+        animInst.moveTo(self.cycle, self.mshrFifo_grids[len(self.mshrFifo)-1])
+        animInst.changeColor(self.cycle, "red")
+        self.mshrFifo[-1]["animInstList"] = [animInst]
 
       else:
         existingMiss["roblinkList"].append(roblink)
-        animBox.moveTo(self.cycle, self.mshrFifo_grids[entryID])
-        existingMiss["animBoxList"].append(animBox)
+        animInst.moveTo(self.cycle, self.mshrFifo_grids[entryID])
+        animInst.changeColor(self.cycle, "red")
+        existingMiss["animInstList"].append(animInst)
 
 
   def squash(self):
     for entry in self.hitList:
-      entry["animBox"].disappear(self.cycle)
+      entry["animInst"].disappear(self.cycle)
     
     for entry in self.mshrFifo[1:]:
-      for animBox in entry["animBoxList"]:
-        animBox.disappear(self.cycle)
+      for animInst in entry["animInstList"]:
+        animInst.disappear(self.cycle)
       
     if len(self.mshrFifo) > 0:
       head = self.mshrFifo[0]
       if head["latency"] > 0:
-        for animBox in head["animBoxList"]:
-          animBox.changeColor(self.cycle, "orange")
+        for animInst in head["animInstList"]:
+          animInst.changeColor(self.cycle, "orange")
 
     super().squash()
     

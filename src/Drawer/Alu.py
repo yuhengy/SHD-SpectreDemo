@@ -88,12 +88,12 @@ class Alu(SimuAlu):
 
   def respond_internal(self, portID, head, roblink, result, robResp):
     ## STEP1: Current entry disappear.
-    head["animBox"].disappear(self.cycle)
+    head["animInst"].disappear(self.cycle)
 
 
     ## STEP2: Other entries move forward.
     for i, entry in enumerate(self.portFifo[portID]):
-      entry["animBox"].moveTo(self.cycle, self.ports_grids[portID][i])
+      entry["animInst"].moveTo(self.cycle, self.ports_grids[portID][i])
 
 
     super().respond_internal(portID, head, roblink, result, robResp)
@@ -102,7 +102,7 @@ class Alu(SimuAlu):
 
 
   ## PUBLIC:
-  def sendReq(self, port, latency, result, roblink, animBox):
+  def sendReq(self, port, latency, result, roblink, animInst):
     super().sendReq(port, latency, result, roblink)
     
     loc = len(self.portFifo[port])
@@ -110,14 +110,15 @@ class Alu(SimuAlu):
            "Buffer for port is full in the visulization, please increase " + \
            "bufferSize argument."
 
-    animBox.moveTo(self.cycle, self.ports_grids[port][loc-1])
-    self.portFifo[port][-1]["animBox"] = animBox
+    animInst.moveTo(self.cycle, self.ports_grids[port][loc-1])
+    animInst.changeColor(self.cycle, "red")
+    self.portFifo[port][-1]["animInst"] = animInst
 
 
   def squash(self):
     for fifo in self.portFifo:
       for entry in fifo:
-        entry["animBox"].disappear()
+        entry["animInst"].disappear()
 
     super().squash()
 
