@@ -1,10 +1,13 @@
 
+import copy
+
+
 class MemSystem():
   MISS_LATENCY = 3
   READ_ONLY_ARRAY = [0, 0, 0, 0]
 
   def __init__(self, l1ValidArray, printTrace=False):
-    self.l1ValidArray = l1ValidArray
+    self.l1ValidArray = copy.copy(l1ValidArray)
     self.hitList = []
     self.mshrFifo = []
     
