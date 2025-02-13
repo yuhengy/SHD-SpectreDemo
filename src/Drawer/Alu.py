@@ -23,8 +23,7 @@ class Alu(SimuAlu):
 
     ## STEP1: Divide into 4 components.
     grid.divideY([7, 3])
-    grid.divideX([0.5, 9, 0.5])
-    grid = grid.getSubGrid(1, 0)
+    grid = grid.getSubGrid(0, 0)
     self.grid = grid
 
     grid.divideY([bufferSize-0.8, 1, fontsize * 1.5, fontsize * 1.5],
@@ -44,7 +43,7 @@ class Alu(SimuAlu):
       grid = buffer_grid.getSubGrid(1+2*portID, 0)
       
       self.animFifoList.append(AnimationFifo(
-        grid, bufferSize, self.d, self.line_width))
+        grid, bufferSize, self.d, self.line_width, flipVeritically=True))
 
       self.d.append(draw.Text(
         f"Port {portID}", fontsize,

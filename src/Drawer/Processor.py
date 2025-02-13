@@ -28,13 +28,13 @@ class Processor(SimuProcessor):
     grid = grid.getSubGrid(1, 1)
 
     ## STEP1.2: Draw.
-    grid.divideY([1, fontsize * 0.5, 4, fontsize * 0.5, fontsize * 2.5],
-                 useFixedLength=[False, True, False, True, True])
+    grid.divideY([1, fontsize * 0.5, fontsize * 2.5],
+                 useFixedLength=[False, True, True])
+    cycleIndicator_grid = grid.getSubGrid(0, 2)
+    grid.divideX([1, 0.5, 4, 0.5, 4])
     rob_grid            = grid.getSubGrid(0, 0)
-    cycleIndicator_grid = grid.getSubGrid(0, 4)
-    grid.divideX([1, 1])
-    alu_grid            = grid.getSubGrid(0, 2)
-    memSystem_grid      = grid.getSubGrid(1, 2)
+    alu_grid            = grid.getSubGrid(2, 0)
+    memSystem_grid      = grid.getSubGrid(4, 0)
 
 
     ## STEP2: Draw the cycle indicator.

@@ -32,9 +32,8 @@ class MemSystem(SimuMemSystem):
 
     ## STEP1: Divide into L1 and main memory.
     grid.divideY([1, fontsize, fontsize * 1.75], [False, True, True])
-    grid.divideX([0.5, 9, 0.5])
-    l1_grid  = grid.getSubGrid(1, 0)
-    mem_grid = grid.getSubGrid(1, 2)
+    l1_grid  = grid.getSubGrid(0, 0)
+    mem_grid = grid.getSubGrid(0, 2)
 
 
     ## STEP2: Draw L1.
@@ -87,7 +86,7 @@ class MemSystem(SimuMemSystem):
 
     ## STEP2.3: Draw MSHR buffer.
     self.mshrAnimFifo = AnimationFifo(
-        buffer_grid, bufferSize, self.d, self.line_width)
+        buffer_grid, bufferSize, self.d, self.line_width, flipVeritically=True)
 
     ## STEP2.4: Draw MSHR box.
     mshrBox_grid.drawRectangle(d, line_width)

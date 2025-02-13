@@ -9,21 +9,21 @@ from src.Drawer.Grid      import Grid
 
 class drawProcessor():
   def __init__(self, imem, r7, l1ValidArray, totalCycle, \
-               scale=1, xyRatio=12/9, speed=1, bufferSize=3):
+               scale=1, xyRatio=16/9, speed=1, bufferSize=3):
     self.d         = None
     self.processor = None
 
 
     ## STEP1: Scaling factors
-    xScale = scale * xyRatio / (12/9)
+    xScale = scale * xyRatio / (16/9)
     yScale = scale
     rScale = min(xScale, yScale)
-    fontsize   =  18 * rScale
-    line_width = 1.8 * rScale
+    fontsize   = 20 * rScale
+    line_width =  2 * rScale
 
 
     ## STEP2: Draw the whole board.
-    grid = Grid(x=0, y=0, width=600 * xScale, height=450 * yScale)
+    grid = Grid(x=0, y=0, width=800 * xScale, height=450 * yScale)
 
     self.d = draw.Drawing(
       grid.width, grid.height, origin=(grid.x, grid.y),
