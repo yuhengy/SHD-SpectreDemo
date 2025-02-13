@@ -11,6 +11,7 @@ def decode(inst):
         "latency": inst["latency"],
         "result" : inst["result"] if "result" in inst else 0,
         "name"   : inst["name"],
+        "inst"   : inst,
       },
      
       "wb_enable": True,
@@ -30,6 +31,7 @@ def decode(inst):
         "useImm": useImm,
         "srcImm": inst["srcImm"] if useImm else None,
         "name"  : inst["name"],
+        "inst"  : inst,
       },
       
       "wb_enable": True,
@@ -46,6 +48,7 @@ def decode(inst):
         "predicted_taken": False,
         "offset"         : inst["offset"],
         "name"           : inst["name"],
+        "inst"           : inst,
       },
       
       "wb_enable": False,
@@ -60,6 +63,7 @@ def decode(inst):
       "exe_cmd": {
         "opcode": "NOP",
         "name"  : inst["name"],
+        "inst"  : inst,
       },
       
       "wb_enable": False,

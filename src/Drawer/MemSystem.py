@@ -43,14 +43,21 @@ class MemSystem(SimuMemSystem):
     table_grid = l1_grid.getSubGrid(1, 1)
 
     ## STEP2.2: Draw valid table.
-    ncol = len(self.l1ValidArray) + 1
+    ncol = len(l1ValidArray) + 1
     self.animTable = AnimationTable(
       table_grid, d, fontsize,
       [
         ["Addr"] + [f"0x{i}" for i in range(ncol-1)],
-        ["Valid"] + ["1" if valid else "0" for valid in self.l1ValidArray]
+        ["Valid"] + ["1" if valid else "0" for valid in l1ValidArray]
       ],
-      fontsize*3.5, ncol, 2, line_width, speed)
+      fontsize*3.5, ncol, 2,
+      [
+        ["none"] + [AnimationTable.COLOR_L1VALID if valid else "none" \
+                    for valid in l1ValidArray],
+        ["none"] + [AnimationTable.COLOR_L1VALID if valid else "none" \
+                    for valid in l1ValidArray]
+      ],
+      line_width, speed)
 
     ## STEP2.3: Divide MSHR into buffer and box.
     mshr_grid.divideY(

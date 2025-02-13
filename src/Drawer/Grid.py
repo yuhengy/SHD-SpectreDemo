@@ -62,10 +62,10 @@ class Grid():
     return self.y + self.height
 
 
-  def drawRectangle(self, d, line_width):
+  def drawRectangle(self, d, line_width, color="none"):
     rectangle = draw.Rectangle(
       self.x, self.y, self.width, self.height,
-      fill="none", stroke="black", stroke_width=line_width
+      fill=color, stroke="black", stroke_width=line_width
     )
     d.append(rectangle)
     return rectangle
@@ -116,5 +116,14 @@ class Grid():
       self.y - height,
       self.width,
       height
+    )
+
+
+  def getLeftGrid(self, weight):
+    return Grid(
+      self.x- weight,
+      self.y,
+      weight,
+      self.height
     )
 

@@ -28,13 +28,20 @@ class Processor(SimuProcessor):
     grid = grid.getSubGrid(1, 1)
 
     ## STEP1.2: Draw.
+    grid.divideX([fontsize*12, 1, 0.5, 8.5],
+                 useFixedLength=[True, False, False, False])
+    rob_grid            = grid.getSubGrid(0, 0).getMergedGrid(
+                          grid.getSubGrid(1, 0))
+    
+    grid = grid.getSubGrid(3, 0)
     grid.divideY([1, fontsize * 0.5, fontsize * 2.5],
                  useFixedLength=[False, True, True])
     cycleIndicator_grid = grid.getSubGrid(0, 2)
-    grid.divideX([1, 0.5, 4, 0.5, 4])
-    rob_grid            = grid.getSubGrid(0, 0)
-    alu_grid            = grid.getSubGrid(2, 0)
-    memSystem_grid      = grid.getSubGrid(4, 0)
+
+    grid = grid.getSubGrid(0, 0)
+    grid.divideX([4, 0.5, 4])
+    alu_grid            = grid.getSubGrid(0, 0)
+    memSystem_grid      = grid.getSubGrid(2, 0)
 
 
     ## STEP2: Draw the cycle indicator.
@@ -101,7 +108,7 @@ class Processor(SimuProcessor):
 
     ## STEP3: Draw submodules, i.e., ROB, ALU, and memory system.
     self.rob       = Rob(
-      d, len(imem)+3, rob_grid, fontsize, line_width, speed)
+      d, len(imem), rob_grid, fontsize, line_width, speed)
     self.alu       = Alu(
       d, bufferSize, alu_grid, fontsize, line_width, speed)
     self.memSystem = MemSystem(

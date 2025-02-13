@@ -9,14 +9,14 @@ from src.Drawer.Animation import Animation
 class AnimationTable(Animation):
 
   def __init__(self, grid, d, fontsize, text, header_width, ncol, nrow,
-               line_width, speed):
+               color, line_width, speed):
     super().__init__(speed)
     self.d        = d
     self.fontsize = fontsize
 
     self.grid  = []
     self.box   = []
-    self.color = []
+    self.color = color
     self.text  = []
     self.above_grid = []
 
@@ -27,15 +27,14 @@ class AnimationTable(Animation):
     grid.divideY([1 for _ in range(nrow)])
     for i in range(nrow):
       self.grid.append([grid.getSubGrid(j, i) for j in range(ncol)])
-    print(self.grid)
 
 
     ## STEP2: Put in text and box for each grid.
-    for row_grid, row_text in zip(self.grid, text):
-      self.box.append([g.drawRectangle(d, line_width) for g in row_grid])
-      self.color.append(["none" for _ in row_grid])
-      self.text.append(
-        [g.drawText(d, t, fontsize) for g, t in zip(row_grid, row_text)])
+    for row_grid, row_color, row_text in zip(self.grid, color, text):
+      self.box.append([g.drawRectangle(d, line_width, c) \
+                       for g, c in zip(row_grid, row_color)])
+      self.text.append([g.drawText(d, t, fontsize) \
+                        for g, t in zip(row_grid, row_text)])
 
 
     ## STEP3: Create grids that is right above the table.

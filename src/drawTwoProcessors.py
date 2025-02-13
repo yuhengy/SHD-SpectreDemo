@@ -8,15 +8,15 @@ from src.Drawer.Grid      import Grid
 
 
 class drawTwoProcessors():
-  def __init__(self, imem, r7, l1ValidArray, totalCycle, \
-               scale=1, xyRatio=18/9, speed=1, bufferSize=3):
+  def __init__(self, imem, r7Pair, l1ValidArray, totalCycle, \
+               scale=1, xyRatio=7/6, speed=1, bufferSize=3):
     self.d          = None
     self.processor0 = None
     self.processor1 = None
 
 
     ## STEP1: Scaling factors
-    xScale = scale * xyRatio / (18/9)
+    xScale = scale * xyRatio / (7/6)
     yScale = scale
     rScale = min(xScale, yScale)
     fontsize   =  14 * rScale
@@ -24,8 +24,8 @@ class drawTwoProcessors():
 
 
     ## STEP2: Draw the whole board.
-    grid = Grid(x=0, y=0, width=900 * xScale, height=450 * yScale)
-    grid.divideX([1, 1])
+    grid = Grid(x=0, y=0, width=700 * xScale, height=600 * yScale)
+    grid.divideY([1, 1])
 
     self.d = draw.Drawing(
       grid.width, grid.height, origin=(grid.x, grid.y),
@@ -38,13 +38,13 @@ class drawTwoProcessors():
 
     ## STEP3: Simulate the processor
     self.processor0 = Processor(
-      imem, r7[0], l1ValidArray, totalCycle, \
+      imem, r7Pair[0], l1ValidArray, totalCycle, \
       self.d, bufferSize, grid.getSubGrid(0, 0), fontsize, line_width, speed)
     self.processor0.simulate()
     
     self.processor1 = Processor(
-      imem, r7[1], l1ValidArray, totalCycle, \
-      self.d, bufferSize, grid.getSubGrid(1, 0), fontsize, line_width, speed)
+      imem, r7Pair[1], l1ValidArray, totalCycle, \
+      self.d, bufferSize, grid.getSubGrid(0, 1), fontsize, line_width, speed)
     self.processor1.simulate()
 
 

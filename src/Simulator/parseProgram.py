@@ -1,11 +1,35 @@
 
+def instToStr_noName(inst):
+
+  def destStr():
+    if inst["dest"]==0:
+      return "__"
+    else:
+      return f"r{inst["dest"]}"
+  def srcStr():
+    if inst["src"]==7:
+      return "rSec"
+    else:
+      return f"r{inst["src"]}"
 
 
-def parseProgram(programStr):
-  imem = []
+  if   inst["opcode"]=="ALU":
+    return f"{destStr()} <- ALU-{inst["port"]}({srcStr()}, lat={inst["latency"]})"
 
-  for line in programStr.splitlines():
-    pass
+
+  elif inst["opcode"]=="LOAD":
+    if "src" in inst:
+      return f"{destStr()} <- LOAD({srcStr()})"
+    else:
+      return f"{destStr()} <- LOAD(0x{inst["srcImm"]})"
+
+
+  elif inst["opcode"]=="BREZ":
+    return f"IF ({srcStr()}==0) PC += {inst["offset"]}"
+
+
+  elif inst["opcode"]=="NOP":
+    return f"NOP"
 
 
 
@@ -26,7 +50,6 @@ def imemToStrList(imem):
         return "rSec"
       else:
         return f"r{inst["src"]}"
-
 
 
     if   inst["opcode"]=="ALU":
@@ -51,7 +74,4 @@ def imemToStrList(imem):
 
 
   return strList
-
-
-
 

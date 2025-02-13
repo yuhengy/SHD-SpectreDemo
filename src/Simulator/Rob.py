@@ -127,6 +127,10 @@ class Rob():
     self.head    = self.tail - 1
 
 
+  def commit_others(self):
+    pass
+
+
   def commit(self, regfileWrite, squash):
     if self.tail==self.head:
       return
@@ -136,12 +140,16 @@ class Rob():
     if entry["status"]== self.Status.FINISHED:
       entry = self.entries[self.head]
       
-      if entry["wb_enable"]:
+      if   entry["wb_enable"]:
         self.commit_wb(regfileWrite)
       
-      if entry["squash"]:
+      elif entry["squash"]:
         self.commit_squash(squash)
       
+      else:
+        self.commit_others()
+
+
       self.head += 1
 
       if self.printTrace:

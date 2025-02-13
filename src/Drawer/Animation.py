@@ -7,6 +7,10 @@ class Animation():
   PRE_TIME  = 0.2
   POST_TIME = 0.2
 
+  COLOR_COMMIT = "green"
+  COLOR_SQUASH = "gray"
+  COLOR_L1VALID = "green"
+
   def __init__(self, speed):
     self.speed = speed
 
