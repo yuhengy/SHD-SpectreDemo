@@ -86,7 +86,8 @@ class MemSystem(SimuMemSystem):
 
     ## STEP2.3: Draw MSHR buffer.
     self.mshrAnimFifo = AnimationFifo(
-        buffer_grid, bufferSize, self.d, self.line_width, flipVeritically=True)
+        buffer_grid, bufferSize, self.d, self.line_width, self.speed,
+        flipVeritically=True)
 
     ## STEP2.4: Draw MSHR box.
     mshrBox_grid.drawRectangle(d, line_width)

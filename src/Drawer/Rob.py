@@ -31,7 +31,8 @@ class Rob(SimuRob):
 
 
     ## STEP2: Draw entries.
-    self.animFifo = AnimationFifo(entries_grid, numInst, d, line_width)
+    self.animFifo = AnimationFifo(
+      entries_grid, numInst, d, line_width, self.speed)
 
 
     ## STEP3: Draw Head, Tail, ROB texts.
@@ -68,13 +69,18 @@ class Rob(SimuRob):
 
 
   def commit_wb(self, regfileWrite):
-    self.entries[self.head]["animInst"].changeColor(self.cycle, "gray")
+    # self.entries[self.head]["animInst"].changeColor(self.cycle, "gray")
+    self.animFifo.changeColor(self.cycle, self.head, "green")
     super().commit_wb(regfileWrite)
 
 
   def commit_squash(self, squash):
     for entry in self.entries[self.head: self.tail]:
-      entry["animInst"].changeColor(self.cycle, "orange")
+      entry["animInst"].changeColor(self.cycle, "black")
+    
+    self.animFifo.changeColor(self.cycle, self.head, "green")
+    for i in range(self.head+1, self.tail):
+      self.animFifo.changeColor(self.cycle, i, "gray")
     super().commit_squash(squash)
 
 

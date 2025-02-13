@@ -1,13 +1,15 @@
 
+import os, sys
 import drawsvg as draw
 
+sys.path.append(os.getcwd())
+from src.Drawer.Animation import Animation
 
-class AnimationInst():
 
-  PRE_TIME  = 0.2
-  POST_TIME = 0.2
-
+class AnimationInst(Animation):
   def __init__(self, d, text, r, line_width, speed, grid):
+    super().__init__(speed)
+    
     self.circleBox = draw.Circle(
       grid.centerX(), grid.centerY(), r,
       fill="none", stroke_width=line_width, stroke="none")
@@ -22,21 +24,12 @@ class AnimationInst():
     self.text       = text
     self.r          = r
     self.line_width = line_width
-    self.speed      = speed
 
     self.grid  = grid
     self.color = "none"
 
 
   ## PRIVATE
-  def startTime(self, cycle):
-    return (cycle-1+self.PRE_TIME)/self.speed
-
-
-  def endTime(self, cycle):
-    return (cycle-self.POST_TIME)/self.speed
-
-
   def changeColor_internal(self, cycle, color, start, end):
     self.circleBox.add_key_frame(start, stroke=self.color)
     self.circleBox.add_key_frame(end, stroke=color)

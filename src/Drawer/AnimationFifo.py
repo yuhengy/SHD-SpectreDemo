@@ -1,16 +1,23 @@
 
+import os, sys
 import drawsvg as draw
 
+sys.path.append(os.getcwd())
+from src.Drawer.Animation import Animation
 
-class AnimationFifo():
+
+class AnimationFifo(Animation):
   TAIL_LENGTH = 0.2
 
-  def __init__(self, grid, size, d, line_width, flipVeritically=False):
+  def __init__(self, grid, size, d, line_width, speed, flipVeritically=False):
+    super().__init__(speed)
+
     self.d          = d
     self.line_width = line_width
 
     self.entry_grid = []
     self.entry_box  = []
+    self.entry_color = []
     self.tail_grid = None
 
     ## STEP1: Divide into grids.
@@ -40,8 +47,16 @@ class AnimationFifo():
     ## STEP3: Draw entries.
     for g in self.entry_grid:
       self.entry_box.append(g.drawRectangle(d, line_width))
+      self.entry_color.append("none")
 
 
   def getGrid(self, entryIndex):
     return self.entry_grid[entryIndex]
+
+
+  def changeColor(self, cycle, entryIndex, color):
+    box = self.entry_box[entryIndex]
+    
+    box.add_key_frame(self.startTime(cycle), fill=self.entry_color[entryIndex])
+    box.add_key_frame(self.endTime(cycle), fill=color)
 

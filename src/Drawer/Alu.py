@@ -43,7 +43,8 @@ class Alu(SimuAlu):
       grid = buffer_grid.getSubGrid(1+2*portID, 0)
       
       self.animFifoList.append(AnimationFifo(
-        grid, bufferSize, self.d, self.line_width, flipVeritically=True))
+        grid, bufferSize, self.d, self.line_width, self.speed,
+        flipVeritically=True))
 
       self.d.append(draw.Text(
         f"Port {portID}", fontsize,
