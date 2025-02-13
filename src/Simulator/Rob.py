@@ -120,12 +120,11 @@ class Rob():
 
   def commit_squash(self, squash):
 
-    ## STEP1: Clear ROB.
-    self.entries = self.entries[:(self.head+1)]
-    self.tail    = self.head + 1
-
     ## STEP2: Clear renaming table, ALU and L1. Reset PC.
     squash(self.entries[self.head]["squash_pc"])
+
+    ## STEP1: Clear ROB.
+    self.head    = self.tail - 1
 
 
   def commit(self, regfileWrite, squash):

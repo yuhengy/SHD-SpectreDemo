@@ -101,7 +101,7 @@ class Processor(SimuProcessor):
 
     ## STEP3: Draw submodules, i.e., ROB, ALU, and memory system.
     self.rob       = Rob(
-      d, len(imem), rob_grid, fontsize, line_width, speed)
+      d, len(imem)+3, rob_grid, fontsize, line_width, speed)
     self.alu       = Alu(
       d, bufferSize, alu_grid, fontsize, line_width, speed)
     self.memSystem = MemSystem(

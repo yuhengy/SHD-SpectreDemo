@@ -4,6 +4,7 @@ import drawsvg as draw
 
 sys.path.append(os.getcwd())
 from src.Simulator.Alu import Alu as SimuAlu
+from src.Drawer.AnimationFifo import AnimationFifo
 
 
 class Alu(SimuAlu):
@@ -17,7 +18,7 @@ class Alu(SimuAlu):
     self.line_width = line_width
     self.speed      = speed
 
-    self.ports_grids = []
+    self.animFifoList = []
 
 
     ## STEP1: Divide into 4 components.
@@ -35,40 +36,16 @@ class Alu(SimuAlu):
     textAlu_grid  = grid.getSubGrid(0, 3)
 
 
-    ## STEP2: Draw 4 buffers and textPort.
-
-    ## STEP2.1: Divide into 4 ports.
+    ## STEP2: Draw 4 FIFOs and text below each FIFO.
     parts = [0.125] + [1, 0.25] * self.NUM_PORTS
     parts[-1] = 0.125
     buffer_grid.divideX(parts)
     for portID in range(self.NUM_PORTS):
       grid = buffer_grid.getSubGrid(1+2*portID, 0)
-
-      ## STEP2.2: Divide into 3 entries.
-      grid.divideY([0.2] + [1 for _ in range(bufferSize)])
-      port_grids = []
-      for i in range(bufferSize, 0, -1):
-        port_grids.append(grid.getSubGrid(0, i))
-      portTail_grid = grid.getSubGrid(0, 0)
-      self.ports_grids.append(port_grids)
       
-      ## STEP2.3: Draw the buffer tail.
-      self.d.append(draw.Line(
-        portTail_grid.x, portTail_grid.y,
-        portTail_grid.x, portTail_grid.y+portTail_grid.height*6,
-        stroke="black", stroke_width=self.line_width
-      ))
-      self.d.append(draw.Line(
-        portTail_grid.x2(), portTail_grid.y,
-        portTail_grid.x2(), portTail_grid.y+portTail_grid.height*6,
-        stroke="black", stroke_width=self.line_width
-      ))
+      self.animFifoList.append(AnimationFifo(
+        grid, bufferSize, self.d, self.line_width))
 
-      ## STEP2.4: Draw the buffer body.
-      for g in port_grids[:-1]:
-        g.drawRectangle(d, line_width)
-      
-      ## STEP2.5: Draw the text.
       self.d.append(draw.Text(
         f"Port {portID}", fontsize,
         grid.centerX(), grid.y2()+0.75*fontsize, center=True
@@ -93,7 +70,7 @@ class Alu(SimuAlu):
 
     ## STEP2: Other entries move forward.
     for i, entry in enumerate(self.portFifo[portID]):
-      entry["animInst"].moveTo(self.cycle, self.ports_grids[portID][i])
+      entry["animInst"].moveTo(self.cycle, self.animFifoList[portID].getGrid(i))
 
 
     super().respond_internal(portID, head, roblink, result, robResp)
@@ -110,7 +87,7 @@ class Alu(SimuAlu):
            "Buffer for port is full in the visulization, please increase " + \
            "bufferSize argument."
 
-    animInst.moveTo(self.cycle, self.ports_grids[port][loc-1])
+    animInst.moveTo(self.cycle, self.animFifoList[port].getGrid(loc-1))
     animInst.changeColor(self.cycle, "red")
     self.portFifo[port][-1]["animInst"] = animInst
 
