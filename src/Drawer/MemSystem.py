@@ -4,7 +4,8 @@ import drawsvg as draw
 
 sys.path.append(os.getcwd())
 from src.Simulator.MemSystem import MemSystem as SimuMemSystem
-from src.Drawer.AnimationFifo import AnimationFifo
+from src.Drawer.AnimationFifo  import AnimationFifo
+from src.Drawer.AnimationTable import AnimationTable
 
 
 class MemSystem(SimuMemSystem):
@@ -23,11 +24,8 @@ class MemSystem(SimuMemSystem):
     self.line_width = line_width
     self.speed      = speed
 
-    self.hit_grids      = []
     self.mshrAnimFifo = None
-
-    self.valid_text = []
-    self.valid_grid = []
+    self.animTable    = None
 
 
     ## STEP1: Divide into L1 and main memory.
@@ -39,35 +37,20 @@ class MemSystem(SimuMemSystem):
     ## STEP2: Draw L1.
 
     ## STEP2.1: Divide L1 into MSHR and valid table.
-    l1_grid.divideY(
-      [fontsize * 0.5, fontsize * 1.75, fontsize * 1.75, 1],
-      [True, True, True, False]
-    )
-    mshr_grid = l1_grid.getSubGrid(0, 3)
-    l1_grid.divideX([1, fontsize * 3.5, fontsize * 2.5, fontsize * 2.5,
-                     fontsize * 2.5, fontsize * 2.5, 1],
-                    [False, True, True, True, True, True, False])
-    self.hit_grids = [l1_grid.getSubGrid(2, 0), l1_grid.getSubGrid(3, 0),
-                      l1_grid.getSubGrid(4, 0), l1_grid.getSubGrid(5, 0)]
-    textAddr_grid  = l1_grid.getSubGrid(1, 1)
-    addr_grid      = [l1_grid.getSubGrid(2, 1), l1_grid.getSubGrid(3, 1),
-                      l1_grid.getSubGrid(4, 1), l1_grid.getSubGrid(5, 1)]
-    textValid_grid = l1_grid.getSubGrid(1, 2)
-    valid_grid     = [l1_grid.getSubGrid(2, 2), l1_grid.getSubGrid(3, 2),
-                      l1_grid.getSubGrid(4, 2), l1_grid.getSubGrid(5, 2)]
-    self.valid_grid = valid_grid
+    l1_grid.divideY([fontsize * 1, fontsize * 3.5, 1], [True, True, False])
+    mshr_grid = l1_grid.getSubGrid(0, 2)
+    l1_grid.divideX([1, fontsize * (3.5 + 2.5*4), 1], [False, True, False])
+    table_grid = l1_grid.getSubGrid(1, 1)
 
     ## STEP2.2: Draw valid table.
-    textAddr_grid .drawText(d, "Addr" , fontsize)
-    textValid_grid.drawText(d, "Valid", fontsize)
-    for i, grid in enumerate(addr_grid):
-      grid.drawText(d, f"0x{i}", fontsize)
-    for i, grid in enumerate(valid_grid):
-      self.valid_text.append(
-        grid.drawText(d, "1" if l1ValidArray[i] else "0", fontsize))
-    
-    for grid in [textAddr_grid] + addr_grid + [textValid_grid] + valid_grid:
-      grid.drawRectangle(d, line_width)
+    ncol = len(self.l1ValidArray) + 1
+    self.animTable = AnimationTable(
+      table_grid, d, fontsize,
+      [
+        ["Addr"] + [f"0x{i}" for i in range(ncol-1)],
+        ["Valid"] + ["1" if valid else "0" for valid in self.l1ValidArray]
+      ],
+      fontsize*3.5, ncol, 2, line_width, speed)
 
     ## STEP2.3: Divide MSHR into buffer and box.
     mshr_grid.divideY(
@@ -84,12 +67,12 @@ class MemSystem(SimuMemSystem):
     mshrBox_grid.divideX([1, 5.5, 3.5])
     mshrBox_grid = mshrBox_grid.getSubGrid(1, 0)
 
-    ## STEP2.3: Draw MSHR buffer.
+    ## STEP2.4: Draw MSHR buffer.
     self.mshrAnimFifo = AnimationFifo(
         buffer_grid, bufferSize, self.d, self.line_width, self.speed,
         flipVeritically=True)
 
-    ## STEP2.4: Draw MSHR box.
+    ## STEP2.5: Draw MSHR box.
     mshrBox_grid.drawRectangle(d, line_width)
     self.d.append(draw.Text(
       "MSHR", self.fontsize,
@@ -97,7 +80,7 @@ class MemSystem(SimuMemSystem):
       center=True
     ))
 
-    ## STEP2.5: Draw L1 box.
+    ## STEP2.6: Draw L1 box.
     l1_grid.drawRectangle(d, line_width)
     self.d.append(draw.Text(
       "L1", self.fontsize,
@@ -130,18 +113,9 @@ class MemSystem(SimuMemSystem):
 
 
     ## STEP3: Update the valid arrary.
-    text = self.valid_text[head["addr"]]
-    text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="black")
-    text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="none")
-    
-    grid = self.valid_grid[head["addr"]]
-    text = draw.Text(
-      "1", self.fontsize,
-      grid.centerX(), grid.centerY(), center=True)
-    text.add_key_frame((self.cycle-1+self.ANIM_PRE)/self.speed, fill="none")
-    text.add_key_frame((self.cycle-self.ANIM_POST)/self.speed, fill="black")
-    self.d.append(text)
-    self.valid_text[head["addr"]] = text
+    self.animTable.changeText(self.cycle, 1, head["addr"]+1, "1")
+    self.animTable.changeColor(self.cycle, 0, head["addr"]+1, "green")
+    self.animTable.changeColor(self.cycle, 1, head["addr"]+1, "green")
 
     
     super().respond_miss(head, robResp)
@@ -153,7 +127,7 @@ class MemSystem(SimuMemSystem):
   def sendReq(self, addr, roblink, animInst):
     if self.l1ValidArray[addr]:
       self.hitList.append({"addr": addr, "roblink": roblink})
-      animInst.moveTo(self.cycle, self.hit_grids[addr])
+      animInst.moveTo(self.cycle, self.animTable.getAboveGrid(addr+1))
       animInst.changeColor(self.cycle, "red")
       self.hitList[-1]["animInst"] = animInst
 

@@ -29,7 +29,7 @@ class AnimationInst(Animation):
     self.color = "none"
 
 
-  ## PRIVATE
+  ## PRIVATE:
   def changeColor_internal(self, cycle, color, start, end):
     self.circleBox.add_key_frame(start, stroke=self.color)
     self.circleBox.add_key_frame(end, stroke=color)

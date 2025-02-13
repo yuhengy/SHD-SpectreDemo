@@ -109,3 +109,12 @@ class Grid():
         self.height
       )
 
+
+  def getAboveGrid(self, height):
+    return Grid(
+      self.x,
+      self.y - height,
+      self.width,
+      height
+    )
+

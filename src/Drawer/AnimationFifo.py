@@ -50,6 +50,9 @@ class AnimationFifo(Animation):
       self.entry_color.append("none")
 
 
+
+
+  ## PUBLIC:
   def getGrid(self, entryIndex):
     return self.entry_grid[entryIndex]
 
@@ -59,4 +62,6 @@ class AnimationFifo(Animation):
     
     box.add_key_frame(self.startTime(cycle), fill=self.entry_color[entryIndex])
     box.add_key_frame(self.endTime(cycle), fill=color)
+
+    self.entry_color[entryIndex] = color
 
