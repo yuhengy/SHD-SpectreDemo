@@ -4,8 +4,9 @@ import drawsvg as draw
 
 sys.path.append(os.getcwd())
 from src.Simulator.MemSystem import MemSystem as SimuMemSystem
-from src.Drawer.AnimationFifo  import AnimationFifo
-from src.Drawer.AnimationTable import AnimationTable
+from src.Drawer.AnimationFifo      import AnimationFifo
+from src.Drawer.AnimationTable     import AnimationTable
+from src.Drawer.AnimationTextArray import AnimationTextArray
 
 
 class MemSystem(SimuMemSystem):
@@ -24,8 +25,9 @@ class MemSystem(SimuMemSystem):
     self.line_width = line_width
     self.speed      = speed
 
-    self.mshrAnimFifo = None
-    self.animTable    = None
+    self.mshrAnimFifo  = None
+    self.animTable     = None
+    self.animTextArray = None
 
 
     ## STEP1: Divide into L1 and main memory.
@@ -76,7 +78,9 @@ class MemSystem(SimuMemSystem):
 
     ## STEP2.4: Draw MSHR buffer.
     self.mshrAnimFifo = AnimationFifo(
-        buffer_grid, bufferSize, self.d, self.line_width, self.speed)
+        buffer_grid, bufferSize, d, line_width, speed)
+    self.animTextArray = AnimationTextArray(
+      self.mshrAnimFifo.getLeftGrid(fontsize*0.9), d, fontsize, speed)
 
     ## STEP2.5: Draw MSHR box.
     mshrBox_grid.drawRectangle(d, line_width)
@@ -110,12 +114,14 @@ class MemSystem(SimuMemSystem):
     ## STEP1: Current entry disappear.
     for animInst in head["animInstList"]:
       animInst.disappear(self.cycle)
+    self.animTextArray.disappear(self.cycle, 0)
 
 
     ## STEP2: Other entries move forward.
     for i, entry in enumerate(self.mshrFifo):
       for animInst in entry["animInstList"]:
         animInst.moveTo(self.cycle, self.mshrAnimFifo.getGrid(i))
+      self.animTextArray.moveTo(self.cycle, i+1, i)
 
 
     ## STEP3: Update the valid arrary.
@@ -147,10 +153,15 @@ class MemSystem(SimuMemSystem):
           "latency": self.MISS_LATENCY,
           "roblinkList": [roblink],
         })
+
+        entryID = len(self.mshrFifo)-1
         animInst.moveTo(
-          self.cycle, self.mshrAnimFifo.getGrid(len(self.mshrFifo)-1))
+          self.cycle, self.mshrAnimFifo.getGrid(entryID))
         animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
         self.mshrFifo[-1]["animInstList"] = [animInst]
+        self.animTextArray.appear(
+          self.cycle, entryID, f"0x{addr}",
+          self.animTextArray.COLOR_DISPATHED_INST)
 
       else:
         existingMiss["roblinkList"].append(roblink)

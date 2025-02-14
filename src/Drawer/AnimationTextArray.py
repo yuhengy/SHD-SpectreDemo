@@ -6,7 +6,7 @@ sys.path.append(os.getcwd())
 from src.Drawer.Animation import Animation
 
 
-class AnimationProgram(Animation):
+class AnimationTextArray(Animation):
   def __init__(self, grid, d, fontsize, speed):
     super().__init__(speed)
 
@@ -21,7 +21,7 @@ class AnimationProgram(Animation):
 
 
   ## PUBLIC:
-  def appear(self, cycle, i, s):
+  def appear(self, cycle, i, s, color="black"):
     grid = self.grid[i]
     textBox = draw.Text(
       s, self.fontsize,
@@ -29,11 +29,11 @@ class AnimationProgram(Animation):
       font_family="monospace", word_spacing=-3, letter_spacing=-1, fill="transparent"
     )
     textBox.add_key_frame(self.startTime(cycle), fill="transparent")
-    textBox.add_key_frame(self.endTime(cycle), fill="black")
+    textBox.add_key_frame(self.endTime(cycle), fill=color)
     self.d.append(textBox)
 
     self.textBox[i] = textBox
-    self.color[i]   = "black"
+    self.color[i]   = color
 
 
   def changeColor(self, cycle, i, color):
@@ -44,3 +44,25 @@ class AnimationProgram(Animation):
 
     self.color[i] = color
 
+
+  def moveTo(self, cycle, fromIdx, toIdx):
+    textBox   = self.textBox[fromIdx]
+    from_grid = self.grid[fromIdx]
+    to_grid   = self.grid[toIdx]
+    textBox.add_key_frame(
+      self.startTime(cycle), x=from_grid.x, y=from_grid.centerY()
+    )
+    textBox.add_key_frame(
+      self.endTime(cycle), x=to_grid.x, y=to_grid.centerY()
+    )
+    
+    self.textBox[toIdx] = textBox
+    self.color[toIdx] = self.color[fromIdx]
+  
+
+  def disappear(self, cycle, i):
+    textBox = self.textBox[i]
+    textBox.add_key_frame(self.startTime(cycle), fill=self.color[i])
+    textBox.add_key_frame(self.endTime(cycle), fill="transparent")
+
+    self.color[i] = "transparent"

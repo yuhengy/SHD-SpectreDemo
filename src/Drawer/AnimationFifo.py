@@ -15,21 +15,21 @@ class AnimationFifo(Animation):
     self.d          = d
     self.line_width = line_width
 
-    self.entry_grid = []
-    self.entry_box  = []
-    self.entry_color = []
+    self.grid = []
+    self.box  = []
+    self.color = []
     self.tail_grid = None
 
     ## STEP1: Divide into grids.
     if flipVeritically:
       grid.divideY([self.TAIL_LENGTH] + [1 for _ in range(size)])
       for i in range(size, 0, -1):
-        self.entry_grid.append(grid.getSubGrid(0, i))
+        self.grid.append(grid.getSubGrid(0, i))
       self.tail_grid = grid.getSubGrid(0, 0)
     else:
       grid.divideY([1 for _ in range(size)] + [self.TAIL_LENGTH])
       for i in range(size):
-        self.entry_grid.append(grid.getSubGrid(0, i))
+        self.grid.append(grid.getSubGrid(0, i))
       self.tail_grid = grid.getSubGrid(0, size)
       
     ## STEP2: Draw the tail.
@@ -45,27 +45,27 @@ class AnimationFifo(Animation):
     ))
 
     ## STEP3: Draw entries.
-    for g in self.entry_grid:
-      self.entry_box.append(g.drawRectangle(d, line_width))
-      self.entry_color.append("transparent")
+    for g in self.grid:
+      self.box.append(g.drawRectangle(d, line_width))
+      self.color.append("transparent")
 
 
 
 
   ## PUBLIC:
   def getGrid(self, entryIndex):
-    return self.entry_grid[entryIndex]
+    return self.grid[entryIndex]
 
 
   def getLeftGrid(self, offset):
-    return [g.getLeftGrid(offset) for g in self.entry_grid]
+    return [g.getLeftGrid(offset) for g in self.grid]
 
 
   def changeColor(self, cycle, entryIndex, color):
-    box = self.entry_box[entryIndex]
+    box = self.box[entryIndex]
     
-    box.add_key_frame(self.startTime(cycle), fill=self.entry_color[entryIndex])
+    box.add_key_frame(self.startTime(cycle), fill=self.color[entryIndex])
     box.add_key_frame(self.endTime(cycle), fill=color)
 
-    self.entry_color[entryIndex] = color
+    self.color[entryIndex] = color
 

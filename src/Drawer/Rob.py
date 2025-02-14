@@ -5,9 +5,10 @@ import drawsvg as draw
 sys.path.append(os.getcwd())
 from src.Simulator.Rob          import Rob as SimuRob
 from src.Simulator.parseProgram import instToStr_noName
-from src.Drawer.AnimationInst    import AnimationInst
-from src.Drawer.AnimationFifo    import AnimationFifo
-from src.Drawer.AnimationProgram import AnimationProgram
+from src.Drawer.AnimationInst      import AnimationInst
+from src.Drawer.AnimationFifo      import AnimationFifo
+from src.Drawer.AnimationTextArray import AnimationTextArray
+from src.Drawer.AnimationSquash    import AnimationSquash
 
 
 class Rob(SimuRob):
@@ -22,10 +23,10 @@ class Rob(SimuRob):
     self.line_width = line_width
     self.speed      = speed
 
-    self.entry_grids = []
     self.animFifo = None
-    self.animProgram = None
+    self.animTextArray = None
     self.branchNestedLevel = 0
+    self.animSquash = None
 
 
     ## STEP1: Divide into 4 components.
@@ -48,9 +49,16 @@ class Rob(SimuRob):
     ))
 
 
-    ## STEP4: Draw program
-    self.animProgram = AnimationProgram(
-      self.animFifo.getLeftGrid(fontsize * 12), d, fontsize, speed)
+    ## STEP4: Draw program.
+    program_grid = self.animFifo.getLeftGrid(fontsize * 12)
+    self.animTextArray = AnimationTextArray(program_grid, d, fontsize, speed)
+
+
+    ## STEP5: Draw squash.
+    squash_grid = [g1.getMergedGrid(g2)
+                   for g1, g2 in zip(self.animTextArray.grid, self.animFifo.grid)]
+    self.animSquash = AnimationSquash(
+      squash_grid, d, line_width, fontsize, speed)
 
 
   def dispatch_alu(self, port, latency, result, i, aluReq):
@@ -58,7 +66,7 @@ class Rob(SimuRob):
     animInst_forDispatch = animInst.fork(self.cycle)
     # animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
     self.animFifo.changeColor(self.cycle, i, self.animFifo.COLOR_DISPATHED_INST)
-    self.animProgram.changeColor(self.cycle, i, self.animProgram.COLOR_DISPATHED_INST)
+    self.animTextArray.changeColor(self.cycle, i, self.animTextArray.COLOR_DISPATHED_INST)
     aluReq(port, latency, result, i, animInst_forDispatch)
 
 
@@ -67,7 +75,7 @@ class Rob(SimuRob):
     animInst_forDispatch = animInst.fork(self.cycle)
     # animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
     self.animFifo.changeColor(self.cycle, i, self.animFifo.COLOR_DISPATHED_INST)
-    self.animProgram.changeColor(self.cycle, i, self.animProgram.COLOR_DISPATHED_INST)
+    self.animTextArray.changeColor(self.cycle, i, self.animTextArray.COLOR_DISPATHED_INST)
     l1Req(addr, i, animInst_forDispatch)
 
 
@@ -78,8 +86,8 @@ class Rob(SimuRob):
   def commit_wb(self, regfileWrite):
     self.animFifo.changeColor(
       self.cycle, self.head, self.animFifo.COLOR_COMMIT)
-    self.animProgram.changeColor(
-      self.cycle, self.head, self.animProgram.COLOR_COMMIT)
+    self.animTextArray.changeColor(
+      self.cycle, self.head, self.animTextArray.COLOR_COMMIT)
     super().commit_wb(regfileWrite)
 
 
@@ -90,13 +98,15 @@ class Rob(SimuRob):
     
     self.animFifo.changeColor(
       self.cycle, self.head, self.animFifo.COLOR_COMMIT)
-    self.animProgram.changeColor(
-      self.cycle, self.head, self.animProgram.COLOR_COMMIT)
+    self.animTextArray.changeColor(
+      self.cycle, self.head, self.animTextArray.COLOR_COMMIT)
     for i in range(self.head+1, self.tail):
       self.animFifo.changeColor(self.cycle, i, self.animFifo.COLOR_SQUASH)
-      self.animProgram.changeColor(self.cycle, i, self.animProgram.COLOR_SQUASH)
+      self.animTextArray.changeColor(self.cycle, i, self.animTextArray.COLOR_SQUASH)
 
     self.branchNestedLevel = 0
+
+    self.animSquash.showBox(self.cycle, self.head, self.tail)
 
     super().commit_squash(squash)
 
@@ -104,8 +114,8 @@ class Rob(SimuRob):
   def commit_others(self):
     self.animFifo.changeColor(
       self.cycle, self.head, self.animFifo.COLOR_COMMIT)
-    self.animProgram.changeColor(
-      self.cycle, self.head, self.animProgram.COLOR_COMMIT)
+    self.animTextArray.changeColor(
+      self.cycle, self.head, self.animTextArray.COLOR_COMMIT)
     super().commit_others()
 
 
@@ -126,7 +136,7 @@ class Rob(SimuRob):
 
 
     ## STEP: Draw program.
-    self.animProgram.appear(
+    self.animTextArray.appear(
       self.cycle, self.tail-1,
       "\u00A0\u00A0"*self.branchNestedLevel + instToStr_noName(exe_cmd["inst"]))
     if exe_cmd["opcode"]=="BREZ":

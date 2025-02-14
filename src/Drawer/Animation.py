@@ -7,7 +7,7 @@ class Animation():
   PRE_TIME  = 0.2
   POST_TIME = 0.2
 
-  COLOR_COMMIT = "#33691E"
+  COLOR_COMMIT = "#616161"
   COLOR_SQUASH = "#BDBDBD"
   COLOR_L1VALID = "#A5D6A7"
 
