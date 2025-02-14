@@ -3,13 +3,14 @@ import os, sys
 import drawsvg as draw
 
 sys.path.append(os.getcwd())
+from src.Simulator.Processor import Processor as SimuProcessor
 from src.Drawer.Processor import Processor
 from src.Drawer.Grid      import Grid
 
 
 class drawTwoProcessors():
-  def __init__(self, imem, r7Pair, l1ValidArray, totalCycle, \
-               scale=1, xyRatio=7/6, speed=0.8, bufferSize=3, extraRobSize=0):
+  def __init__(self, imem, r7Pair, l1ValidArray, maxCycle=None, \
+               scale=1, xyRatio=7/6, speed=0.8):
     self.d          = None
     self.processor0 = None
     self.processor1 = None
@@ -23,28 +24,45 @@ class drawTwoProcessors():
     line_width = 1.4 * rScale
 
 
-    ## STEP2: Draw the whole board.
+    ## STEP2: Simulate the processor once to get buffer size.
+    simuProcessor0 = SimuProcessor(imem, r7Pair[0], l1ValidArray, maxCycle)
+    simuProcessor0.simulate()
+    robSize  = max(5, simuProcessor0.rob.statistic_maxInst)
+    aluSize  = max(3, simuProcessor0.alu.statistic_maxFifoSize)
+    mshrSize = max(3, simuProcessor0.memSystem.statistic_maxFifoSize)
+    simuProcessor1 = SimuProcessor(imem, r7Pair[1], l1ValidArray, maxCycle)
+    simuProcessor1.simulate()
+    robSize  = max(robSize , simuProcessor1.rob.statistic_maxInst)
+    aluSize  = max(aluSize , simuProcessor1.alu.statistic_maxFifoSize)
+    mshrSize = max(mshrSize, simuProcessor1.memSystem.statistic_maxFifoSize)
+    if maxCycle==None:
+      maxCycle = max(simuProcessor0.cycle-1, simuProcessor1.cycle-1)
+
+
+    ## STEP3: Draw the whole board.
     grid = Grid(x=0, y=0, width=700 * xScale, height=600 * yScale)
     grid.divideY([1, 1])
 
     self.d = draw.Drawing(
       grid.width, grid.height, origin=(grid.x, grid.y),
       animation_config=draw.types.SyncedAnimationConfig(
-        duration=totalCycle/speed,
+        duration=maxCycle/speed,
         show_playback_progress=True,
         show_playback_controls=True)
     )
 
 
-    ## STEP3: Simulate the processor
+    ## STEP4: Simulate the processor
     self.processor0 = Processor(
-      imem, r7Pair[0], l1ValidArray, totalCycle, self.d, bufferSize, \
-      extraRobSize, grid.getSubGrid(0, 0), fontsize, line_width, speed)
+      imem, r7Pair[0], l1ValidArray, maxCycle, self.d, \
+      robSize, aluSize, mshrSize,
+      grid.getSubGrid(0, 0), fontsize, line_width, speed)
     self.processor0.simulate()
     
     self.processor1 = Processor(
-      imem, r7Pair[1], l1ValidArray, totalCycle, self.d, bufferSize, \
-      extraRobSize, grid.getSubGrid(0, 1), fontsize, line_width, speed)
+      imem, r7Pair[1], l1ValidArray, maxCycle, self.d, \
+      robSize, aluSize, mshrSize,
+      grid.getSubGrid(0, 1), fontsize, line_width, speed)
     self.processor1.simulate()
 
 

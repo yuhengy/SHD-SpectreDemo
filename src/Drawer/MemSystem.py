@@ -144,7 +144,7 @@ class MemSystem(SimuMemSystem):
       self.hitList.append({"addr": addr, "roblink": roblink})
       animInst.moveTo(
         self.cycle,
-        self.animTable.getBelowGrid(addr+1).getRightGrid(self.fontsize*0.75))
+        self.animTable.getBelowGrid(addr+1))
       animInst.changeColor(self.cycle, Color.DISPATHED_INST)
       self.hitList[-1]["animInst"] = animInst
 

@@ -16,7 +16,10 @@ class Rob():
     self.head = 0
     self.tail = 0
 
-    self.cycle = 0
+    self.cycle  = 0
+    self.finish = False
+
+    self.statistic_maxInst = 0
 
     self.printTrace = printTrace
 
@@ -158,4 +161,8 @@ class Rob():
 
   def tick(self):
     self.cycle += 1
+    if self.head==self.tail:
+      self.finish = True
+
+    self.statistic_maxInst = len(self.entries)
 

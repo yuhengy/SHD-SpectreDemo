@@ -13,6 +13,8 @@ class MemSystem():
     
     self.cycle = 0
 
+    self.statistic_maxFifoSize = 0
+
     self.printTrace = printTrace
 
 
@@ -95,4 +97,7 @@ class MemSystem():
       head["latency"] = head["latency"] - 1
 
     self.cycle += 1
+
+    self.statistic_maxFifoSize = max(self.statistic_maxFifoSize,
+                                     len(self.mshrFifo))
 

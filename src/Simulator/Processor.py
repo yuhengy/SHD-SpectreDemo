@@ -13,7 +13,7 @@ from src.Simulator.parseProgram    import imemToStrList
 
 class Processor():
 
-  def __init__(self, imem, r7, l1ValidArray, totalCycle, printTrace=False):
+  def __init__(self, imem, r7, l1ValidArray, maxCycle, printTrace=False):
     self.pc         = 0
     self.imem       = copy.deepcopy(imem)
     self.regfile    = PhysicalRegfile(r7, printTrace)
@@ -21,8 +21,8 @@ class Processor():
     self.alu        = Alu(printTrace)
     self.memSystem  = MemSystem(l1ValidArray, printTrace)
     
-    self.cycle      = 0
-    self.totalCycle = totalCycle
+    self.cycle    = 0
+    self.maxCycle = maxCycle
 
     self.printTrace = printTrace
 
@@ -94,8 +94,13 @@ class Processor():
 
 
   def simulate(self):
-    for i in range(self.totalCycle+1):
-      self.tick()
+    if self.maxCycle==None:
+      while not self.rob.finish:
+        self.tick()
+    
+    else:
+      for _ in range(self.maxCycle+1):
+        self.tick()
 
 
 
