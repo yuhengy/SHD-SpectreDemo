@@ -4,6 +4,7 @@ import drawsvg as draw
 
 sys.path.append(os.getcwd())
 from src.Drawer.Animation import Animation
+from src.Drawer.Color     import Color
 
 
 class AnimationSquash(Animation):
@@ -36,8 +37,8 @@ class AnimationSquash(Animation):
       fill="transparent", stroke="transparent", stroke_width=self.line_width*2
     )
     rectangle.add_key_frame(self.startTime(cycle), stroke="transparent")
-    rectangle.add_key_frame(self.endTime(cycle), stroke=self.COLOR_DISPATHED_INST)
-    rectangle.add_key_frame(self.startTime(cycle+1), stroke=self.COLOR_DISPATHED_INST)
+    rectangle.add_key_frame(self.endTime(cycle), stroke=Color.DISPATHED_INST)
+    rectangle.add_key_frame(self.startTime(cycle+1), stroke=Color.DISPATHED_INST)
     rectangle.add_key_frame(self.endTime(cycle+1), stroke="transparent")
     self.d.append(rectangle)
 
@@ -46,8 +47,8 @@ class AnimationSquash(Animation):
       first_grid.centerX(), first_grid.y, center=True,
       fill="transparent")
     text.add_key_frame(self.startTime(cycle), fill="transparent")
-    text.add_key_frame(self.endTime(cycle), fill=self.COLOR_DISPATHED_INST)
-    text.add_key_frame(self.startTime(cycle+1), fill=self.COLOR_DISPATHED_INST)
+    text.add_key_frame(self.endTime(cycle), fill=Color.DISPATHED_INST)
+    text.add_key_frame(self.startTime(cycle+1), fill=Color.DISPATHED_INST)
     text.add_key_frame(self.endTime(cycle+1), fill="transparent")
     self.d.append(text)
 

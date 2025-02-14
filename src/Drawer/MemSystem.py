@@ -4,6 +4,7 @@ import drawsvg as draw
 
 sys.path.append(os.getcwd())
 from src.Simulator.MemSystem import MemSystem as SimuMemSystem
+from src.Drawer.Color              import Color
 from src.Drawer.AnimationFifo      import AnimationFifo
 from src.Drawer.AnimationTable     import AnimationTable
 from src.Drawer.AnimationTextArray import AnimationTextArray
@@ -54,9 +55,9 @@ class MemSystem(SimuMemSystem):
       ],
       fontsize*3.5, ncol, 2,
       [
-        ["transparent"] + [AnimationTable.COLOR_L1VALID if valid else "transparent" \
+        ["transparent"] + [Color.L1VALID if valid else "transparent" \
                     for valid in l1ValidArray],
-        ["transparent"] + [AnimationTable.COLOR_L1VALID if valid else "transparent" \
+        ["transparent"] + [Color.L1VALID if valid else "transparent" \
                     for valid in l1ValidArray]
       ],
       line_width, speed)
@@ -68,25 +69,25 @@ class MemSystem(SimuMemSystem):
 
     buffer_grid = \
       mshr_grid.getSubGrid(0, 2).getMergedGrid(mshr_grid.getSubGrid(0, 3))
-    buffer_grid.divideX([1.5, 2.25, 6.25])
+    buffer_grid.divideX([self.fontsize*1.5, 3.5, 6.5], [True, False, False])
     buffer_grid = buffer_grid.getSubGrid(1, 0)
     
     mshrBox_grid = \
       mshr_grid.getSubGrid(0, 1).getMergedGrid(mshr_grid.getSubGrid(0, 2))
-    mshrBox_grid.divideX([1, 5.5, 3.5])
+    mshrBox_grid.divideX([self.fontsize*0.75, 7, 3], [True, False, False])
     mshrBox_grid = mshrBox_grid.getSubGrid(1, 0)
 
     ## STEP2.4: Draw MSHR buffer.
     self.mshrAnimFifo = AnimationFifo(
         buffer_grid, bufferSize, d, line_width, speed)
     self.animTextArray = AnimationTextArray(
-      self.mshrAnimFifo.getLeftGrid(fontsize*0.9), d, fontsize, speed)
+      self.mshrAnimFifo.getRightGrid(fontsize*0.25), d, fontsize, speed)
 
     ## STEP2.5: Draw MSHR box.
     mshrBox_grid.drawRectangle(d, line_width)
     self.d.append(draw.Text(
       "MSHR", self.fontsize,
-      mshrBox_grid.centerX()+2.25*self.fontsize, mshrBox_grid.centerY(),
+      mshrBox_grid.centerX() + self.fontsize*2.75, mshrBox_grid.centerY(),
       center=True
     ))
 
@@ -120,16 +121,16 @@ class MemSystem(SimuMemSystem):
     ## STEP2: Other entries move forward.
     for i, entry in enumerate(self.mshrFifo):
       for animInst in entry["animInstList"]:
-        animInst.moveTo(self.cycle, self.mshrAnimFifo.getGrid(i))
+        animInst.moveTo(
+          self.cycle,
+          self.mshrAnimFifo.getGrid(i).getRightGrid(self.fontsize*0.75))
       self.animTextArray.moveTo(self.cycle, i+1, i)
 
 
     ## STEP3: Update the valid arrary.
     self.animTable.changeText(self.cycle, 1, head["addr"]+1, "1")
-    self.animTable.changeColor(
-      self.cycle, 0, head["addr"]+1, self.animTable.COLOR_L1VALID)
-    self.animTable.changeColor(
-      self.cycle, 1, head["addr"]+1, self.animTable.COLOR_L1VALID)
+    self.animTable.changeColor(self.cycle, 0, head["addr"]+1, Color.L1VALID)
+    self.animTable.changeColor(self.cycle, 1, head["addr"]+1, Color.L1VALID)
 
     
     super().respond_miss(head, robResp)
@@ -141,8 +142,10 @@ class MemSystem(SimuMemSystem):
   def sendReq(self, addr, roblink, animInst):
     if self.l1ValidArray[addr]:
       self.hitList.append({"addr": addr, "roblink": roblink})
-      animInst.moveTo(self.cycle, self.animTable.getBelowGrid(addr+1))
-      animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
+      animInst.moveTo(
+        self.cycle,
+        self.animTable.getBelowGrid(addr+1).getRightGrid(self.fontsize*0.75))
+      animInst.changeColor(self.cycle, Color.DISPATHED_INST)
       self.hitList[-1]["animInst"] = animInst
 
     else:
@@ -156,17 +159,19 @@ class MemSystem(SimuMemSystem):
 
         entryID = len(self.mshrFifo)-1
         animInst.moveTo(
-          self.cycle, self.mshrAnimFifo.getGrid(entryID))
-        animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
+          self.cycle,
+          self.mshrAnimFifo.getGrid(entryID).getRightGrid(self.fontsize*0.75))
+        animInst.changeColor(self.cycle, Color.DISPATHED_INST)
         self.mshrFifo[-1]["animInstList"] = [animInst]
         self.animTextArray.appear(
-          self.cycle, entryID, f"0x{addr}",
-          self.animTextArray.COLOR_DISPATHED_INST)
+          self.cycle, entryID, f"0x{addr}", Color.DISPATHED_INST)
 
       else:
         existingMiss["roblinkList"].append(roblink)
-        animInst.moveTo(self.cycle, self.mshrAnimFifo.getGrid(entryID))
-        animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
+        animInst.moveTo(
+          self.cycle,
+          self.mshrAnimFifo.getGrid(entryID).getRightGrid(self.fontsize*0.75))
+        animInst.changeColor(self.cycle, Color.DISPATHED_INST)
         existingMiss["animInstList"].append(animInst)
 
 
@@ -182,7 +187,7 @@ class MemSystem(SimuMemSystem):
       head = self.mshrFifo[0]
       if head["latency"] > 0:
         for animInst in head["animInstList"]:
-          animInst.changeColor(self.cycle, animInst.COLOR_MSHR_TO_DROP)
+          animInst.changeColor(self.cycle, Color.MSHR_TO_DROP)
 
     super().squash()
     

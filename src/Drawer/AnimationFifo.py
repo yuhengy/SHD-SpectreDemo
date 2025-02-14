@@ -61,6 +61,10 @@ class AnimationFifo(Animation):
     return [g.getLeftGrid(offset) for g in self.grid]
 
 
+  def getRightGrid(self, offset):
+    return [g.getRightGrid(offset) for g in self.grid]
+
+
   def changeColor(self, cycle, entryIndex, color):
     box = self.box[entryIndex]
     

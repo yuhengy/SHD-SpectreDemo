@@ -119,11 +119,20 @@ class Grid():
     )
 
 
-  def getLeftGrid(self, weight):
+  def getLeftGrid(self, width):
     return Grid(
-      self.x- weight,
+      self.x - width,
       self.y,
-      weight,
+      width,
+      self.height
+    )
+
+
+  def getRightGrid(self, width):
+    return Grid(
+      self.x + width,
+      self.y,
+      self.width,
       self.height
     )
 

@@ -4,6 +4,7 @@ import drawsvg as draw
 
 sys.path.append(os.getcwd())
 from src.Simulator.Alu import Alu as SimuAlu
+from src.Drawer.Color         import Color
 from src.Drawer.AnimationFifo import AnimationFifo
 
 
@@ -86,7 +87,7 @@ class Alu(SimuAlu):
            "bufferSize argument."
 
     animInst.moveTo(self.cycle, self.animFifoList[port].getGrid(loc-1))
-    animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
+    animInst.changeColor(self.cycle, Color.DISPATHED_INST)
     self.portFifo[port][-1]["animInst"] = animInst
 
 

@@ -1,0 +1,10 @@
+
+class Color():
+  
+  COMMIT = "#616161"
+  SQUASH = "#BDBDBD"
+  L1VALID = "#A5D6A7"
+
+  DISPATHED_INST = "#FB8C00"
+  MSHR_TO_DROP = "#FFE0B2"
+

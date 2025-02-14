@@ -5,6 +5,7 @@ import drawsvg as draw
 sys.path.append(os.getcwd())
 from src.Simulator.Rob          import Rob as SimuRob
 from src.Simulator.parseProgram import instToStr_noName
+from src.Drawer.Color              import Color
 from src.Drawer.AnimationInst      import AnimationInst
 from src.Drawer.AnimationFifo      import AnimationFifo
 from src.Drawer.AnimationTextArray import AnimationTextArray
@@ -64,18 +65,18 @@ class Rob(SimuRob):
   def dispatch_alu(self, port, latency, result, i, aluReq):
     animInst = self.entries[i]["animInst"]
     animInst_forDispatch = animInst.fork(self.cycle)
-    # animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
-    self.animFifo.changeColor(self.cycle, i, self.animFifo.COLOR_DISPATHED_INST)
-    self.animTextArray.changeColor(self.cycle, i, self.animTextArray.COLOR_DISPATHED_INST)
+    # animInst.changeColor(self.cycle, Color.DISPATHED_INST)
+    self.animFifo.changeColor(self.cycle, i, Color.DISPATHED_INST)
+    self.animTextArray.changeColor(self.cycle, i, Color.DISPATHED_INST)
     aluReq(port, latency, result, i, animInst_forDispatch)
 
 
   def dispatch_l1(self, addr, i, l1Req):
     animInst = self.entries[i]["animInst"]
     animInst_forDispatch = animInst.fork(self.cycle)
-    # animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
-    self.animFifo.changeColor(self.cycle, i, self.animFifo.COLOR_DISPATHED_INST)
-    self.animTextArray.changeColor(self.cycle, i, self.animTextArray.COLOR_DISPATHED_INST)
+    # animInst.changeColor(self.cycle, Color.DISPATHED_INST)
+    self.animFifo.changeColor(self.cycle, i, Color.DISPATHED_INST)
+    self.animTextArray.changeColor(self.cycle, i, Color.DISPATHED_INST)
     l1Req(addr, i, animInst_forDispatch)
 
 
@@ -85,9 +86,9 @@ class Rob(SimuRob):
 
   def commit_wb(self, regfileWrite):
     self.animFifo.changeColor(
-      self.cycle, self.head, self.animFifo.COLOR_COMMIT)
+      self.cycle, self.head, Color.COMMIT)
     self.animTextArray.changeColor(
-      self.cycle, self.head, self.animTextArray.COLOR_COMMIT)
+      self.cycle, self.head, Color.COMMIT)
     super().commit_wb(regfileWrite)
 
 
@@ -96,13 +97,11 @@ class Rob(SimuRob):
       animInst = entry["animInst"]
       animInst.changeColor(self.cycle, "black")
     
-    self.animFifo.changeColor(
-      self.cycle, self.head, self.animFifo.COLOR_COMMIT)
-    self.animTextArray.changeColor(
-      self.cycle, self.head, self.animTextArray.COLOR_COMMIT)
+    self.animFifo.changeColor(self.cycle, self.head, Color.COMMIT)
+    self.animTextArray.changeColor(self.cycle, self.head, Color.COMMIT)
     for i in range(self.head+1, self.tail):
-      self.animFifo.changeColor(self.cycle, i, self.animFifo.COLOR_SQUASH)
-      self.animTextArray.changeColor(self.cycle, i, self.animTextArray.COLOR_SQUASH)
+      self.animFifo.changeColor(self.cycle, i, Color.SQUASH)
+      self.animTextArray.changeColor(self.cycle, i, Color.SQUASH)
 
     self.branchNestedLevel = 0
 
@@ -112,10 +111,8 @@ class Rob(SimuRob):
 
 
   def commit_others(self):
-    self.animFifo.changeColor(
-      self.cycle, self.head, self.animFifo.COLOR_COMMIT)
-    self.animTextArray.changeColor(
-      self.cycle, self.head, self.animTextArray.COLOR_COMMIT)
+    self.animFifo.changeColor(self.cycle, self.head, Color.COMMIT)
+    self.animTextArray.changeColor(self.cycle, self.head, Color.COMMIT)
     super().commit_others()
 
 
