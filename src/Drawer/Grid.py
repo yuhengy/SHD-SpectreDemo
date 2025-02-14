@@ -62,7 +62,7 @@ class Grid():
     return self.y + self.height
 
 
-  def drawRectangle(self, d, line_width, color="none"):
+  def drawRectangle(self, d, line_width, color="transparent"):
     rectangle = draw.Rectangle(
       self.x, self.y, self.width, self.height,
       fill=color, stroke="black", stroke_width=line_width
@@ -110,10 +110,10 @@ class Grid():
       )
 
 
-  def getAboveGrid(self, height):
+  def getBelowGrid(self, height):
     return Grid(
       self.x,
-      self.y - height,
+      self.y + self.height,
       self.width,
       height
     )

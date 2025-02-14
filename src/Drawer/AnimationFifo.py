@@ -47,7 +47,7 @@ class AnimationFifo(Animation):
     ## STEP3: Draw entries.
     for g in self.entry_grid:
       self.entry_box.append(g.drawRectangle(d, line_width))
-      self.entry_color.append("none")
+      self.entry_color.append("transparent")
 
 
 

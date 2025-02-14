@@ -12,12 +12,12 @@ class AnimationInst(Animation):
     
     self.circleBox = draw.Circle(
       grid.centerX(), grid.centerY(), r,
-      fill="none", stroke_width=line_width, stroke="none")
+      fill="transparent", stroke_width=line_width, stroke="transparent")
     d.append(self.circleBox)
     self.textBox = draw.Text(
       text, 2.5*r / max(2, len(text)),
       grid.centerX(), grid.centerY(), center=True,
-      fill="none")
+      fill="transparent")
     d.append(self.textBox)
 
     self.d          = d
@@ -26,7 +26,7 @@ class AnimationInst(Animation):
     self.line_width = line_width
 
     self.grid  = grid
-    self.color = "none"
+    self.color = "transparent"
 
 
   ## PRIVATE:
@@ -79,5 +79,5 @@ class AnimationInst(Animation):
 
 
   def disappear(self, cycle):
-    self.changeColor(cycle, "none")
+    self.changeColor(cycle, "transparent")
 

@@ -26,9 +26,9 @@ class AnimationProgram(Animation):
     textBox = draw.Text(
       s, self.fontsize,
       grid.x, grid.centerY(), text_anchor="start", dominant_baseline="middle",
-      font_family="monospace", word_spacing=-3, letter_spacing=-1, fill="none"
+      font_family="monospace", word_spacing=-3, letter_spacing=-1, fill="transparent"
     )
-    textBox.add_key_frame(self.startTime(cycle), fill="none")
+    textBox.add_key_frame(self.startTime(cycle), fill="transparent")
     textBox.add_key_frame(self.endTime(cycle), fill="black")
     self.d.append(textBox)
 

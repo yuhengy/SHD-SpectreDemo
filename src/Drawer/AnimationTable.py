@@ -38,26 +38,26 @@ class AnimationTable(Animation):
 
 
     ## STEP3: Create grids that is right above the table.
-    for entry_grid in self.grid[0]:
-      self.above_grid.append(entry_grid.getAboveGrid(fontsize))
+    for entry_grid in self.grid[1]:
+      self.above_grid.append(entry_grid.getBelowGrid(fontsize))
 
 
 
 
   ## PUBLIC:
-  def getAboveGrid(self, colIndex):
+  def getBelowGrid(self, colIndex):
     return self.above_grid[colIndex]
 
 
   def changeText(self, cycle, rowIndex, colIndex, text):
     text_old = self.text[rowIndex][colIndex]
     text_old.add_key_frame(self.startTime(cycle), fill="black")
-    text_old.add_key_frame(self.endTime(cycle), fill="none")
+    text_old.add_key_frame(self.endTime(cycle), fill="transparent")
 
     grid = self.grid[rowIndex][colIndex]
     text_new = draw.Text(
       "1", self.fontsize, grid.centerX(), grid.centerY(), center=True)
-    text_new.add_key_frame(self.startTime(cycle), fill="none")
+    text_new.add_key_frame(self.startTime(cycle), fill="transparent")
     text_new.add_key_frame(self.endTime(cycle), fill="black")
     self.d.append(text_new)
     self.text[rowIndex][colIndex] = text_new

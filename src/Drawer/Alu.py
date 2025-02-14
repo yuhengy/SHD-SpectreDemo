@@ -26,13 +26,12 @@ class Alu(SimuAlu):
     grid = grid.getSubGrid(0, 0)
     self.grid = grid
 
-    grid.divideY([bufferSize-0.8, 1, fontsize * 1.5, fontsize * 1.5],
-                 [False, False, True, True])
-    buffer_grid   = grid.getSubGrid(0, 0).getMergedGrid(grid.getSubGrid(0, 1))
-    box_grid      = grid.getSubGrid(0, 1).getMergedGrid(grid.getSubGrid(0, 2)) \
-                                         .getMergedGrid(grid.getSubGrid(0, 3))
-    textPort_grid = grid.getSubGrid(0, 2)
-    textAlu_grid  = grid.getSubGrid(0, 3)
+    grid.divideY([fontsize * 1.5, fontsize * 1, 1, bufferSize-0.8],
+                 [True, True, False, False])
+    textAlu_grid  = grid.getSubGrid(0, 0)
+    box_grid      = grid.getSubGrid(0, 0).getMergedGrid(grid.getSubGrid(0, 1)) \
+                                         .getMergedGrid(grid.getSubGrid(0, 2))
+    buffer_grid   = grid.getSubGrid(0, 2).getMergedGrid(grid.getSubGrid(0, 3))
 
 
     ## STEP2: Draw 4 FIFOs and text below each FIFO.
@@ -43,8 +42,7 @@ class Alu(SimuAlu):
       grid = buffer_grid.getSubGrid(1+2*portID, 0)
       
       self.animFifoList.append(AnimationFifo(
-        grid, bufferSize, self.d, self.line_width, self.speed,
-        flipVeritically=True))
+        grid, bufferSize, self.d, self.line_width, self.speed))
 
       self.d.append(draw.Text(
         f"Port {portID}", fontsize,
@@ -55,7 +53,7 @@ class Alu(SimuAlu):
     ## STEP3: Draw ALU box and text.
     self.d.append(draw.Rectangle(
       box_grid.x, box_grid.y, box_grid.width, box_grid.height,
-      fill="none", stroke="black", stroke_width=self.line_width
+      fill="transparent", stroke="black", stroke_width=self.line_width
     ))
     self.d.append(draw.Text(
       "ALU", fontsize,
@@ -88,7 +86,7 @@ class Alu(SimuAlu):
            "bufferSize argument."
 
     animInst.moveTo(self.cycle, self.animFifoList[port].getGrid(loc-1))
-    animInst.changeColor(self.cycle, "red")
+    animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
     self.portFifo[port][-1]["animInst"] = animInst
 
 

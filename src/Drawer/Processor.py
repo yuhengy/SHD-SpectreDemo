@@ -13,8 +13,8 @@ from src.Drawer.MemSystem import MemSystem
 
 class Processor(SimuProcessor):
 
-  def __init__(self, imem, r7, l1ValidArray, totalCycle, \
-               d, bufferSize, grid, fontsize, line_width, speed=1):
+  def __init__(self, imem, r7, l1ValidArray, totalCycle, d, bufferSize, \
+               extraRobSize, grid, fontsize, line_width, speed, useLogo=True):
     super().__init__(imem, r7, l1ValidArray, totalCycle, False)
 
 
@@ -34,7 +34,7 @@ class Processor(SimuProcessor):
                           grid.getSubGrid(1, 0))
     
     grid = grid.getSubGrid(3, 0)
-    grid.divideY([1, fontsize * 0.5, fontsize * 2.5],
+    grid.divideY([1, fontsize * 0.5, fontsize * 2.75],
                  useFixedLength=[False, True, True])
     cycleIndicator_grid = grid.getSubGrid(0, 2)
 
@@ -50,23 +50,41 @@ class Processor(SimuProcessor):
     cycleIndicator_grid.divideX([1, fontsize * 1.5, fontsize * 3],
                                 useFixedLength=[False, True, True])
     cycleIndicator_grid.divideY(
-      [fontsize * 0.5, fontsize * 0.25, fontsize * 0.75, fontsize * 1],
-      useFixedLength=[True, True, True, True])
-    cyclePointer_grid = cycleIndicator_grid.getSubGrid(0, 0)
-    cycleAxis_grid    = cycleIndicator_grid.getSubGrid(0, 2)
-    label_grid        = cycleIndicator_grid.getSubGrid(0, 3)
-    arrow_grid        = cycleIndicator_grid.getSubGrid(1, 2)
-    text_grid         = cycleIndicator_grid.getSubGrid(2, 2)
+      [fontsize * 0.25, fontsize * 0.5, fontsize * 0.25,
+      fontsize * 0.75, fontsize * 1],
+      useFixedLength=[True, True, True, True, True])
+    cycleLogo_grid    = cycleIndicator_grid.getSubGrid(0, 0)
+    cyclePointer_grid = cycleIndicator_grid.getSubGrid(0, 1)
+    cycleAxis_grid    = cycleIndicator_grid.getSubGrid(0, 3)
+    label_grid        = cycleIndicator_grid.getSubGrid(0, 4)
+    arrow_grid        = cycleIndicator_grid.getSubGrid(1, 3)
+    text_grid         = cycleIndicator_grid.getSubGrid(2, 3)
 
     ## STEP2.2: A moving pointer
-    pointer = draw.Circle(
-      cyclePointer_grid.x,
-      cyclePointer_grid.centerY(),
-      cyclePointer_grid.height/2,
-      fill="black"
-    )
-    pointer.add_key_frame(               0, cx=cyclePointer_grid.x)
-    pointer.add_key_frame(totalCycle/speed, cx=cyclePointer_grid.x2())
+    if useLogo:
+      pointer = draw.Image(
+        cycleLogo_grid.x - cycleLogo_grid.height*4,
+        cycleLogo_grid.y,
+        cycleLogo_grid.height*8,
+        cycleLogo_grid.height*4,
+        "logo/matcha-logo-dark-green.pdf",
+        embed=True,
+      )
+      pointer.add_key_frame(
+                       0, x=cycleLogo_grid.x - cycleLogo_grid.height*4)
+      pointer.add_key_frame(
+        totalCycle/speed, x=cycleLogo_grid.x2() - cycleLogo_grid.height*4)
+    
+    else:
+      pointer = draw.Circle(
+        cyclePointer_grid.x,
+        cyclePointer_grid.centerY(),
+        cyclePointer_grid.height/2,
+        fill="black"
+      )
+      pointer.add_key_frame(               0, cx=cyclePointer_grid.x)
+      pointer.add_key_frame(totalCycle/speed, cx=cyclePointer_grid.x2())
+    
     d.append(pointer)
 
     ## STEP2.3: Axis, sticks, and labels.
@@ -95,7 +113,7 @@ class Processor(SimuProcessor):
       arrow_grid.centerY()                       ,
       arrow_grid.x2()      - arrow_grid.width*0.3,
       arrow_grid.centerY() + arrow_grid.width*0.2,
-      fill="none", stroke="black", stroke_width=line_width
+      fill="transparent", stroke="black", stroke_width=line_width
     ))
 
     ## STEP2.5: Text
@@ -108,7 +126,7 @@ class Processor(SimuProcessor):
 
     ## STEP3: Draw submodules, i.e., ROB, ALU, and memory system.
     self.rob       = Rob(
-      d, len(imem), rob_grid, fontsize, line_width, speed)
+      d, len(imem)+extraRobSize, rob_grid, fontsize, line_width, speed)
     self.alu       = Alu(
       d, bufferSize, alu_grid, fontsize, line_width, speed)
     self.memSystem = MemSystem(

@@ -56,27 +56,26 @@ class Rob(SimuRob):
   def dispatch_alu(self, port, latency, result, i, aluReq):
     animInst = self.entries[i]["animInst"]
     animInst_forDispatch = animInst.fork(self.cycle)
-    animInst.changeColor(self.cycle, "red")
+    # animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
+    self.animFifo.changeColor(self.cycle, i, self.animFifo.COLOR_DISPATHED_INST)
+    self.animProgram.changeColor(self.cycle, i, self.animProgram.COLOR_DISPATHED_INST)
     aluReq(port, latency, result, i, animInst_forDispatch)
 
 
   def dispatch_l1(self, addr, i, l1Req):
     animInst = self.entries[i]["animInst"]
     animInst_forDispatch = animInst.fork(self.cycle)
-    animInst.changeColor(self.cycle, "red")
+    # animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
+    self.animFifo.changeColor(self.cycle, i, self.animFifo.COLOR_DISPATHED_INST)
+    self.animProgram.changeColor(self.cycle, i, self.animProgram.COLOR_DISPATHED_INST)
     l1Req(addr, i, animInst_forDispatch)
 
 
   def dispatch_br(self, i):
     super().dispatch_br(i)
-    
-    entry = self.entries[i]
-    # if entry["squash"]:
-    #   entry["animInst"].changeColor(self.cycle, "orange")
 
 
   def commit_wb(self, regfileWrite):
-    # self.entries[self.head]["animInst"].changeColor(self.cycle, "gray")
     self.animFifo.changeColor(
       self.cycle, self.head, self.animFifo.COLOR_COMMIT)
     self.animProgram.changeColor(
@@ -85,8 +84,9 @@ class Rob(SimuRob):
 
 
   def commit_squash(self, squash):
-    for entry in self.entries[self.head: self.tail]:
-      entry["animInst"].changeColor(self.cycle, "black")
+    for entry in self.entries[self.head+1: self.tail]:
+      animInst = entry["animInst"]
+      animInst.changeColor(self.cycle, "black")
     
     self.animFifo.changeColor(
       self.cycle, self.head, self.animFifo.COLOR_COMMIT)
@@ -134,7 +134,8 @@ class Rob(SimuRob):
 
 
   def collectResultAndForward(self, roblink, result):
-    self.entries[roblink]["animInst"].changeColor(self.cycle, "black")
+    animInst = self.entries[roblink]["animInst"]
+    animInst.changeColor(self.cycle, "black")
     
     super().collectResultAndForward(roblink, result)
 

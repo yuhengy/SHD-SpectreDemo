@@ -9,7 +9,7 @@ from src.Drawer.Grid      import Grid
 
 class drawTwoProcessors():
   def __init__(self, imem, r7Pair, l1ValidArray, totalCycle, \
-               scale=1, xyRatio=7/6, speed=1, bufferSize=3):
+               scale=1, xyRatio=7/6, speed=0.8, bufferSize=3, extraRobSize=0):
     self.d          = None
     self.processor0 = None
     self.processor1 = None
@@ -38,13 +38,13 @@ class drawTwoProcessors():
 
     ## STEP3: Simulate the processor
     self.processor0 = Processor(
-      imem, r7Pair[0], l1ValidArray, totalCycle, \
-      self.d, bufferSize, grid.getSubGrid(0, 0), fontsize, line_width, speed)
+      imem, r7Pair[0], l1ValidArray, totalCycle, self.d, bufferSize, \
+      extraRobSize, grid.getSubGrid(0, 0), fontsize, line_width, speed)
     self.processor0.simulate()
     
     self.processor1 = Processor(
-      imem, r7Pair[1], l1ValidArray, totalCycle, \
-      self.d, bufferSize, grid.getSubGrid(0, 1), fontsize, line_width, speed)
+      imem, r7Pair[1], l1ValidArray, totalCycle, self.d, bufferSize, \
+      extraRobSize, grid.getSubGrid(0, 1), fontsize, line_width, speed)
     self.processor1.simulate()
 
 

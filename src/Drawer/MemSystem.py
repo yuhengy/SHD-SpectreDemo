@@ -29,16 +29,16 @@ class MemSystem(SimuMemSystem):
 
 
     ## STEP1: Divide into L1 and main memory.
-    grid.divideY([1, fontsize, fontsize * 1.75], [False, True, True])
-    l1_grid  = grid.getSubGrid(0, 0)
-    mem_grid = grid.getSubGrid(0, 2)
+    grid.divideY([fontsize * 1.75, fontsize, 1], [True, True, False])
+    mem_grid = grid.getSubGrid(0, 0)
+    l1_grid  = grid.getSubGrid(0, 2)
 
 
     ## STEP2: Draw L1.
 
     ## STEP2.1: Divide L1 into MSHR and valid table.
-    l1_grid.divideY([fontsize * 1, fontsize * 3.5, 1], [True, True, False])
-    mshr_grid = l1_grid.getSubGrid(0, 2)
+    l1_grid.divideY([1, fontsize * 3.5,fontsize * 1 ], [False, True, True])
+    mshr_grid = l1_grid.getSubGrid(0, 0)
     l1_grid.divideX([1, fontsize * (3.5 + 2.5*4), 1], [False, True, False])
     table_grid = l1_grid.getSubGrid(1, 1)
 
@@ -52,32 +52,31 @@ class MemSystem(SimuMemSystem):
       ],
       fontsize*3.5, ncol, 2,
       [
-        ["none"] + [AnimationTable.COLOR_L1VALID if valid else "none" \
+        ["transparent"] + [AnimationTable.COLOR_L1VALID if valid else "transparent" \
                     for valid in l1ValidArray],
-        ["none"] + [AnimationTable.COLOR_L1VALID if valid else "none" \
+        ["transparent"] + [AnimationTable.COLOR_L1VALID if valid else "transparent" \
                     for valid in l1ValidArray]
       ],
       line_width, speed)
 
     ## STEP2.3: Divide MSHR into buffer and box.
     mshr_grid.divideY(
-      [fontsize * 0.5, bufferSize-0.8, 1, fontsize * 0.5, fontsize * 0.5],
-      [True, False, False, True, True])
+      [fontsize * 0.5, fontsize * 0.5, 1, bufferSize-0.8, fontsize * 0.5],
+      [True, True, False, False, True])
 
     buffer_grid = \
-      mshr_grid.getSubGrid(0, 1).getMergedGrid(mshr_grid.getSubGrid(0, 2))
+      mshr_grid.getSubGrid(0, 2).getMergedGrid(mshr_grid.getSubGrid(0, 3))
     buffer_grid.divideX([1.5, 2.25, 6.25])
     buffer_grid = buffer_grid.getSubGrid(1, 0)
     
     mshrBox_grid = \
-      mshr_grid.getSubGrid(0, 2).getMergedGrid(mshr_grid.getSubGrid(0, 3))
+      mshr_grid.getSubGrid(0, 1).getMergedGrid(mshr_grid.getSubGrid(0, 2))
     mshrBox_grid.divideX([1, 5.5, 3.5])
     mshrBox_grid = mshrBox_grid.getSubGrid(1, 0)
 
     ## STEP2.4: Draw MSHR buffer.
     self.mshrAnimFifo = AnimationFifo(
-        buffer_grid, bufferSize, self.d, self.line_width, self.speed,
-        flipVeritically=True)
+        buffer_grid, bufferSize, self.d, self.line_width, self.speed)
 
     ## STEP2.5: Draw MSHR box.
     mshrBox_grid.drawRectangle(d, line_width)
@@ -91,7 +90,7 @@ class MemSystem(SimuMemSystem):
     l1_grid.drawRectangle(d, line_width)
     self.d.append(draw.Text(
       "L1", self.fontsize,
-      l1_grid.centerX()+5*self.fontsize, l1_grid.y2()-0.75*self.fontsize,
+      l1_grid.centerX()+5*self.fontsize, l1_grid.y+0.75*self.fontsize,
       center=True
     ))
 
@@ -121,8 +120,10 @@ class MemSystem(SimuMemSystem):
 
     ## STEP3: Update the valid arrary.
     self.animTable.changeText(self.cycle, 1, head["addr"]+1, "1")
-    self.animTable.changeColor(self.cycle, 0, head["addr"]+1, "green")
-    self.animTable.changeColor(self.cycle, 1, head["addr"]+1, "green")
+    self.animTable.changeColor(
+      self.cycle, 0, head["addr"]+1, self.animTable.COLOR_L1VALID)
+    self.animTable.changeColor(
+      self.cycle, 1, head["addr"]+1, self.animTable.COLOR_L1VALID)
 
     
     super().respond_miss(head, robResp)
@@ -134,8 +135,8 @@ class MemSystem(SimuMemSystem):
   def sendReq(self, addr, roblink, animInst):
     if self.l1ValidArray[addr]:
       self.hitList.append({"addr": addr, "roblink": roblink})
-      animInst.moveTo(self.cycle, self.animTable.getAboveGrid(addr+1))
-      animInst.changeColor(self.cycle, "red")
+      animInst.moveTo(self.cycle, self.animTable.getBelowGrid(addr+1))
+      animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
       self.hitList[-1]["animInst"] = animInst
 
     else:
@@ -148,13 +149,13 @@ class MemSystem(SimuMemSystem):
         })
         animInst.moveTo(
           self.cycle, self.mshrAnimFifo.getGrid(len(self.mshrFifo)-1))
-        animInst.changeColor(self.cycle, "red")
+        animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
         self.mshrFifo[-1]["animInstList"] = [animInst]
 
       else:
         existingMiss["roblinkList"].append(roblink)
         animInst.moveTo(self.cycle, self.mshrAnimFifo.getGrid(entryID))
-        animInst.changeColor(self.cycle, "red")
+        animInst.changeColor(self.cycle, animInst.COLOR_DISPATHED_INST)
         existingMiss["animInstList"].append(animInst)
 
 
@@ -170,7 +171,7 @@ class MemSystem(SimuMemSystem):
       head = self.mshrFifo[0]
       if head["latency"] > 0:
         for animInst in head["animInstList"]:
-          animInst.changeColor(self.cycle, "orange")
+          animInst.changeColor(self.cycle, animInst.COLOR_MSHR_TO_DROP)
 
     super().squash()
     

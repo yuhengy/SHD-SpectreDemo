@@ -9,7 +9,7 @@ from src.Drawer.Grid      import Grid
 
 class drawProcessor():
   def __init__(self, imem, r7, l1ValidArray, totalCycle, \
-               scale=1, xyRatio=7/3, speed=1, bufferSize=3):
+               scale=1, xyRatio=7/3, speed=0.8, bufferSize=3, extraRobSize=0):
     self.d         = None
     self.processor = None
 
@@ -37,7 +37,7 @@ class drawProcessor():
     ## STEP3: Simulate the processor
     self.processor = Processor(
       imem, r7, l1ValidArray, totalCycle, \
-      self.d, bufferSize, grid, fontsize, line_width, speed)
+      self.d, bufferSize, extraRobSize, grid, fontsize, line_width, speed)
     self.processor.simulate()
 
 
