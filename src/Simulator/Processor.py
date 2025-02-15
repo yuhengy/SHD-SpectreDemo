@@ -13,13 +13,14 @@ from src.Simulator.parseProgram    import imemToStrList
 
 class Processor():
 
-  def __init__(self, imem, r7, l1ValidArray, maxCycle, printTrace=False):
+  def __init__(self, imem, r7, l1ValidArray, maxCycle, defense="Baseline",
+               printTrace=False):
     self.pc         = 0
     self.imem       = copy.deepcopy(imem)
     self.regfile    = PhysicalRegfile(r7, printTrace)
-    self.rob        = Rob(printTrace)
+    self.rob        = Rob(defense, printTrace)
     self.alu        = Alu(printTrace)
-    self.memSystem  = MemSystem(l1ValidArray, printTrace)
+    self.memSystem  = MemSystem(l1ValidArray, defense, printTrace)
     
     self.cycle    = 0
     self.maxCycle = maxCycle

@@ -13,9 +13,9 @@ from src.Drawer.AnimationSquash    import AnimationSquash
 
 
 class Rob(SimuRob):
-  def __init__(self, d, numInst, grid, fontsize, line_width,
+  def __init__(self, d, numInst, grid, fontsize, line_width, defense="Baseline",
                speed=1):
-    super().__init__()
+    super().__init__(defense)
 
     self.d          = d
     self.numInst    = numInst
@@ -71,13 +71,13 @@ class Rob(SimuRob):
     aluReq(port, latency, result, i, animInst_forDispatch)
 
 
-  def dispatch_l1(self, addr, i, l1Req):
+  def dispatch_l1(self, addr, i, l1Req, isSpeculative=None):
     animInst = self.entries[i]["animInst"]
     animInst_forDispatch = animInst.fork(self.cycle)
     # animInst.changeColor(self.cycle, Color.DISPATHED_INST)
     self.animFifo.changeColor(self.cycle, i, Color.DISPATHED_INST)
     self.animTextArray.changeColor(self.cycle, i, Color.DISPATHED_INST)
-    l1Req(addr, i, animInst_forDispatch)
+    l1Req(addr, i, animInst_forDispatch, isSpeculative)
 
 
   def dispatch_br(self, i):
@@ -108,6 +108,12 @@ class Rob(SimuRob):
     self.animSquash.showBox(self.cycle, self.head, self.tail)
 
     super().commit_squash(squash)
+
+
+  def commit_br_noSquash(self):
+    self.animFifo.changeColor(self.cycle, self.head, Color.COMMIT)
+    self.animTextArray.changeColor(self.cycle, self.head, Color.COMMIT)
+    super().commit_br_noSquash()
 
 
   def commit_others(self):

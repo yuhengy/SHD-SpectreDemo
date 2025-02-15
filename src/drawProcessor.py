@@ -9,8 +9,8 @@ from src.Drawer.Grid      import Grid
 
 
 class drawProcessor():
-  def __init__(self, imem, r7, l1ValidArray, maxCycle=None, \
-               scale=1, xyRatio=7/3, speed=0.8, bufferSize=3, extraRobSize=0):
+  def __init__(self, imem, r7, l1ValidArray, defense="Baseline",
+               maxCycle=None, scale=1, xyRatio=7/3, speed=0.8):
     self.d         = None
     self.processor = None
 
@@ -24,7 +24,7 @@ class drawProcessor():
 
 
     ## STEP2: Simulate the processor once to get buffer size.
-    simuProcessor = SimuProcessor(imem, r7, l1ValidArray, maxCycle)
+    simuProcessor = SimuProcessor(imem, r7, l1ValidArray, maxCycle, defense)
     simuProcessor.simulate()
     robSize  = max(5, simuProcessor.rob.statistic_maxInst)
     aluSize  = max(3, simuProcessor.alu.statistic_maxFifoSize)
@@ -49,7 +49,7 @@ class drawProcessor():
     self.processor = Processor(
       imem, r7, l1ValidArray, maxCycle, self.d,
       robSize, aluSize, mshrSize,
-      grid, fontsize, line_width, speed)
+      grid, fontsize, line_width, defense, speed)
     self.processor.simulate()
 
 

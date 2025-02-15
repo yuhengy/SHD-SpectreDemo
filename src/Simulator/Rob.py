@@ -11,10 +11,18 @@ class Rob():
     FINISHED   = 4
 
 
-  def __init__(self, printTrace=False):
+  def __init__(self, defense="Baseline", printTrace=False):
+    self.defense = defense
+
     self.entries = []
     self.head = 0
     self.tail = 0
+
+    if defense=="InvisiSpec":
+      self.isSpeculative         = False
+      self.isSpeculative_roblink = None
+
+
 
     self.cycle  = 0
     self.finish = False
@@ -43,6 +51,13 @@ class Rob():
       "squash"      : False,
       "squash_pc"   : None,
     })
+    
+    if self.defense=="InvisiSpec":
+      self.entries[-1]["isSpeculative"] = self.isSpeculative
+      if exe_cmd["opcode"]=="BREZ":
+        self.isSpeculative         = True
+        self.isSpeculative_roblink = self.tail
+    
     self.tail += 1
 
     if self.printTrace:
@@ -53,8 +68,8 @@ class Rob():
     aluReq(port, latency, result, i)
 
 
-  def dispatch_l1(self, addr, i, l1Req):
-    l1Req(addr, i)
+  def dispatch_l1(self, addr, i, l1Req, isSpeculative=None):
+    l1Req(addr, i, isSpeculative)
 
 
   def dispatch_br(self, i):
@@ -79,7 +94,10 @@ class Rob():
         
         elif exe_cmd["opcode"]=="LOAD":
           addr = exe_cmd["srcImm"] if exe_cmd["useImm"] else entry["src_data"]
-          self.dispatch_l1(addr, i, l1Req)
+          if self.defense=="InvisiSpec":
+            self.dispatch_l1(addr, i, l1Req, entry["isSpeculative"])
+          else:
+            self.dispatch_l1(addr, i, l1Req)
           entry["status"] = self.Status.DISPATCHED
         
         elif exe_cmd["opcode"]=="BREZ":
@@ -123,11 +141,21 @@ class Rob():
 
   def commit_squash(self, squash):
 
-    ## STEP2: Clear renaming table, ALU and L1. Reset PC.
+    ## STEP1: Clear renaming table, ALU and L1. Reset PC.
     squash(self.entries[self.head]["squash_pc"])
 
-    ## STEP1: Clear ROB.
+    ## STEP2: Clear ROB.
     self.head    = self.tail - 1
+
+    if self.defense=="InvisiSpec":
+      ## STEP3: Clear isSpeculative bit
+      self.isSpeculative = False
+
+
+  def commit_br_noSquash(self):
+    if self.defense=="InvisiSpec":
+      if self.isSpeculative and self.isSpeculative_roblink==self.head:
+        self.isSpeculative = False
 
 
   def commit_others(self):
@@ -148,6 +176,9 @@ class Rob():
       
       elif entry["squash"]:
         self.commit_squash(squash)
+      
+      elif entry["exe_cmd"]["opcode"]=="BREZ":
+        self.commit_br_noSquash()
       
       else:
         self.commit_others()

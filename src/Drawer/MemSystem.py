@@ -16,15 +16,18 @@ class MemSystem(SimuMemSystem):
   ANIM_POST = 0.2
 
   def __init__(self, l1ValidArray, d, bufferSize, grid, fontsize, line_width,
-               speed=1):
-    super().__init__(l1ValidArray)
+               defense="Baseline", speed=1):
+    super().__init__(l1ValidArray, defense)
 
     self.d          = d
     self.bufferSize = bufferSize
     self.grid       = grid
     self.fontsize   = fontsize
     self.line_width = line_width
+    self.defense    = defense
     self.speed      = speed
+
+    self.animInst = None
 
     self.mshrAnimFifo  = None
     self.animTable     = None
@@ -103,6 +106,44 @@ class MemSystem(SimuMemSystem):
     ## STEP3: Draw main memory.
     mem_grid.drawRectangle(d, line_width)
     mem_grid.drawText(d, "Main Memory", fontsize)
+
+
+
+
+  ## PRIVATE:
+  def sendReq_hit(self, addr, roblink):
+    super().sendReq_hit(addr, roblink)
+    
+    self.animInst.moveTo(
+      self.cycle,
+      self.animTable.getBelowGrid(addr+1))
+    self.animInst.changeColor(self.cycle, Color.DISPATHED_INST)
+    self.hitList[-1]["animInst"] = self.animInst
+
+
+  def sendReq_newMshr(self, addr, roblink, isSpeculative):
+    super().sendReq_newMshr(addr, roblink, isSpeculative)
+
+    entryID = len(self.mshrFifo)-1
+    self.animInst.moveTo(
+      self.cycle,
+      self.mshrAnimFifo.getGrid(entryID).getRightGrid(self.fontsize*0.75))
+    self.animInst.changeColor(self.cycle, Color.DISPATHED_INST)
+    self.mshrFifo[-1]["animInstList"] = [self.animInst]
+    self.animTextArray.appear(
+      self.cycle, entryID, f"0x{addr}", Color.DISPATHED_INST)
+
+
+  def sendReq_appendMshr(self, addr, roblink, isSpeculative):
+    super().sendReq_appendMshr(addr, roblink, isSpeculative)
+    
+    existingMiss, entryID = self.findInMshrFifo(addr)
+
+    self.animInst.moveTo(
+      self.cycle,
+      self.mshrAnimFifo.getGrid(entryID).getRightGrid(self.fontsize*0.75))
+    self.animInst.changeColor(self.cycle, Color.DISPATHED_INST)
+    existingMiss["animInstList"].append(self.animInst)
   
 
   def respond_hit(self, entry, robResp):
@@ -128,9 +169,16 @@ class MemSystem(SimuMemSystem):
 
 
     ## STEP3: Update the valid arrary.
-    self.animTable.changeText(self.cycle, 1, head["addr"]+1, "1")
-    self.animTable.changeColor(self.cycle, 0, head["addr"]+1, Color.L1VALID)
-    self.animTable.changeColor(self.cycle, 1, head["addr"]+1, Color.L1VALID)
+    def updateValid():
+      self.animTable.changeText(self.cycle, 1, head["addr"]+1, "1")
+      self.animTable.changeColor(self.cycle, 0, head["addr"]+1, Color.L1VALID)
+      self.animTable.changeColor(self.cycle, 1, head["addr"]+1, Color.L1VALID)
+    
+    if self.defense=="InvisiSpec":
+      if not head["isSpeculative"]:
+        updateValid()
+    else:
+      updateValid()
 
     
     super().respond_miss(head, robResp)
@@ -139,40 +187,9 @@ class MemSystem(SimuMemSystem):
 
 
   ## PUBLIC:
-  def sendReq(self, addr, roblink, animInst):
-    if self.l1ValidArray[addr]:
-      self.hitList.append({"addr": addr, "roblink": roblink})
-      animInst.moveTo(
-        self.cycle,
-        self.animTable.getBelowGrid(addr+1))
-      animInst.changeColor(self.cycle, Color.DISPATHED_INST)
-      self.hitList[-1]["animInst"] = animInst
-
-    else:
-      existingMiss, entryID = self.findInMshrFifo(addr)
-      if existingMiss==None:
-        self.mshrFifo.append({
-          "addr": addr,
-          "latency": self.MISS_LATENCY,
-          "roblinkList": [roblink],
-        })
-
-        entryID = len(self.mshrFifo)-1
-        animInst.moveTo(
-          self.cycle,
-          self.mshrAnimFifo.getGrid(entryID).getRightGrid(self.fontsize*0.75))
-        animInst.changeColor(self.cycle, Color.DISPATHED_INST)
-        self.mshrFifo[-1]["animInstList"] = [animInst]
-        self.animTextArray.appear(
-          self.cycle, entryID, f"0x{addr}", Color.DISPATHED_INST)
-
-      else:
-        existingMiss["roblinkList"].append(roblink)
-        animInst.moveTo(
-          self.cycle,
-          self.mshrAnimFifo.getGrid(entryID).getRightGrid(self.fontsize*0.75))
-        animInst.changeColor(self.cycle, Color.DISPATHED_INST)
-        existingMiss["animInstList"].append(animInst)
+  def sendReq(self, addr, roblink, animInst, isSpeculative=None):
+    self.animInst = animInst
+    super().sendReq(addr, roblink, isSpeculative)
 
 
   def squash(self):

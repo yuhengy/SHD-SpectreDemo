@@ -15,8 +15,9 @@ class Processor(SimuProcessor):
 
   def __init__(self, imem, r7, l1ValidArray, totalCycle, d, \
                robSize, aluSize, mshrSize,
-               grid, fontsize, line_width, speed, useLogo=True):
-    super().__init__(imem, r7, l1ValidArray, totalCycle, False)
+               grid, fontsize, line_width, defense="Baseline", speed=1,
+               useLogo=True):
+    super().__init__(imem, r7, l1ValidArray, totalCycle, defense, False)
 
 
     ## STEP1: Divide the whole board for 4 components.
@@ -127,10 +128,10 @@ class Processor(SimuProcessor):
 
     ## STEP3: Draw submodules, i.e., ROB, ALU, and memory system.
     self.rob       = Rob(
-      d, robSize, rob_grid, fontsize, line_width, speed)
+      d, robSize, rob_grid, fontsize, line_width, defense, speed)
     self.alu       = Alu(
       d, aluSize, alu_grid, fontsize, line_width, speed)
     self.memSystem = MemSystem(
       l1ValidArray, d, mshrSize, memSystem_grid, fontsize, line_width,
-      speed)
+      defense, speed)
 

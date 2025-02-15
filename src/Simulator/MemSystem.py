@@ -6,8 +6,10 @@ class MemSystem():
   MISS_LATENCY = 3
   READ_ONLY_ARRAY = [0, 0, 0, 0]
 
-  def __init__(self, l1ValidArray, printTrace=False):
+  def __init__(self, l1ValidArray, defense="Baseline", printTrace=False):
     self.l1ValidArray = copy.copy(l1ValidArray)
+    self.defense = defense
+    
     self.hitList = []
     self.mshrFifo = []
     
@@ -18,6 +20,9 @@ class MemSystem():
     self.printTrace = printTrace
 
 
+
+
+  ## PRIVATE:
   def findInMshrFifo(self, addr):
     existingMiss = None
     entryID      = None
@@ -28,33 +33,41 @@ class MemSystem():
     return existingMiss, entryID
 
 
-  def sendReq(self, addr, roblink):
-    if self.l1ValidArray[addr]:
-      self.hitList.append({"addr": addr, "roblink": roblink})
+  def sendReq_hit(self, addr, roblink):
+    self.hitList.append({"addr": addr, "roblink": roblink})
 
-      if self.printTrace:
-        print(f"[Memory System] Get request and hit: {self.hitList[-1]}.")
+    if self.printTrace:
+      print(f"[Memory System] Get request and hit: {self.hitList[-1]}.")
 
-    else:
-      existingMiss, entryID = self.findInMshrFifo(addr)
 
-      if existingMiss==None:
-        self.mshrFifo.append({
-          "addr": addr,
-          "latency": self.MISS_LATENCY,
-          "roblinkList": [roblink],
-        })
+  def sendReq_newMshr(self, addr, roblink, isSpeculative):
+    self.mshrFifo.append({
+      "addr": addr,
+      "latency": self.MISS_LATENCY,
+      "roblinkList": [roblink],
+    })
 
-        if self.printTrace:
-          print(f"[Memory System] Get request and miss.",
-                f"New MSHR request: {self.mshrFifo[-1]}.")
-      
-      else:
-        existingMiss["roblinkList"].append(roblink)
+    if self.defense=="InvisiSpec":
+      self.mshrFifo[-1]["isSpeculative"] = isSpeculative
 
-        if self.printTrace:
-          print(f"[Memory System] Get request and miss.",
-                f"Append to existing MSHR request: {existingMiss}.")
+    if self.printTrace:
+      print(f"[Memory System] Get request and miss.",
+            f"New MSHR request: {self.mshrFifo[-1]}.")
+
+
+  def sendReq_appendMshr(self, addr, roblink, isSpeculative):
+    existingMiss, _ = self.findInMshrFifo(addr)
+    existingMiss["roblinkList"].append(roblink)
+
+    if self.defense=="InvisiSpec":
+      existingMiss["isSpeculative"] = existingMiss["isSpeculative"] and \
+                                      isSpeculative
+
+    if self.printTrace:
+      print(f"[Memory System] Get request and miss.",
+            f"Append to existing MSHR request: {existingMiss}.")
+
+
   
 
   def respond_hit(self, entry, robResp):
@@ -64,6 +77,29 @@ class MemSystem():
   def respond_miss(self, head, robResp):
     for roblink in head["roblinkList"]:
       robResp(roblink, self.READ_ONLY_ARRAY[head["addr"]])
+
+    if self.defense=="InvisiSpec":
+      if not head["isSpeculative"]:
+        self.l1ValidArray[head["addr"]] = True
+    else:
+      self.l1ValidArray[head["addr"]] = True
+
+
+
+
+  ## PUBLIC:
+  def sendReq(self, addr, roblink, isSpeculative=None):
+    if self.l1ValidArray[addr]:
+      self.sendReq_hit(addr, roblink)
+
+    else:
+      existingMiss, _ = self.findInMshrFifo(addr)
+
+      if existingMiss==None:
+        self.sendReq_newMshr(addr, roblink, isSpeculative)
+      
+      else:
+        self.sendReq_appendMshr(addr, roblink, isSpeculative)
 
 
   def respond(self, robResp):
@@ -78,7 +114,6 @@ class MemSystem():
       if head["latency"]==0:
         self.mshrFifo.pop(0)
         self.respond_miss(head, robResp)
-        self.l1ValidArray[head["addr"]] = True
 
 
   def squash(self):
