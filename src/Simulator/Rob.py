@@ -18,7 +18,7 @@ class Rob():
     self.head = 0
     self.tail = 0
 
-    if defense=="InvisiSpec":
+    if defense=="InvisiSpec" or defense=="GhostMinion":
       self.isSpeculative         = False
       self.isSpeculative_roblink = None
 
@@ -52,7 +52,7 @@ class Rob():
       "squash_pc"   : None,
     })
     
-    if self.defense=="InvisiSpec":
+    if self.defense=="InvisiSpec" or self.defense=="GhostMinion":
       self.entries[-1]["isSpeculative"] = self.isSpeculative
       if exe_cmd["opcode"]=="BREZ":
         self.isSpeculative         = True
@@ -94,7 +94,7 @@ class Rob():
         
         elif exe_cmd["opcode"]=="LOAD":
           addr = exe_cmd["srcImm"] if exe_cmd["useImm"] else entry["src_data"]
-          if self.defense=="InvisiSpec":
+          if self.defense=="InvisiSpec" or self.defense=="GhostMinion":
             self.dispatch_l1(addr, i, l1Req, entry["isSpeculative"])
           else:
             self.dispatch_l1(addr, i, l1Req)
@@ -147,13 +147,13 @@ class Rob():
     ## STEP2: Clear ROB.
     self.head    = self.tail - 1
 
-    if self.defense=="InvisiSpec":
+    if self.defense=="InvisiSpec" or self.defense=="GhostMinion":
       ## STEP3: Clear isSpeculative bit
       self.isSpeculative = False
 
 
   def commit_br_noSquash(self):
-    if self.defense=="InvisiSpec":
+    if self.defense=="InvisiSpec" or self.defense=="GhostMinion":
       if self.isSpeculative and self.isSpeculative_roblink==self.head:
         self.isSpeculative = False
 

@@ -130,7 +130,7 @@ class Processor(SimuProcessor):
     self.rob       = Rob(
       d, robSize, rob_grid, fontsize, line_width, defense, speed)
     self.alu       = Alu(
-      d, aluSize, alu_grid, fontsize, line_width, speed)
+      d, aluSize, alu_grid, fontsize, line_width, defense, speed)
     self.memSystem = MemSystem(
       l1ValidArray, d, mshrSize, memSystem_grid, fontsize, line_width,
       defense, speed)

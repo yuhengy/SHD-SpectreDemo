@@ -9,8 +9,9 @@ from src.Drawer.AnimationFifo import AnimationFifo
 
 
 class Alu(SimuAlu):
-  def __init__(self, d, bufferSize, grid, fontsize, line_width, speed=1):
-    super().__init__()
+  def __init__(self, d, bufferSize, grid, fontsize, line_width,
+               defense="Baseline", speed=1):
+    super().__init__(defense)
 
     self.d          = d
     self.bufferSize = bufferSize
@@ -80,21 +81,31 @@ class Alu(SimuAlu):
   ## PUBLIC:
   def sendReq(self, port, latency, result, roblink, animInst):
     super().sendReq(port, latency, result, roblink)
-    
-    loc = len(self.portFifo[port])
-    assert loc <= self.bufferSize, \
+
+    fifo = self.portFifo[port]
+    animFifo = self.animFifoList[port]
+    assert len(fifo) <= self.bufferSize, \
            "Buffer for port is full in the visulization, please increase " + \
            "bufferSize argument."
 
-    animInst.moveTo(self.cycle, self.animFifoList[port].getGrid(loc-1))
+    ## STEP1: Find where the new entry is inserted.
+    loc = [i for i, d in enumerate(fifo) if d["roblink"]==roblink][0]
+
+    ## STEP2: Move to this new entry.
+    animInst.moveTo(self.cycle, animFifo.getGrid(loc))
     animInst.changeColor(self.cycle, Color.DISPATHED_INST)
-    self.portFifo[port][-1]["animInst"] = animInst
+    self.portFifo[port][loc]["animInst"] = animInst
+
+    ## STEP3: Adjust other entries, if necessary.
+    if self.defense=="GhostMinion":
+      for i in range(loc+1, len(fifo)):
+        fifo[i]["animInst"].moveTo(self.cycle, animFifo.getGrid(i))
 
 
   def squash(self):
     for fifo in self.portFifo:
       for entry in fifo:
-        entry["animInst"].disappear()
+        entry["animInst"].disappear(self.cycle)
 
     super().squash()
 

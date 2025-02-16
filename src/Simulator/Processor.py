@@ -19,7 +19,7 @@ class Processor():
     self.imem       = copy.deepcopy(imem)
     self.regfile    = PhysicalRegfile(r7, printTrace)
     self.rob        = Rob(defense, printTrace)
-    self.alu        = Alu(printTrace)
+    self.alu        = Alu(defense, printTrace)
     self.memSystem  = MemSystem(l1ValidArray, defense, printTrace)
     
     self.cycle    = 0

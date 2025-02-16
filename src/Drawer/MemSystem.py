@@ -24,7 +24,6 @@ class MemSystem(SimuMemSystem):
     self.grid       = grid
     self.fontsize   = fontsize
     self.line_width = line_width
-    self.defense    = defense
     self.speed      = speed
 
     self.animInst = None
@@ -124,26 +123,59 @@ class MemSystem(SimuMemSystem):
   def sendReq_newMshr(self, addr, roblink, isSpeculative):
     super().sendReq_newMshr(addr, roblink, isSpeculative)
 
-    entryID = len(self.mshrFifo)-1
+    ## STEP1: Find where the new entry is inserted.
+    existingMiss, entryID = self.findInMshrFifo(addr)
+
+    ## STEP2: Adjust other entries, if necessary.
+    if self.defense=="GhostMinion":
+      for i in range(entryID+1, len(self.mshrFifo)):
+        for animInst in self.mshrFifo[i]["animInstList"]:
+          animInst.moveTo(
+            self.cycle,
+            self.mshrAnimFifo.getGrid(i).getRightGrid(self.fontsize*0.75))
+        self.animTextArray.moveTo(self.cycle, i-1, i)
+    
+    ## STEP3: Move to this new entry.
     self.animInst.moveTo(
       self.cycle,
       self.mshrAnimFifo.getGrid(entryID).getRightGrid(self.fontsize*0.75))
     self.animInst.changeColor(self.cycle, Color.DISPATHED_INST)
-    self.mshrFifo[-1]["animInstList"] = [self.animInst]
+    existingMiss["animInstList"] = [self.animInst]
     self.animTextArray.appear(
       self.cycle, entryID, f"0x{addr}", Color.DISPATHED_INST)
+      
 
 
   def sendReq_appendMshr(self, addr, roblink, isSpeculative):
-    super().sendReq_appendMshr(addr, roblink, isSpeculative)
+    entryID_old = super().sendReq_appendMshr(addr, roblink, isSpeculative)
     
+    ## STEP1: Find this new entry.
     existingMiss, entryID = self.findInMshrFifo(addr)
 
+    ## STEP2: Do the change color for this inst, and move for the entry.
+    self.animInst.changeColor(self.cycle, Color.DISPATHED_INST)
     self.animInst.moveTo(
       self.cycle,
       self.mshrAnimFifo.getGrid(entryID).getRightGrid(self.fontsize*0.75))
-    self.animInst.changeColor(self.cycle, Color.DISPATHED_INST)
     existingMiss["animInstList"].append(self.animInst)
+    
+    if self.defense=="GhostMinion":
+      for animInst in existingMiss["animInstList"][:-1]:
+        animInst.moveTo(
+          self.cycle,
+          self.mshrAnimFifo.getGrid(entryID).getRightGrid(self.fontsize*0.75))
+
+    ## STEP3: Move other entries.
+    if self.defense=="GhostMinion":
+      for i in range(entryID+1, entryID_old+1):
+        for animInst in self.mshrFifo[i]["animInstList"]:
+          animInst.moveTo(
+            self.cycle,
+            self.mshrAnimFifo.getGrid(i).getRightGrid(self.fontsize*0.75))
+      
+      ## STEP4: Do the rotate for addr text.
+      self.animTextArray.rotateToLarger(self.cycle, entryID, entryID_old)
+
   
 
   def respond_hit(self, entry, robResp):
@@ -174,7 +206,7 @@ class MemSystem(SimuMemSystem):
       self.animTable.changeColor(self.cycle, 0, head["addr"]+1, Color.L1VALID)
       self.animTable.changeColor(self.cycle, 1, head["addr"]+1, Color.L1VALID)
     
-    if self.defense=="InvisiSpec":
+    if self.defense=="InvisiSpec" or self.defense=="GhostMinion":
       if not head["isSpeculative"]:
         updateValid()
     else:

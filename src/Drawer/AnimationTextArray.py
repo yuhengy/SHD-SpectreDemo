@@ -57,7 +57,30 @@ class AnimationTextArray(Animation):
     )
     
     self.textBox[toIdx] = textBox
-    self.color[toIdx] = self.color[fromIdx]
+    self.color  [toIdx] = self.color[fromIdx]
+
+
+  def rotateToLarger(self, cycle, minIdx, maxIdx):
+    if minIdx==maxIdx:
+      return
+
+    max_textBox = self.textBox[maxIdx]
+    max_color   = self.color[maxIdx]
+    from_grid = self.grid[maxIdx]
+    to_grid   = self.grid[minIdx]
+    max_textBox.add_key_frame(
+      self.startTime(cycle), x=from_grid.x, y=from_grid.centerY()
+    )
+    max_textBox.add_key_frame(
+      self.endTime(cycle), x=to_grid.x, y=to_grid.centerY()
+    )
+
+    for i in range(minIdx, maxIdx):
+      self.moveTo(cycle, i, i+1)
+    
+    self.textBox[minIdx] = max_textBox
+    self.color  [minIdx] = max_color
+
   
 
   def disappear(self, cycle, i):

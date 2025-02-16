@@ -1,5 +1,5 @@
 
-import os, sys
+import os, sys, math
 import drawsvg as draw
 
 sys.path.append(os.getcwd())
@@ -56,6 +56,10 @@ class AnimationInst(Animation):
 
 
   def moveTo(self, cycle, grid):
+    if math.isclose(self.grid.centerX(), grid.centerX()) and \
+       math.isclose(self.grid.centerY(), grid.centerY()):
+      return
+
     self.circleBox.add_key_frame(
       self.startTime(cycle), cx=self.grid.centerX(), cy=self.grid.centerY()
     )

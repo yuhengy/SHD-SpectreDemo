@@ -2,7 +2,9 @@
 class Alu():
   NUM_PORTS = 4
 
-  def __init__(self, printTrace=False):
+  def __init__(self, defense="Baseline", printTrace=False):
+    self.defense = defense
+
     self.portFifo = [[] for _ in range(self.NUM_PORTS)]
     
     self.cycle = 0
@@ -14,14 +16,23 @@ class Alu():
 
   def sendReq(self, port, latency, result, roblink):
     assert port < self.NUM_PORTS, f"ALU only has {self.NUM_PORTS} ports."
-    self.portFifo[port].append({
+    fifo = self.portFifo[port]
+    fifo.append({
       "latency": latency,
       "result" : result,
       "roblink": roblink
     })
 
+    if self.defense=="GhostMinion":
+      fifo[-1]["resetLatency"] = latency
+      self.portFifo[port] = sorted(fifo, key=lambda d: d["roblink"])
+      fifo = self.portFifo[port]
+
+      if fifo[0]["roblink"]==roblink and len(fifo) > 1:
+        fifo[1]["latency"] = fifo[1]["resetLatency"]
+
     if self.printTrace:
-      print(f"[ALU] Get request {self.portFifo[port][-1]} at Port {port}.")
+      print(f"[ALU] Get request {fifo[-1]} at Port {port}.")
 
 
   def respond_internal(self, portID, head, roblink, result, robResp):
