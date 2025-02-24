@@ -1,8 +1,10 @@
 
 # SHD-SpectreDemo
 
-This repo provides a Visualized Simulator to demonstrate Spectre Attack on out-of-order processors.
+This repo provides a Visualized Simulator (check the amazing svg animation below) to demonstrate Spectre Attack on out-of-order processors.
 We also implement 2 Spectre defenses, InvisiSpec and GhostMinion, and guide you to discover new Spectre variants to break them.
+
+![Spectre Attack on a Out-of-Order Processor](video/Spectre.svg "Spectre Attack on a Out-of-Order Processor")
 
 
 ## Run the Repo on Binder
