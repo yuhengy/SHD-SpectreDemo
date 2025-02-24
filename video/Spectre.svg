@@ -4,53 +4,58 @@
 <defs>
 </defs>
 <image x="238.70000000000002" y="247.5" width="28.0" height="14.0" xlink:href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMTEzLjEiPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAuY2xzLTEgewogICAgICAgIGZpbGw6ICM1YjcxMzI7CiAgICAgIH0KCiAgICAgIC5jbHMtMSwgLmNscy0yLCAuY2xzLTMsIC5jbHMtNCB7CiAgICAgICAgc3Ryb2tlLXdpZHRoOiAwcHg7CiAgICAgIH0KCiAgICAgIC5jbHMtMiB7CiAgICAgICAgZmlsbDogbm9uZTsKICAgICAgfQoKICAgICAgLmNscy0zIHsKICAgICAgICBmaWxsOiAjNWM3MTMyOwogICAgICB9CgogICAgICAuY2xzLTQgewogICAgICAgIGZpbGw6ICNmZmY7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxyZWN0IGNsYXNzPSJjbHMtMyIgeD0iNjUuNDciIHk9IjExLjkxIiB3aWR0aD0iLjAxIiBoZWlnaHQ9IjUzLjU3Ii8+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNNzEuMzcsNjUuNDhzLjA0LjA4LjA2LjEydi0uMTJoLS4wNlpNNjUuNDcsNTAuOHMwLC4wMi4wMS4wM1YxMS45MWgtLjAxdjM4Ljg5WiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTcxLjM3LDY1LjQ4cy4wNC4wOC4wNi4xMnYtLjEyaC0uMDZaTTY1LjQ3LDY1LjQ4aC4wMVYxMS45MWgtLjAxdjUzLjU3WiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTAsMHY0MS42N2MwLDE5LjY5LDE2LjAyLDM1LjcxLDM1LjcxLDM1LjcxaDM1Ljcydi0uMTJjMi4wNywzLjA3LDQuMzMsNS45Myw2Ljc2LDguNiwxNi40OCwxOC4wNyw0MS4yNCwyNy4yNCw3My42LDI3LjI0czU3LjExLTkuMTcsNzMuNTktMjcuMjRjMTYuMzQtMTcuOTIsMjQuNjItNDQuOCwyNC42Mi03OS45MVYwSDBaTTEwNy4xNCwxMS45MWg0Ny42MnYxMS45aC00Ny42MnYtMTEuOVpNMjMuODEsNjIuMjhjLTcuMTEtNC4xMi0xMS45MS0xMS44Mi0xMS45MS0yMC42MVYxMS45MWgxMS45MXY1MC4zN1pNNDEuNjcsNTMuNTdoLTExLjkxVjExLjkxaDExLjkxdjQxLjY2Wk01OS41Miw2NS40OGgtMTEuOVYxMS45MWgxMS45djUzLjU3Wk0xMDEuMTksODkuMzVjLTQuMzgtMi42Mi04LjM1LTUuNy0xMS45MS05LjIydi0zOC40NmgtMTEuOXYyMy44MWgtNS45NXYuMTJzLS4wNC0uMDgtLjA2LS4xMmgtNS45VjExLjkxaDM1Ljcydjc3LjQ0Wk0xMTkuMDUsOTcuMDNjLTQuMjItMS4yMi04LjE5LTIuNzItMTEuOTEtNC40OFYyOS43NmgxMS45MXY2Ny4yN1pNMTc4LjU3LDk4LjUzYy04LjA5LDEuNzgtMTcuMDEsMi42Ni0yNi43OCwyLjY2cy0xOC43LS44OC0yNi43OS0yLjY2VjI5Ljc2aDI5Ljc2djExLjkxaC0xNy44NnY0Ny42Mmg0MS42N3Y5LjI0Wk0xOTYuNDIsOTIuNTVjLTMuNzEsMS43Ny03LjY4LDMuMjYtMTEuOSw0LjQ4di01NS4zNmgtMTEuOTF2NDEuNjZoLTExLjlWMTEuOTFoMTEuOXYyMy44MWgxMS45MVYxMS45MWgxMS45djgwLjY0Wk0yMjYuMTksNjQuMDd2LTIyLjRoLTExLjkxdjM4LjQ3Yy0zLjU2LDMuNTItNy41Myw2LjU5LTExLjksOS4yMVYxMS45MWgzNS42M2MtLjYxLDIxLjIxLTQuNTIsMzguNTgtMTEuODIsNTIuMTZaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjMuODEsMTEuOTF2NTAuMzdjLTcuMTEtNC4xMi0xMS45MS0xMS44Mi0xMS45MS0yMC42MVYxMS45MWgxMS45MVoiLz4KICA8cmVjdCBjbGFzcz0iY2xzLTIiIHg9IjI5Ljc2IiB5PSIxMS45MSIgd2lkdGg9IjExLjkxIiBoZWlnaHQ9IjQxLjY2Ii8+CiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMTE5LjA1LDI5Ljc2djY3LjI3Yy00LjIyLTEuMjItOC4xOS0yLjcyLTExLjkxLTQuNDhWMjkuNzZoMTEuOTFaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMTc4LjU3LDg5LjI5djkuMjRjLTguMDksMS43OC0xNy4wMSwyLjY2LTI2Ljc4LDIuNjZzLTE4LjctLjg4LTI2Ljc5LTIuNjZWMjkuNzZoMjkuNzZ2MTEuOTFoLTE3Ljg2djQ3LjYyaDQxLjY3WiIvPgogIDxyZWN0IGNsYXNzPSJjbHMtMiIgeD0iMTA3LjE0IiB5PSIxMS45MSIgd2lkdGg9IjQ3LjYyIiBoZWlnaHQ9IjExLjkiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xOTYuNDIsMTEuOTF2ODAuNjRjLTMuNzEsMS43Ny03LjY4LDMuMjYtMTEuOSw0LjQ4di01NS4zNmgtMTEuOTF2NDEuNjZoLTExLjlWMTEuOTFoMTEuOXYyMy44MWgxMS45MVYxMS45MWgxMS45WiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTIzOC4wMSwxMS45MWgtMzUuNjN2NzcuNDRjNC4zNy0yLjYyLDguMzQtNS42OSwxMS45LTkuMjF2LTM4LjQ3aDExLjkxdjIyLjRjNy4zLTEzLjU4LDExLjIxLTMwLjk1LDExLjgyLTUyLjE2Wk0yMTQuMjgsMzUuNzJ2LTExLjkxaDExLjkxdjExLjkxaC0xMS45MVoiLz4KICA8cmVjdCBjbGFzcz0iY2xzLTEiIHg9IjIxNC4yOCIgeT0iMjMuODEiIHdpZHRoPSIxMS45MSIgaGVpZ2h0PSIxMS45MSIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTY1LjQ3LDExLjkxdjUzLjU3aC4wMVYxMS45MWgtLjAxWk03MS4zNyw2NS40OHMuMDQuMDguMDYuMTJ2LS4xMmgtLjA2WiIvPgogIDxyZWN0IGNsYXNzPSJjbHMtMiIgeD0iNDcuNjIiIHk9IjExLjkxIiB3aWR0aD0iMTEuOSIgaGVpZ2h0PSI1My41NyIvPgogIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTY1LjQ3LDExLjkxdjUzLjU3aC4wMVYxMS45MWgtLjAxWiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTY1LjQ4LDExLjkxdjUzLjU3aDExLjl2LTIzLjgxaDExLjl2MzguNDZjMy41NiwzLjUyLDcuNTMsNi42LDExLjkxLDkuMjJWMTEuOTFoLTM1LjcxWk04OS4yOCwzNS43MmgtMTEuOXYtMTEuOTFoMTEuOXYxMS45MVoiLz4KICA8cmVjdCBjbGFzcz0iY2xzLTEiIHg9Ijc3LjM4IiB5PSIyMy44MSIgd2lkdGg9IjExLjkiIGhlaWdodD0iMTEuOTEiLz4KPC9zdmc+">
-<animate attributeName="x" dur="11.25s" values="238.70000000000002;616.0" keyTimes="0;1" repeatCount="indefinite" fill="freeze" />
+<animate attributeName="x" dur="12.5s" values="238.70000000000002;616.0" keyTimes="0;1" repeatCount="indefinite" fill="freeze" />
 </image>
 <path d="M252.70000000000002,266.75 L651.0,266.75" stroke="black" stroke-width="1.4" />
 <path d="M252.70000000000002,261.5 L252.70000000000002,272.0" stroke="black" stroke-width="1.4" />
 <text x="252.70000000000002" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">0</text>
-<path d="M294.62222222222226,261.5 L294.62222222222226,272.0" stroke="black" stroke-width="1.4" />
-<text x="294.62222222222226" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">1</text>
-<path d="M336.5444444444445,261.5 L336.5444444444445,272.0" stroke="black" stroke-width="1.4" />
-<text x="336.5444444444445" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">2</text>
-<path d="M378.4666666666667,261.5 L378.4666666666667,272.0" stroke="black" stroke-width="1.4" />
-<text x="378.4666666666667" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">3</text>
-<path d="M420.3888888888889,261.5 L420.3888888888889,272.0" stroke="black" stroke-width="1.4" />
-<text x="420.3888888888889" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">4</text>
-<path d="M462.31111111111113,261.5 L462.31111111111113,272.0" stroke="black" stroke-width="1.4" />
-<text x="462.31111111111113" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">5</text>
-<path d="M504.23333333333335,261.5 L504.23333333333335,272.0" stroke="black" stroke-width="1.4" />
-<text x="504.23333333333335" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">6</text>
-<path d="M546.1555555555556,261.5 L546.1555555555556,272.0" stroke="black" stroke-width="1.4" />
-<text x="546.1555555555556" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">7</text>
-<path d="M588.0777777777778,261.5 L588.0777777777778,272.0" stroke="black" stroke-width="1.4" />
-<text x="588.0777777777778" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">8</text>
-<path d="M630.0,261.5 L630.0,272.0" stroke="black" stroke-width="1.4" />
-<text x="630.0" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">9</text>
+<path d="M290.43,261.5 L290.43,272.0" stroke="black" stroke-width="1.4" />
+<text x="290.43" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">1</text>
+<path d="M328.16,261.5 L328.16,272.0" stroke="black" stroke-width="1.4" />
+<text x="328.16" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">2</text>
+<path d="M365.89000000000004,261.5 L365.89000000000004,272.0" stroke="black" stroke-width="1.4" />
+<text x="365.89000000000004" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">3</text>
+<path d="M403.62,261.5 L403.62,272.0" stroke="black" stroke-width="1.4" />
+<text x="403.62" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">4</text>
+<path d="M441.35,261.5 L441.35,272.0" stroke="black" stroke-width="1.4" />
+<text x="441.35" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">5</text>
+<path d="M479.08000000000004,261.5 L479.08000000000004,272.0" stroke="black" stroke-width="1.4" />
+<text x="479.08000000000004" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">6</text>
+<path d="M516.8100000000001,261.5 L516.8100000000001,272.0" stroke="black" stroke-width="1.4" />
+<text x="516.8100000000001" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">7</text>
+<path d="M554.5400000000001,261.5 L554.5400000000001,272.0" stroke="black" stroke-width="1.4" />
+<text x="554.5400000000001" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">8</text>
+<path d="M592.2700000000001,261.5 L592.2700000000001,272.0" stroke="black" stroke-width="1.4" />
+<text x="592.2700000000001" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">9</text>
+<path d="M630.0000000000001,261.5 L630.0000000000001,272.0" stroke="black" stroke-width="1.4" />
+<text x="630.0000000000001" y="279.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">10</text>
 <path d="M644.7,262.55 L651.0,266.75 L644.7,270.95" fill="transparent" stroke="black" stroke-width="1.4" />
 <text x="672.0" y="266.75" font-size="14.0" text-anchor="middle" dominant-baseline="central">Cycle</text>
-<path d="M175.0,278.83333333333337 L175.0,286.00000000000006" stroke="black" stroke-width="1.4" />
-<path d="M226.8,278.83333333333337 L226.8,286.00000000000006" stroke="black" stroke-width="1.4" />
-<rect x="175.0" y="28.0" width="51.80000000000001" height="35.833333333333336" fill="transparent" stroke="black" stroke-width="1.4">
-<animate attributeName="fill" dur="11.25s" values="transparent;transparent;#FB8C00;#FB8C00;#616161;#616161" keyTimes="0;0.022;0.089;0.467;0.533;1" repeatCount="indefinite" fill="freeze" />
+<path d="M175.0,279.70731707317077 L175.0,286.00000000000006" stroke="black" stroke-width="1.4" />
+<path d="M226.8,279.70731707317077 L226.8,286.00000000000006" stroke="black" stroke-width="1.4" />
+<rect x="175.0" y="28.0" width="51.80000000000001" height="31.463414634146343" fill="transparent" stroke="black" stroke-width="1.4">
+<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#FB8C00;#FB8C00;#616161;#616161" keyTimes="0;0.02;0.08;0.52;0.58;1" repeatCount="indefinite" fill="freeze" />
 </rect>
-<rect x="175.0" y="63.833333333333336" width="51.80000000000001" height="35.833333333333336" fill="transparent" stroke="black" stroke-width="1.4">
-<animate attributeName="fill" dur="11.25s" values="transparent;transparent;#616161;#616161" keyTimes="0;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
+<rect x="175.0" y="59.463414634146346" width="51.80000000000001" height="31.463414634146343" fill="transparent" stroke="black" stroke-width="1.4">
+<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#616161;#616161" keyTimes="0;0.62;0.68;1" repeatCount="indefinite" fill="freeze" />
 </rect>
-<rect x="175.0" y="99.66666666666667" width="51.80000000000001" height="35.833333333333336" fill="transparent" stroke="black" stroke-width="1.4">
-<animate attributeName="fill" dur="11.25s" values="transparent;transparent;#FB8C00;#FB8C00;#BDBDBD;#BDBDBD" keyTimes="0;0.244;0.311;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
+<rect x="175.0" y="90.92682926829269" width="51.80000000000001" height="31.463414634146343" fill="transparent" stroke="black" stroke-width="1.4">
+<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#FB8C00;#FB8C00;#BDBDBD;#BDBDBD" keyTimes="0;0.22;0.28;0.62;0.68;1" repeatCount="indefinite" fill="freeze" />
 </rect>
-<rect x="175.0" y="135.5" width="51.80000000000001" height="35.833333333333336" fill="transparent" stroke="black" stroke-width="1.4">
-<animate attributeName="fill" dur="11.25s" values="transparent;transparent;#BDBDBD;#BDBDBD" keyTimes="0;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
+<rect x="175.0" y="122.39024390243902" width="51.80000000000001" height="31.463414634146343" fill="transparent" stroke="black" stroke-width="1.4">
+<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#BDBDBD;#BDBDBD" keyTimes="0;0.62;0.68;1" repeatCount="indefinite" fill="freeze" />
 </rect>
-<rect x="175.0" y="171.33333333333334" width="51.80000000000001" height="35.833333333333336" fill="transparent" stroke="black" stroke-width="1.4">
-<animate attributeName="fill" dur="11.25s" values="transparent;transparent;#BDBDBD;#BDBDBD" keyTimes="0;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
+<rect x="175.0" y="153.85365853658539" width="51.80000000000001" height="31.463414634146343" fill="transparent" stroke="black" stroke-width="1.4">
+<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#BDBDBD;#BDBDBD" keyTimes="0;0.62;0.68;1" repeatCount="indefinite" fill="freeze" />
 </rect>
-<rect x="175.0" y="207.16666666666669" width="51.80000000000001" height="35.833333333333336" fill="transparent" stroke="black" stroke-width="1.4">
-<animate attributeName="fill" dur="11.25s" values="transparent;transparent;#BDBDBD;#BDBDBD" keyTimes="0;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
+<rect x="175.0" y="185.3170731707317" width="51.80000000000001" height="31.463414634146343" fill="transparent" stroke="black" stroke-width="1.4">
+<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#BDBDBD;#BDBDBD" keyTimes="0;0.62;0.68;1" repeatCount="indefinite" fill="freeze" />
 </rect>
-<rect x="175.0" y="243.0" width="51.80000000000001" height="35.833333333333336" fill="transparent" stroke="black" stroke-width="1.4">
-<animate attributeName="fill" dur="11.25s" values="transparent;transparent;#FB8C00;#FB8C00;#616161;#616161" keyTimes="0;0.689;0.756;0.911;0.978;1" repeatCount="indefinite" fill="freeze" />
+<rect x="175.0" y="216.78048780487805" width="51.80000000000001" height="31.463414634146343" fill="transparent" stroke="black" stroke-width="1.4">
+<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#BDBDBD;#BDBDBD" keyTimes="0;0.62;0.68;1" repeatCount="indefinite" fill="freeze" />
+</rect>
+<rect x="175.0" y="248.2439024390244" width="51.80000000000001" height="31.463414634146343" fill="transparent" stroke="black" stroke-width="1.4">
+<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#FB8C00;#FB8C00;#616161;#616161" keyTimes="0;0.72;0.78;0.92;0.98;1" repeatCount="indefinite" fill="freeze" />
 </rect>
 <text x="200.9" y="17.5" font-size="14.0" text-anchor="middle" dominant-baseline="central">ROB Head</text>
 <path d="M257.88,162.421875 L257.88,170.45" stroke="black" stroke-width="1.4" />
@@ -81,7 +86,7 @@
 <text x="356.3" y="17.5" font-size="14.0" text-anchor="middle" dominant-baseline="central">ALU</text>
 <rect x="494.9" y="177.5" width="49.0" height="24.5" fill="transparent" stroke="black" stroke-width="1.4" />
 <rect x="543.9" y="177.5" width="35.0" height="24.5" fill="transparent" stroke="black" stroke-width="1.4">
-<animate attributeName="fill" dur="11.25s" values="transparent;transparent;#A5D6A7;#A5D6A7" keyTimes="0;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
+<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#A5D6A7;#A5D6A7" keyTimes="0;0.52;0.58;1" repeatCount="indefinite" fill="freeze" />
 </rect>
 <rect x="578.9" y="177.5" width="35.0" height="24.5" fill="transparent" stroke="black" stroke-width="1.4" />
 <rect x="613.9" y="177.5" width="35.0" height="24.5" fill="transparent" stroke="black" stroke-width="1.4" />
@@ -93,13 +98,13 @@
 <text x="666.4" y="189.75" font-size="14.0" text-anchor="middle" dominant-baseline="central">0x3</text>
 <rect x="494.9" y="202.0" width="49.0" height="24.5" fill="transparent" stroke="black" stroke-width="1.4" />
 <rect x="543.9" y="202.0" width="35.0" height="24.5" fill="transparent" stroke="black" stroke-width="1.4">
-<animate attributeName="fill" dur="11.25s" values="transparent;transparent;#A5D6A7;#A5D6A7" keyTimes="0;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
+<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#A5D6A7;#A5D6A7" keyTimes="0;0.52;0.58;1" repeatCount="indefinite" fill="freeze" />
 </rect>
 <rect x="578.9" y="202.0" width="35.0" height="24.5" fill="transparent" stroke="black" stroke-width="1.4" />
 <rect x="613.9" y="202.0" width="35.0" height="24.5" fill="transparent" stroke="black" stroke-width="1.4" />
 <rect x="648.9" y="202.0" width="35.0" height="24.5" fill="transparent" stroke="black" stroke-width="1.4" />
 <text x="519.4" y="214.25" font-size="14.0" text-anchor="middle" dominant-baseline="central">Valid</text>
-<text x="561.4" y="214.25" font-size="14.0" text-anchor="middle" dominant-baseline="central">0<animate attributeName="fill" dur="11.25s" values="black;black;transparent;transparent" keyTimes="0;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="561.4" y="214.25" font-size="14.0" text-anchor="middle" dominant-baseline="central">0<animate attributeName="fill" dur="12.5s" values="black;black;transparent;transparent" keyTimes="0;0.52;0.58;1" repeatCount="indefinite" fill="freeze" /></text>
 <text x="596.4" y="214.25" font-size="14.0" text-anchor="middle" dominant-baseline="central">0</text>
 <text x="631.4" y="214.25" font-size="14.0" text-anchor="middle" dominant-baseline="central">0</text>
 <text x="666.4" y="214.25" font-size="14.0" text-anchor="middle" dominant-baseline="central">0</text>
@@ -114,74 +119,79 @@
 <text x="659.4" y="56.0" font-size="14.0" text-anchor="middle" dominant-baseline="central">L1</text>
 <rect x="485.8" y="7.0" width="207.2" height="24.5" fill="transparent" stroke="black" stroke-width="1.4" />
 <text x="589.4" y="19.25" font-size="14.0" text-anchor="middle" dominant-baseline="central">Main Memory</text>
-<circle cx="200.9" cy="45.91666666666667" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
-<animate attributeName="stroke" dur="11.25s" values="transparent;black;black;black;black" keyTimes="0;0;0.356;0.422;1" repeatCount="indefinite" fill="freeze" />
+<circle cx="200.9" cy="43.73170731707317" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
+<animate attributeName="stroke" dur="12.5s" values="transparent;black;black;black;black" keyTimes="0;0;0.42;0.48;1" repeatCount="indefinite" fill="freeze" />
 </circle>
-<text x="200.9" y="45.91666666666667" font-size="5.25" fill="transparent" text-anchor="middle" dominant-baseline="central">delay<animate attributeName="fill" dur="11.25s" values="transparent;black;black;black;black" keyTimes="0;0;0.356;0.422;1" repeatCount="indefinite" fill="freeze" /></text>
-<text x="7.0" y="45.91666666666667" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">r1 &lt;- ALU-0(r0, lat=3)<animate attributeName="fill" dur="11.25s" values="transparent;black;black;#FB8C00;#FB8C00;#616161;#616161" keyTimes="0;0;0.022;0.089;0.467;0.533;1" repeatCount="indefinite" fill="freeze" /></text>
-<circle cx="200.9" cy="45.91666666666667" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
-<animate attributeName="stroke" dur="11.25s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.02;0.021;0.022;0.089;0.356;0.422;1" repeatCount="indefinite" fill="freeze" />
-<animate attributeName="cx" dur="11.25s" values="200.9;200.9;278.6;278.6" keyTimes="0;0.022;0.089;1" repeatCount="indefinite" fill="freeze" />
-<animate attributeName="cy" dur="11.25s" values="45.91666666666667;45.91666666666667;62.0703125;62.0703125" keyTimes="0;0.022;0.089;1" repeatCount="indefinite" fill="freeze" />
+<text x="200.9" y="43.73170731707317" font-size="5.25" fill="transparent" text-anchor="middle" dominant-baseline="central">delay<animate attributeName="fill" dur="12.5s" values="transparent;black;black;black;black" keyTimes="0;0;0.42;0.48;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="7.0" y="43.73170731707317" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">r1 &lt;- ALU-0(r0, lat=4)<animate attributeName="fill" dur="12.5s" values="transparent;black;black;#FB8C00;#FB8C00;#616161;#616161" keyTimes="0;0;0.02;0.08;0.52;0.58;1" repeatCount="indefinite" fill="freeze" /></text>
+<circle cx="200.9" cy="43.73170731707317" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
+<animate attributeName="stroke" dur="12.5s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.018;0.019;0.02;0.08;0.42;0.48;1" repeatCount="indefinite" fill="freeze" />
+<animate attributeName="cx" dur="12.5s" values="200.9;200.9;278.6;278.6" keyTimes="0;0.02;0.08;1" repeatCount="indefinite" fill="freeze" />
+<animate attributeName="cy" dur="12.5s" values="43.73170731707317;43.73170731707317;62.0703125;62.0703125" keyTimes="0;0.02;0.08;1" repeatCount="indefinite" fill="freeze" />
 </circle>
-<text x="200.9" y="45.91666666666667" font-size="5.25" fill="transparent" text-anchor="middle" dominant-baseline="central">delay<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.02;0.021;0.022;0.089;0.356;0.422;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="x" dur="11.25s" values="200.9;200.9;278.6;278.6" keyTimes="0;0.022;0.089;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="y" dur="11.25s" values="45.91666666666667;45.91666666666667;62.0703125;62.0703125" keyTimes="0;0.022;0.089;1" repeatCount="indefinite" fill="freeze" /></text>
-<circle cx="200.9" cy="81.75" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
-<animate attributeName="stroke" dur="11.25s" values="transparent;transparent;black;black" keyTimes="0;0.022;0.089;1" repeatCount="indefinite" fill="freeze" />
+<text x="200.9" y="43.73170731707317" font-size="5.25" fill="transparent" text-anchor="middle" dominant-baseline="central">delay<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.018;0.019;0.02;0.08;0.42;0.48;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="x" dur="12.5s" values="200.9;200.9;278.6;278.6" keyTimes="0;0.02;0.08;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="y" dur="12.5s" values="43.73170731707317;43.73170731707317;62.0703125;62.0703125" keyTimes="0;0.02;0.08;1" repeatCount="indefinite" fill="freeze" /></text>
+<circle cx="200.9" cy="75.19512195121952" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
+<animate attributeName="stroke" dur="12.5s" values="transparent;transparent;black;black" keyTimes="0;0.02;0.08;1" repeatCount="indefinite" fill="freeze" />
 </circle>
-<text x="200.9" y="81.75" font-size="13.125" fill="transparent" text-anchor="middle" dominant-baseline="central">br<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black" keyTimes="0;0.022;0.089;1" repeatCount="indefinite" fill="freeze" /></text>
-<text x="7.0" y="81.75" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">IF (r1==0) PC += 5<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;#616161;#616161" keyTimes="0;0.022;0.089;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
-<circle cx="200.9" cy="117.58333333333334" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
-<animate attributeName="stroke" dur="11.25s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.133;0.2;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
+<text x="200.9" y="75.19512195121952" font-size="13.125" fill="transparent" text-anchor="middle" dominant-baseline="central">br<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black" keyTimes="0;0.02;0.08;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="7.0" y="75.19512195121952" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">IF (r1==0) PC += 6<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;#616161;#616161" keyTimes="0;0.02;0.08;0.62;0.68;1" repeatCount="indefinite" fill="freeze" /></text>
+<circle cx="200.9" cy="106.65853658536587" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
+<animate attributeName="stroke" dur="12.5s" values="transparent;transparent;black;black;black;black;black;black" keyTimes="0;0.12;0.18;0.52;0.58;0.62;0.68;1" repeatCount="indefinite" fill="freeze" />
 </circle>
-<text x="200.9" y="117.58333333333334" font-size="13.125" fill="transparent" text-anchor="middle" dominant-baseline="central">Tx<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.133;0.2;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
-<text x="7.0" y="117.58333333333334" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">  __ &lt;- LOAD(rSec)<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;#BDBDBD;#BDBDBD" keyTimes="0;0.133;0.2;0.244;0.311;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
-<circle cx="200.9" cy="117.58333333333334" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
-<animate attributeName="stroke" dur="11.25s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.243;0.244;0.244;0.311;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
-<animate attributeName="cx" dur="11.25s" values="200.9;200.9;549.885;549.885" keyTimes="0;0.244;0.311;1" repeatCount="indefinite" fill="freeze" />
-<animate attributeName="cy" dur="11.25s" values="117.58333333333334;117.58333333333334;76.84375;76.84375" keyTimes="0;0.244;0.311;1" repeatCount="indefinite" fill="freeze" />
+<text x="200.9" y="106.65853658536587" font-size="13.125" fill="transparent" text-anchor="middle" dominant-baseline="central">Tx<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;black;black;black;black" keyTimes="0;0.12;0.18;0.52;0.58;0.62;0.68;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="7.0" y="106.65853658536587" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">  __ &lt;- LOAD(rSec)<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;#BDBDBD;#BDBDBD" keyTimes="0;0.12;0.18;0.22;0.28;0.62;0.68;1" repeatCount="indefinite" fill="freeze" /></text>
+<circle cx="200.9" cy="106.65853658536587" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
+<animate attributeName="stroke" dur="12.5s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.218;0.219;0.22;0.28;0.52;0.58;1" repeatCount="indefinite" fill="freeze" />
+<animate attributeName="cx" dur="12.5s" values="200.9;200.9;549.885;549.885" keyTimes="0;0.22;0.28;1" repeatCount="indefinite" fill="freeze" />
+<animate attributeName="cy" dur="12.5s" values="106.65853658536587;106.65853658536587;76.84375;76.84375" keyTimes="0;0.22;0.28;1" repeatCount="indefinite" fill="freeze" />
 </circle>
-<text x="200.9" y="117.58333333333334" font-size="13.125" fill="transparent" text-anchor="middle" dominant-baseline="central">Tx<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.243;0.244;0.244;0.311;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="x" dur="11.25s" values="200.9;200.9;549.885;549.885" keyTimes="0;0.244;0.311;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="y" dur="11.25s" values="117.58333333333334;117.58333333333334;76.84375;76.84375" keyTimes="0;0.244;0.311;1" repeatCount="indefinite" fill="freeze" /></text>
-<text x="510.3" y="76.84375" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">0x0<animate attributeName="fill" dur="11.25s" values="transparent;transparent;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.244;0.311;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
-<circle cx="200.9" cy="153.41666666666666" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
-<animate attributeName="stroke" dur="11.25s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.244;0.311;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
+<text x="200.9" y="106.65853658536587" font-size="13.125" fill="transparent" text-anchor="middle" dominant-baseline="central">Tx<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.218;0.219;0.22;0.28;0.52;0.58;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="x" dur="12.5s" values="200.9;200.9;549.885;549.885" keyTimes="0;0.22;0.28;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="y" dur="12.5s" values="106.65853658536587;106.65853658536587;76.84375;76.84375" keyTimes="0;0.22;0.28;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="510.3" y="76.84375" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">0x0<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.22;0.28;0.52;0.58;1" repeatCount="indefinite" fill="freeze" /></text>
+<circle cx="200.9" cy="138.1219512195122" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
+<animate attributeName="stroke" dur="12.5s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.22;0.28;0.62;0.68;1" repeatCount="indefinite" fill="freeze" />
 </circle>
-<text x="200.9" y="153.41666666666666" font-size="8.75" fill="transparent" text-anchor="middle" dominant-baseline="central">nop<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.244;0.311;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
-<text x="7.0" y="153.41666666666666" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">  NOP<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;#BDBDBD;#BDBDBD" keyTimes="0;0.244;0.311;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
-<circle cx="200.9" cy="189.25" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
-<animate attributeName="stroke" dur="11.25s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.356;0.422;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
+<text x="200.9" y="138.1219512195122" font-size="8.75" fill="transparent" text-anchor="middle" dominant-baseline="central">nop<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.22;0.28;0.62;0.68;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="7.0" y="138.1219512195122" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">  NOP<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;#BDBDBD;#BDBDBD" keyTimes="0;0.22;0.28;0.62;0.68;1" repeatCount="indefinite" fill="freeze" /></text>
+<circle cx="200.9" cy="169.58536585365854" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
+<animate attributeName="stroke" dur="12.5s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.32;0.38;0.62;0.68;1" repeatCount="indefinite" fill="freeze" />
 </circle>
-<text x="200.9" y="189.25" font-size="8.75" fill="transparent" text-anchor="middle" dominant-baseline="central">nop<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.356;0.422;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
-<text x="7.0" y="189.25" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">  NOP<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;#BDBDBD;#BDBDBD" keyTimes="0;0.356;0.422;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
-<circle cx="200.9" cy="225.08333333333334" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
-<animate attributeName="stroke" dur="11.25s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.467;0.533;0.578;0.644;1" repeatCount="indefinite" fill="freeze" />
+<text x="200.9" y="169.58536585365854" font-size="8.75" fill="transparent" text-anchor="middle" dominant-baseline="central">nop<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.32;0.38;0.62;0.68;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="7.0" y="169.58536585365854" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">  NOP<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;#BDBDBD;#BDBDBD" keyTimes="0;0.32;0.38;0.62;0.68;1" repeatCount="indefinite" fill="freeze" /></text>
+<circle cx="200.9" cy="201.04878048780486" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
+<animate attributeName="stroke" dur="12.5s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.42;0.48;0.62;0.68;1" repeatCount="indefinite" fill="freeze" />
 </circle>
-<text x="200.9" y="225.08333333333334" font-size="8.75" fill="transparent" text-anchor="middle" dominant-baseline="central">nop<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.467;0.533;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
-<text x="7.0" y="225.08333333333334" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">  NOP<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;#BDBDBD;#BDBDBD" keyTimes="0;0.467;0.533;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
-<rect x="0.0" y="53.333333333333336" width="233.8" height="193.16666666666669" fill="transparent" stroke="transparent" stroke-width="2.8">
-<animate attributeName="stroke" dur="11.25s" values="transparent;transparent;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.578;0.644;0.689;0.756;1" repeatCount="indefinite" fill="freeze" />
+<text x="200.9" y="201.04878048780486" font-size="8.75" fill="transparent" text-anchor="middle" dominant-baseline="central">nop<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.42;0.48;0.62;0.68;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="7.0" y="201.04878048780486" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">  NOP<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;#BDBDBD;#BDBDBD" keyTimes="0;0.42;0.48;0.62;0.68;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="561.4" y="214.25" font-size="14.0" text-anchor="middle" dominant-baseline="central">1<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black" keyTimes="0;0.52;0.58;1" repeatCount="indefinite" fill="freeze" /></text>
+<circle cx="200.9" cy="232.5121951219512" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
+<animate attributeName="stroke" dur="12.5s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.52;0.58;0.62;0.68;1" repeatCount="indefinite" fill="freeze" />
+</circle>
+<text x="200.9" y="232.5121951219512" font-size="8.75" fill="transparent" text-anchor="middle" dominant-baseline="central">nop<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.52;0.58;0.62;0.68;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="7.0" y="232.5121951219512" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">  NOP<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;#BDBDBD;#BDBDBD" keyTimes="0;0.52;0.58;0.62;0.68;1" repeatCount="indefinite" fill="freeze" /></text>
+<rect x="0.0" y="48.963414634146346" width="233.8" height="202.78048780487805" fill="transparent" stroke="transparent" stroke-width="2.8">
+<animate attributeName="stroke" dur="12.5s" values="transparent;transparent;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.62;0.68;0.72;0.78;1" repeatCount="indefinite" fill="freeze" />
 </rect>
-<text x="116.9" y="63.833333333333336" font-size="14.0" fill="transparent" text-anchor="middle" dominant-baseline="central">Squash!<animate attributeName="fill" dur="11.25s" values="transparent;transparent;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.578;0.644;0.689;0.756;1" repeatCount="indefinite" fill="freeze" /></text>
-<text x="561.4" y="214.25" font-size="14.0" text-anchor="middle" dominant-baseline="central">1<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black" keyTimes="0;0.578;0.644;1" repeatCount="indefinite" fill="freeze" /></text>
-<circle cx="200.9" cy="260.9166666666667" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
-<animate attributeName="stroke" dur="11.25s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.578;0.644;0.8;0.867;1" repeatCount="indefinite" fill="freeze" />
+<text x="116.9" y="59.463414634146346" font-size="14.0" fill="transparent" text-anchor="middle" dominant-baseline="central">Squash!<animate attributeName="fill" dur="12.5s" values="transparent;transparent;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.62;0.68;0.72;0.78;1" repeatCount="indefinite" fill="freeze" /></text>
+<circle cx="200.9" cy="263.9756097560976" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
+<animate attributeName="stroke" dur="12.5s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.62;0.68;0.82;0.88;1" repeatCount="indefinite" fill="freeze" />
 </circle>
-<text x="200.9" y="260.9166666666667" font-size="13.125" fill="transparent" text-anchor="middle" dominant-baseline="central">Rx<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.578;0.644;0.8;0.867;1" repeatCount="indefinite" fill="freeze" /></text>
-<text x="7.0" y="260.9166666666667" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">__ &lt;- LOAD(0x0)<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;#616161;#616161" keyTimes="0;0.578;0.644;0.689;0.756;0.911;0.978;1" repeatCount="indefinite" fill="freeze" /></text>
-<circle cx="200.9" cy="260.9166666666667" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
-<animate attributeName="stroke" dur="11.25s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.687;0.688;0.689;0.756;0.8;0.867;1" repeatCount="indefinite" fill="freeze" />
-<animate attributeName="cx" dur="11.25s" values="200.9;200.9;561.4;561.4" keyTimes="0;0.689;0.756;1" repeatCount="indefinite" fill="freeze" />
-<animate attributeName="cy" dur="11.25s" values="260.9166666666667;260.9166666666667;233.5;233.5" keyTimes="0;0.689;0.756;1" repeatCount="indefinite" fill="freeze" />
+<text x="200.9" y="263.9756097560976" font-size="13.125" fill="transparent" text-anchor="middle" dominant-baseline="central">Rx<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;black;black" keyTimes="0;0.62;0.68;0.82;0.88;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="7.0" y="263.9756097560976" font-size="14.0" text-anchor="start" dominant-baseline="middle" font-family="monospace" word-spacing="-3" letter-spacing="-1" fill="transparent">__ &lt;- LOAD(0x0)<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;#616161;#616161" keyTimes="0;0.62;0.68;0.72;0.78;0.92;0.98;1" repeatCount="indefinite" fill="freeze" /></text>
+<circle cx="200.9" cy="263.9756097560976" r="10.5" fill="transparent" stroke-width="1.4" stroke="transparent">
+<animate attributeName="stroke" dur="12.5s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.718;0.719;0.72;0.78;0.82;0.88;1" repeatCount="indefinite" fill="freeze" />
+<animate attributeName="cx" dur="12.5s" values="200.9;200.9;561.4;561.4" keyTimes="0;0.72;0.78;1" repeatCount="indefinite" fill="freeze" />
+<animate attributeName="cy" dur="12.5s" values="263.9756097560976;263.9756097560976;233.5;233.5" keyTimes="0;0.72;0.78;1" repeatCount="indefinite" fill="freeze" />
 </circle>
-<text x="200.9" y="260.9166666666667" font-size="13.125" fill="transparent" text-anchor="middle" dominant-baseline="central">Rx<animate attributeName="fill" dur="11.25s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.687;0.688;0.689;0.756;0.8;0.867;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="x" dur="11.25s" values="200.9;200.9;561.4;561.4" keyTimes="0;0.689;0.756;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="y" dur="11.25s" values="260.9166666666667;260.9166666666667;233.5;233.5" keyTimes="0;0.689;0.756;1" repeatCount="indefinite" fill="freeze" /></text>
+<text x="200.9" y="263.9756097560976" font-size="13.125" fill="transparent" text-anchor="middle" dominant-baseline="central">Rx<animate attributeName="fill" dur="12.5s" values="transparent;transparent;black;black;#FB8C00;#FB8C00;transparent;transparent" keyTimes="0;0.718;0.719;0.72;0.78;0.82;0.88;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="x" dur="12.5s" values="200.9;200.9;561.4;561.4" keyTimes="0;0.72;0.78;1" repeatCount="indefinite" fill="freeze" /><animate attributeName="y" dur="12.5s" values="263.9756097560976;263.9756097560976;233.5;233.5" keyTimes="0;0.72;0.78;1" repeatCount="indefinite" fill="freeze" /></text>
 <g id="scrub">
 <path d="M32,290.0 L668.0,290.0" stroke="#ccc" stroke-width="4" stroke-linecap="round" />
 <rect x="32" y="290.0" width="0" height="0.001" stroke="#05f" stroke-width="4" stroke-linejoin="round">
-<animate attributeName="width" dur="11.25s" values="0;636.0" keyTimes="0;1" repeatCount="indefinite" fill="freeze" />
+<animate attributeName="width" dur="12.5s" values="0;636.0" keyTimes="0;1" repeatCount="indefinite" fill="freeze" />
 </rect>
-<g id="scrub-capture" data-xmin="32" data-xmax="668.0" data-totaldur="11.25" data-startdelay="0" data-enddelay="0" data-pauseonload="0">
+<g id="scrub-capture" data-xmin="32" data-xmax="668.0" data-totaldur="12.5" data-startdelay="0" data-enddelay="0" data-pauseonload="0">
 <rect x="30.0" y="280.0" width="640.0" height="20" fill="rgba(255,255,255,0)" />
 <circle cx="32" cy="290.0" r="6" fill="#05f" id="scrub-knob" visibility="hidden">
-<animate attributeName="cx" dur="11.25s" values="32;668.0" keyTimes="0;1" repeatCount="indefinite" fill="freeze" />
+<animate attributeName="cx" dur="12.5s" values="32;668.0" keyTimes="0;1" repeatCount="indefinite" fill="freeze" />
 </circle>
 </g>
 <g id="scrub-play" visibility="hidden">
