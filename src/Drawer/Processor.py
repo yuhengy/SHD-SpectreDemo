@@ -69,7 +69,7 @@ class Processor(SimuProcessor):
         cycleLogo_grid.y,
         cycleLogo_grid.height*8,
         cycleLogo_grid.height*4,
-        "logo/matcha-logo-dark-green.pdf",
+        "logo/matcha-logo-dark-green.svg",
         embed=True,
       )
       pointer.add_key_frame(
