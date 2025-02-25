@@ -31,7 +31,7 @@ class Rob(SimuRob):
 
 
     ## STEP1: Divide into 4 components.
-    grid.divideX([fontsize * 12, 1], [True, False])
+    grid.divideX([fontsize * 12.5, 1], [True, False])
     instText_grid = grid.getSubGrid(0, 0)
     grid.divideY([fontsize * 1.5, 1], [True, False, True])
     head_grid    = grid.getSubGrid(1, 0)
@@ -51,7 +51,7 @@ class Rob(SimuRob):
 
 
     ## STEP4: Draw program.
-    program_grid = self.animFifo.getLeftGrid(fontsize * 12)
+    program_grid = self.animFifo.getLeftGrid(fontsize * 12.5)
     self.animTextArray = AnimationTextArray(program_grid, d, fontsize, speed)
 
 

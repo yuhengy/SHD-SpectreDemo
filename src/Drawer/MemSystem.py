@@ -34,7 +34,7 @@ class MemSystem(SimuMemSystem):
 
 
     ## STEP1: Divide into L1 and main memory.
-    grid.divideY([fontsize * 1.75, fontsize, 1], [True, True, False])
+    grid.divideY([fontsize * 1.75, fontsize * 1, 1], [True, True, False])
     mem_grid = grid.getSubGrid(0, 0)
     l1_grid  = grid.getSubGrid(0, 2)
 
@@ -42,7 +42,7 @@ class MemSystem(SimuMemSystem):
     ## STEP2: Draw L1.
 
     ## STEP2.1: Divide L1 into MSHR and valid table.
-    l1_grid.divideY([1, fontsize * 3.5,fontsize * 1 ], [False, True, True])
+    l1_grid.divideY([1, fontsize * 3, fontsize * 1], [False, True, True])
     mshr_grid = l1_grid.getSubGrid(0, 0)
     l1_grid.divideX([1, fontsize * (3.5 + 2.5*4), 1], [False, True, False])
     table_grid = l1_grid.getSubGrid(1, 1)
@@ -71,7 +71,7 @@ class MemSystem(SimuMemSystem):
 
     buffer_grid = \
       mshr_grid.getSubGrid(0, 2).getMergedGrid(mshr_grid.getSubGrid(0, 3))
-    buffer_grid.divideX([self.fontsize*1.5, 3.5, 6.5], [True, False, False])
+    buffer_grid.divideX([self.fontsize*1.5, 3, 6.5], [True, False, False])
     buffer_grid = buffer_grid.getSubGrid(1, 0)
     
     mshrBox_grid = \
@@ -228,15 +228,17 @@ class MemSystem(SimuMemSystem):
     for entry in self.hitList:
       entry["animInst"].disappear(self.cycle)
     
-    for entry in self.mshrFifo[1:]:
+    for i, entry in enumerate(self.mshrFifo[1:]):
       for animInst in entry["animInstList"]:
         animInst.disappear(self.cycle)
+      self.animTextArray.disappear(self.cycle, i+1)
       
     if len(self.mshrFifo) > 0:
       head = self.mshrFifo[0]
       if head["latency"] > 0:
         for animInst in head["animInstList"]:
           animInst.changeColor(self.cycle, Color.MSHR_TO_DROP)
+        self.animTextArray.changeColor(self.cycle, 0, Color.MSHR_TO_DROP)
 
     super().squash()
     

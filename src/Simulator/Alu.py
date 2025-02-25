@@ -1,6 +1,6 @@
 
 class Alu():
-  NUM_PORTS = 4
+  NUM_PORTS = 3
 
   def __init__(self, defense="Baseline", printTrace=False):
     self.defense = defense

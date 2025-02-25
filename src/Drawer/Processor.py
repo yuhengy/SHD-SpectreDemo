@@ -30,7 +30,7 @@ class Processor(SimuProcessor):
     grid = grid.getSubGrid(1, 1)
 
     ## STEP1.2: Draw.
-    grid.divideX([fontsize*12, 1, 0.5, 8.5],
+    grid.divideX([fontsize * 12.5, 1, 0.5, 8.5],
                  useFixedLength=[True, False, False, False])
     rob_grid            = grid.getSubGrid(0, 0).getMergedGrid(
                           grid.getSubGrid(1, 0))
@@ -41,7 +41,7 @@ class Processor(SimuProcessor):
     cycleIndicator_grid = grid.getSubGrid(0, 2)
 
     grid = grid.getSubGrid(0, 0)
-    grid.divideX([4, 0.5, 4])
+    grid.divideX([3.5, 0.5, 5])
     alu_grid            = grid.getSubGrid(0, 0)
     memSystem_grid      = grid.getSubGrid(2, 0)
 

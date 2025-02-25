@@ -10,17 +10,17 @@ from src.Drawer.Grid      import Grid
 
 class drawProcessor():
   def __init__(self, imem, r7, l1ValidArray, defense="Baseline",
-               maxCycle=None, scale=1, xyRatio=7/3, speed=0.8):
+               maxCycle=None, scale=1, xyRatio=8/3, speed=0.8):
     self.d         = None
     self.processor = None
 
 
     ## STEP1: Scaling factors
-    xScale = scale * xyRatio / (7/3)
+    xScale = scale * xyRatio / (8/3)
     yScale = scale
     rScale = min(xScale, yScale)
-    fontsize   =  14 * rScale
-    line_width = 1.4 * rScale
+    fontsize   =  17 * rScale
+    line_width = 1.7 * rScale
 
 
     ## STEP2: Simulate the processor once to get buffer size.
@@ -28,13 +28,13 @@ class drawProcessor():
     simuProcessor.simulate()
     robSize  = max(5, simuProcessor.rob.statistic_maxInst)
     aluSize  = max(3, simuProcessor.alu.statistic_maxFifoSize)
-    mshrSize = max(3, simuProcessor.memSystem.statistic_maxFifoSize)
+    mshrSize = max(2, simuProcessor.memSystem.statistic_maxFifoSize)
     if maxCycle==None:
       maxCycle = simuProcessor.cycle - 1
 
 
     ## STEP3: Draw the whole board.
-    grid = Grid(x=0, y=0, width=700 * xScale, height=300 * yScale)
+    grid = Grid(x=0, y=0, width=800 * xScale, height=300 * yScale)
 
     self.d = draw.Drawing(
       grid.width, grid.height, origin=(grid.x, grid.y),
