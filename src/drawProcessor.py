@@ -10,7 +10,7 @@ from src.Drawer.Grid      import Grid
 
 class drawProcessor():
   def __init__(self, imem, r7, l1ValidArray, defense="Baseline",
-               maxCycle=None, scale=1, xyRatio=8/3, speed=0.8):
+               maxCycle=None, scale=1, xyRatio=8/3, speed=0.5):
     self.d         = None
     self.processor = None
 
